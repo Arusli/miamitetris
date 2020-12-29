@@ -77,6 +77,9 @@ function createRow() {
         divArray[index].column = columncount; 
         columncount +=1;
         divArray[index].row = rowcount; 
+        divArray[index].idbelow = `r${divArray[index].row - 1}c${divArray[index].column}`
+        divArray[index].idright = `r${divArray[index].row}c${divArray[index].column + 1}`
+        divArray[index].idleft = `r${divArray[index].row}c${divArray[index].column - 1}`
         divArray[index].setAttribute('id', `r${divArray[index].row}c${divArray[index].column}`) //sets id with row1column2 format for simpler manipulation
         // console.log(divArray[index].id)
         // console.log(divArray[index].row, divArray[index].column);
@@ -86,7 +89,7 @@ function createRow() {
 }
 
 // createRow();
-
+//NOTE: we need to add 2 or 3 hidden rows at the top to allow the new shapes to generate 'off-screen'
 function createGrid() {
     let k; //using k, since we used i on inside loop
     for (k=0;k<15;k++) {
@@ -101,7 +104,6 @@ function createGrid() {
 }
 
 createGrid();
-// console.log(divArray);
 
 //create tetrimino
 //placeholder:
@@ -128,6 +130,10 @@ const zTetrimino = [r14c5, r14c6, r15c4, r15c5];
 const arrayOfTetriminos = [lTetrimino, sTetrimino, iTetrimino, tTetrimino, zTetrimino];
 
 
+//checks that idofsquarebelow works
+console.log(r14c4.idbelow, r14c4.idright, r14c4.idleft);
+
+
 //generates random number from zero to max, excluding max
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
@@ -142,9 +148,34 @@ function generateTetrimino() {
     }
 }
 
-generateTetrimino();
+generateTetrimino(); //initialized
 
 //function to check if pathblocked
+
+function pathBlocked(array) {
+
+    // let path = [];
+    //create beneath array
+    // for (i=0;i<array.length;i++) {
+    //     path.push(document.getElementById(`${array[i].idbelow}`));
+    // }
+
+    const path = array.map((e) => document.getElementById(`${e.idbelow}`))
+    console.log(path); //test
+    let j;
+    for (j=0;j<array;j++) {
+        if (path[i].className === 'static-square') {
+            return true;
+            break;
+        }
+    }
+}
+
+function makeStatic(array) {
+    array.forEach( element => element.setAttribute('class', 'static-square'))
+}
+
+pathBlocked(zTetrimino); //test
 
 
 //individual functions to rotate each l,s,i,t,z
@@ -152,15 +183,21 @@ generateTetrimino();
 
 //Write a function that moves all filled-square class divs down one square on an interval.
 function fall() {
+
+    // the reason i am making an identical array is so that there is an array with value types, not reference
+
     let tetrimino = [];
-    const array = document.getElementsByClassName('filled-square');
-//    console.log(tetrimino);
+    const array = document.getElementsByClassName('filled-square'); 
+   
+   
+//    creates an identical array, but of value types (not reference)
+   // technically array is not an array, its only array-like, so i cannot use .map on it.
     let j;
     for (j=0;j<array.length;j++) {
         tetrimino.push(array[j]);
     }
-    console.log(tetrimino);
-    console.log(tetrimino[0].row, tetrimino[0].column, tetrimino[0].id, tetrimino[0].className);
+    // console.log(tetrimino);
+    // console.log(tetrimino[0].row, tetrimino[0].column, tetrimino[0].id, tetrimino[0].className);
     
     //need an if statement that checks that function pathClear (vs pathBlocked) evalutes to true
     //placeholder:
@@ -176,10 +213,7 @@ function fall() {
         }
         // console.log(tetrimino[0].row, tetrimino[0].column, tetrimino[0].id, tetrimino[0].className);
     } else {
-        let i;
-        for (i=0;i<tetrimino.length;i++) {
-            tetrimino[i].setAttribute('class', 'static-square');
-        }
+        makeStatic(tetrimino);
         generateTetrimino();
     }
     //
