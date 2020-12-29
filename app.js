@@ -21,7 +21,6 @@
 //create an event listener that moves and adjusts 
 
 const board = document.getElementById('board');
-board.style.backgroundColor = 'purple';
 
 // TESTING CODE, WORKS
 // const newdiv = document.createElement('DIV');
@@ -52,14 +51,13 @@ board.style.backgroundColor = 'purple';
 let divArray = [];
 let rowcount = 1; //initial row value
 let columncount = 1; //initial column value
-let maxRows = 15;
+let maxRows = 16; //safe to adjust
 let maxColumns= 10;
 const tile = 40; //determines grid unit size
 let bottom = 0;
 let left = 0;
 
-//maybe i should make an array of the rows and do a forEach with initialize row function
-//i think i need to set id=r1c2, r1c3, r1c4, etc. use these to select and manipulate dom.
+
 
 function createRow() {
     let i;
@@ -92,7 +90,7 @@ function createRow() {
 //NOTE: we need to add 2 or 3 hidden rows at the top to allow the new shapes to generate 'off-screen'
 function createGrid() {
     let k; //using k, since we used i on inside loop
-    for (k=0;k<15;k++) {
+    for (k=0;k<maxRows;k++) {
         createRow(); //fills in the entire row, adjusting all necessary variables within this inner function.
         
         //Now that the row is created, we reset and adjust variables for next row:
@@ -103,7 +101,20 @@ function createGrid() {
     }
 }
 
+function hideBottomRow() {
+    const bottomRow = [];
+    let i;
+    for (i=0;i<divArray.length;i++) {
+        if (divArray[i].row === 1) {
+            bottomRow.push(divArray[i]);
+        }
+    }
+    console.log(bottomRow);
+    bottomRow.forEach(e => e.style.visibility = 'hidden');
+}
+
 createGrid();
+hideBottomRow();
 
 //create tetrimino
 //placeholder:
@@ -121,6 +132,21 @@ let r15c5 = document.getElementById('r15c5');
 let r15c6 = document.getElementById('r15c6');
 let r15c7 = document.getElementById('r15c7');
 
+let r13c4 = document.getElementById('r13c4');
+let r13c5 = document.getElementById('r13c5');
+let r13c6 = document.getElementById('r13c6');
+let r13c7 = document.getElementById('r13c7');
+
+//test blockage
+r13c4.className = 'static-square';
+r13c5.className = 'static-square';
+r13c6.className = 'static-square';
+r13c7.className = 'static-square';
+
+
+let r1c1 = document.getElementById('r1c1');
+let r1c2 = document.getElementById('r2c1');
+const testTetrimino = [r3c1, r3c2];
 
 const lTetrimino = [r14c4, r14c5, r14c6, r15c6];
 const sTetrimino = [r14c5, r14c6, r15c5, r15c6]; //square
@@ -148,34 +174,40 @@ function generateTetrimino() {
     }
 }
 
-generateTetrimino(); //initialized
+function generateTestTetrimino(array) {
+    array.forEach( e => {e.className = 'filled-square'})
+}
+
+// generateTetrimino(); //initialized
+
+
+
 
 //function to check if pathblocked
-
 function pathBlocked(array) {
 
-    // let path = [];
-    //create beneath array
-    // for (i=0;i<array.length;i++) {
-    //     path.push(document.getElementById(`${array[i].idbelow}`));
-    // }
-
-    const path = array.map((e) => document.getElementById(`${e.idbelow}`))
+    const path = array.map((e) => document.getElementById(`${e.idbelow}`)) //!! What happens if array is at row 0? then there are now elements beneath...
     console.log(path); //test
     let j;
-    for (j=0;j<array;j++) {
-        if (path[i].className === 'static-square') {
+    for (j=0;j<array.length;j++) {
+        if (path[j].className === 'static-square' || path[j].row < 2) {
             return true;
             break;
         }
     }
+    return false;
 }
 
 function makeStatic(array) {
     array.forEach( element => element.setAttribute('class', 'static-square'))
 }
 
-pathBlocked(zTetrimino); //test
+
+//PATH TESTING
+generateTestTetrimino(testTetrimino);
+console.log('is array?', Array.isArray(testTetrimino));
+// console.log(testTetrimino[0].row, testTetrimino[0].idbelow);
+console.log('blocked?', pathBlocked(testTetrimino)); //test
 
 
 //individual functions to rotate each l,s,i,t,z
@@ -201,6 +233,8 @@ function fall() {
     
     //need an if statement that checks that function pathClear (vs pathBlocked) evalutes to true
     //placeholder:
+
+
     if (tetrimino[0].row > 1) {
         let i;
         for(i=0;i<tetrimino.length;i++) {
@@ -222,7 +256,7 @@ function fall() {
 
 
 
-setInterval(fall, 500);
+// setInterval(fall, 500);
 
 
 

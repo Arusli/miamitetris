@@ -13,15 +13,15 @@ body {
     align-items: center;
 }
 
-/* should be 10 units across*/
+/* should be 10 units across, 40px units */
 #board {
     position: relative;
     margin: 0;
     padding: 0;
-    height: 600px;
-    width: 400px; /* 40 px units */
-    background-color: cyan;
-    border: 1px solid black;
+    height: 640px;
+    width: 400px;
+    background-color:white;
+    /* border: 1px solid black; */
 }
 /* 
 #test {
