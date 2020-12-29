@@ -45,7 +45,7 @@ function createRow() {
         let index = i + indexAdjuster;
 
         divArray.push(document.createElement('DIV'))
-        divArray[index].setAttribute('class','blank-square')
+        divArray[index].setAttribute('class','blank')
         board.appendChild(divArray[index]); //adds to index of all divs in the grid
         divArray[index].style.bottom = `${bottom}px`; //positioning
         divArray[index].style.left = `${left}px`; //positioning
@@ -110,10 +110,10 @@ hideTopTwoRows();
 
 //create tetrimino
 //placeholder:
-// document.getElementById('r15c5').className = 'filled-square';
-// document.getElementById('r15c6').className = 'filled-square';
-// document.getElementById('r15c7').className = 'filled-square';
-// document.getElementById('r15c8').className = 'filled-square';
+// document.getElementById('r15c5').className = 'active';
+// document.getElementById('r15c6').className = 'active';
+// document.getElementById('r15c7').className = 'active';
+// document.getElementById('r15c8').className = 'active';
 
 let r14c4 = document.getElementById('r14c4');
 let r14c5 = document.getElementById('r14c5');
@@ -143,10 +143,10 @@ let r13c4 = document.getElementById('r13c4');
 let r13c5 = document.getElementById('r13c5');
 let r13c6 = document.getElementById('r13c6');
 let r13c7 = document.getElementById('r13c7');
-// r13c4.className = 'static-square';
-// r13c5.className = 'static-square';
-// r13c6.className = 'static-square';
-// r13c7.className = 'static-square';
+// r13c4.className = 'static';
+// r13c5.className = 'static';
+// r13c6.className = 'static';
+// r13c7.className = 'static';
 
 
 //TEST TETRIMINO
@@ -200,14 +200,14 @@ function generateTetrimino() {
     const array = arrayOfTetriminos[num]; 
     let i;
     for (i=0;i<array.length;i++) {
-        array[i].className = 'filled-square';
+        array[i].className = 'active';
     }
     shapeOrientation = arrayOfShapeOrientations[num];
     console.log(shapeOrientation);
 }
 
 function generateTestTetrimino(array) {
-    array.forEach( e => {e.className = 'filled-square'})
+    array.forEach( e => {e.className = 'active'})
 }
 
 
@@ -222,7 +222,7 @@ function pathBlocked(array) {
     // console.log(path); //test
     let j;
     for (j=0;j<array.length;j++) {
-        if (path[j].className === 'static-square' || path[j].row < 2) {
+        if (path[j].className === 'static' || path[j].row < 2) {
             return true;
             break;
         }
@@ -231,7 +231,7 @@ function pathBlocked(array) {
 }
 
 function makeStatic(array) {
-    array.forEach( element => element.setAttribute('class', 'static-square'))
+    array.forEach( element => element.setAttribute('class', 'static'))
 }
 
 function lowerPieces(array) {
@@ -239,8 +239,8 @@ function lowerPieces(array) {
     for(i=0;i<array.length;i++) {
         let newRowNum = array[i].row - 1;
         // console.log(tetrimino[i].className);
-        document.getElementById(`r${newRowNum}c${array[i].column}`).setAttribute('class','filled-square');
-        array[i].setAttribute('class','blank-square');
+        document.getElementById(`r${newRowNum}c${array[i].column}`).setAttribute('class','active');
+        array[i].setAttribute('class','blank');
         // console.log(tetrimino[i].className);
         // console.log('loop complete');
     }
@@ -270,12 +270,12 @@ function lowerPieces(array) {
 
 
 
-//Write a function that moves all filled-square class divs down one square on an interval.
+//Write a function that moves all active class divs down one square on an interval.
 function fall() {
 
     // the reason i am making an identical array is so that there is an array with value types, not reference
     let tetrimino = [];
-    const array = document.getElementsByClassName('filled-square'); 
+    const array = document.getElementsByClassName('active'); 
    
    
     //creates an identical array, but of value types (not reference)
@@ -322,8 +322,8 @@ setInterval(fall, 1000);
 // TESTING CODE, WORKS
 // const newdiv = document.createElement('DIV');
 // const newdiv2 = document.createElement('DIV');
-// newdiv.setAttribute('class', 'blank-square');
-// newdiv2.setAttribute('class', 'blank-square');
+// newdiv.setAttribute('class', 'blank');
+// newdiv2.setAttribute('class', 'blank');
 // board.appendChild(newdiv);
 // board.appendChild(newdiv2);
 

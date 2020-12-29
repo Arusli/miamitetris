@@ -29,7 +29,7 @@ body {
     left: 0px;
 } */
 
-.blank-square {
+.blank {
     padding: 0px;
     margin: 0px;
     box-sizing: border-box;
@@ -40,7 +40,7 @@ body {
     border: 1px solid black;
 }
 
-.filled-square {
+.active {
     padding: 0px;
     margin: 0px;
     box-sizing: border-box;
@@ -51,7 +51,7 @@ body {
     border: 1px solid black;
 }
 
-.static-square {
+.static {
     padding: 0px;
     margin: 0px;
     box-sizing: border-box;
