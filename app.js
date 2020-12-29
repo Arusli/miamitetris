@@ -26,7 +26,7 @@ const board = document.getElementById('board');
 let divArray = [];
 let rowcount = 1; //initial row value
 let columncount = 1; //initial column value
-let maxRows = 16; //safe to adjust
+let maxRows = 18; //safe to adjust
 let maxColumns= 10;
 const tile = 40; //determines grid unit size
 let bottom = 0;
@@ -84,12 +84,26 @@ function hideBottomRow() {
             bottomRow.push(divArray[i]);
         }
     }
-    console.log(bottomRow);
+    // console.log(bottomRow);
     bottomRow.forEach(e => e.style.visibility = 'hidden');
+}
+
+
+function hideTopTwoRows() {
+    const topTwoRows = [];
+    let i;
+    for (i=0;i<divArray.length;i++) {
+        if (divArray[i].row > 16) {
+            topTwoRows.push(divArray[i]);
+        }
+    }
+    topTwoRows.forEach(e => e.style.visibility = 'hidden');
 }
 
 createGrid();
 hideBottomRow();
+hideTopTwoRows();
+//row 16 is the visible top, row 2 is the visible bottom.
 
 //create tetrimino
 //placeholder:
