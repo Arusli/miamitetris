@@ -1,0 +1,52 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+/* should be 10 units across*/
+#board {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    height: 600px;
+    width: 400px; /* 40 px units */
+    background-color: cyan;
+    border: 1px solid black;
+}
+/* 
+#test {
+    bottom: 0px;
+    left: 0px;
+} */
+
+.blank-square {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    background-color: white;
+    border: 1px solid black;
+}
+
+.filled-square {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    background-color: yellow;
+    border: 1px solid black;
+}
