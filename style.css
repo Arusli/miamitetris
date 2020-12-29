@@ -47,6 +47,17 @@ body {
     position: absolute;
     height: 40px;
     width: 40px;
-    background-color: yellow;
+    background-color: purple;
+    border: 1px solid black;
+}
+
+.static-square {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    background-color: pink;
     border: 1px solid black;
 }

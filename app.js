@@ -54,7 +54,7 @@ let rowcount = 1; //initial row value
 let columncount = 1; //initial column value
 let maxRows = 15;
 let maxColumns= 10;
-const tile = 40;
+const tile = 40; //determines grid unit size
 let bottom = 0;
 let left = 0;
 
@@ -74,9 +74,9 @@ function createRow() {
         divArray[index].style.bottom = `${bottom}px`; //positioning
         divArray[index].style.left = `${left}px`; //positioning
         left += tile;
-        divArray[index].column = columncount.toString(); //sets a string to column property to use in setting id
+        divArray[index].column = columncount; 
         columncount +=1;
-        divArray[index].row = rowcount.toString(); //sets a string to row property to use in setting id
+        divArray[index].row = rowcount; 
         divArray[index].setAttribute('id', `r${divArray[index].row}c${divArray[index].column}`) //sets id with row1column2 format for simpler manipulation
         // console.log(divArray[index].id)
         // console.log(divArray[index].row, divArray[index].column);
@@ -101,7 +101,116 @@ function createGrid() {
 }
 
 createGrid();
-console.log(divArray);
+// console.log(divArray);
+
+//create tetrimino
+//placeholder:
+// document.getElementById('r15c5').className = 'filled-square';
+// document.getElementById('r15c6').className = 'filled-square';
+// document.getElementById('r15c7').className = 'filled-square';
+// document.getElementById('r15c8').className = 'filled-square';
+
+let r14c4 = document.getElementById('r14c4');
+let r14c5 = document.getElementById('r14c5');
+let r14c6 = document.getElementById('r14c6');
+let r14c7 = document.getElementById('r14c7');
+let r15c4 = document.getElementById('r15c4');
+let r15c5 = document.getElementById('r15c5');
+let r15c6 = document.getElementById('r15c6');
+let r15c7 = document.getElementById('r15c7');
+
+
+const lTetrimino = [r14c4, r14c5, r14c6, r15c6];
+const sTetrimino = [r14c5, r14c6, r15c5, r15c6]; //square
+const iTetrimino = [r14c4, r14c5, r14c6, r14c7];
+const tTetrimino = [r14c4, r14c5, r14c6, r15c5];
+const zTetrimino = [r14c5, r14c6, r15c4, r15c5];
+const arrayOfTetriminos = [lTetrimino, sTetrimino, iTetrimino, tTetrimino, zTetrimino];
+
+
+//generates random number from zero to max, excluding max
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
+
+function generateTetrimino() {
+    const random = getRandomInt(5); 
+    const array = arrayOfTetriminos[random];
+    let i;
+    for (i=0;i<array.length;i++) {
+        array[i].className = 'filled-square';
+    }
+}
+
+generateTetrimino();
+
+//function to check if pathblocked
+
+
+//individual functions to rotate each l,s,i,t,z
+
+
+//Write a function that moves all filled-square class divs down one square on an interval.
+function fall() {
+    let tetrimino = [];
+    const array = document.getElementsByClassName('filled-square');
+//    console.log(tetrimino);
+    let j;
+    for (j=0;j<array.length;j++) {
+        tetrimino.push(array[j]);
+    }
+    console.log(tetrimino);
+    console.log(tetrimino[0].row, tetrimino[0].column, tetrimino[0].id, tetrimino[0].className);
+    
+    //need an if statement that checks that function pathClear (vs pathBlocked) evalutes to true
+    //placeholder:
+    if (tetrimino[0].row > 1) {
+        let i;
+        for(i=0;i<tetrimino.length;i++) {
+            let newRowNum = tetrimino[i].row - 1;
+            // console.log(tetrimino[i].className);
+            document.getElementById(`r${newRowNum}c${tetrimino[i].column}`).setAttribute('class','filled-square');
+            tetrimino[i].setAttribute('class','blank-square');
+            // console.log(tetrimino[i].className);
+            // console.log('loop complete');
+        }
+        // console.log(tetrimino[0].row, tetrimino[0].column, tetrimino[0].id, tetrimino[0].className);
+    } else {
+        let i;
+        for (i=0;i<tetrimino.length;i++) {
+            tetrimino[i].setAttribute('class', 'static-square');
+        }
+        generateTetrimino();
+    }
+    //
+    
+}
+
+
+
+setInterval(fall, 500);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Error: this code overwrites the cssproperties prototype
