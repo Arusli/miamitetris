@@ -32,6 +32,9 @@ const tile = 40; //determines grid unit size
 let bottom = 0;
 let left = 0;
 
+// let tetriminoShape = 'l'
+let shapeOrientation = 'la1';
+
 
 
 function createRow() {
@@ -50,6 +53,7 @@ function createRow() {
         divArray[index].column = columncount; 
         columncount +=1;
         divArray[index].row = rowcount; 
+        divArray[index].idabove = `r${divArray[index].row + 1}c${divArray[index].column}`
         divArray[index].idbelow = `r${divArray[index].row - 1}c${divArray[index].column}`
         divArray[index].idright = `r${divArray[index].row}c${divArray[index].column + 1}`
         divArray[index].idleft = `r${divArray[index].row}c${divArray[index].column - 1}`
@@ -67,7 +71,6 @@ function createGrid() {
     let k; //using k, since we used i on inside loop
     for (k=0;k<maxRows;k++) {
         createRow(); //fills in the entire row, adjusting all necessary variables within this inner function.
-        
         //Now that the row is created, we reset and adjust variables for next row:
         left = 0;
         bottom += tile;
@@ -120,13 +123,26 @@ let r15c4 = document.getElementById('r15c4');
 let r15c5 = document.getElementById('r15c5');
 let r15c6 = document.getElementById('r15c6');
 let r15c7 = document.getElementById('r15c7');
+let r16c4 = document.getElementById('r16c4');
+let r16c5 = document.getElementById('r16c5');
+let r16c6 = document.getElementById('r16c6');
+let r16c7 = document.getElementById('r16c7');
+let r17c4 = document.getElementById('r17c4');
+let r17c5 = document.getElementById('r17c5');
+let r17c6 = document.getElementById('r17c6');
+let r17c7 = document.getElementById('r17c7');
+let r18c4 = document.getElementById('r18c4');
+let r18c5 = document.getElementById('r18c5');
+let r18c6 = document.getElementById('r18c6');
+let r18c7 = document.getElementById('r18c7');
 
+
+
+//TEST BLOCKAGE
 let r13c4 = document.getElementById('r13c4');
 let r13c5 = document.getElementById('r13c5');
 let r13c6 = document.getElementById('r13c6');
 let r13c7 = document.getElementById('r13c7');
-
-//TEST BLOCKAGE
 // r13c4.className = 'static-square';
 // r13c5.className = 'static-square';
 // r13c6.className = 'static-square';
@@ -138,16 +154,40 @@ let r1c1 = document.getElementById('r1c1');
 let r1c2 = document.getElementById('r2c1');
 const testTetrimino = [r2c1, r2c2];  //adjustable
 
-const lTetrimino = [r14c4, r14c5, r14c6, r15c6];
+//SHAPES
+//next need to set these initial shapes
+//nearly all games start the shape in one default position, not randomized
+//sometimes the shape spawns fully on screen and cannot rotate if it will cause shape to move off screen, othertimes
+//othertimes the shape comes from off screen and is not caged by the top. I prefer this, I think.
+const laTetrimino = [r14c4, r14c5, r14c6, r15c6];
+const lbTetrimino = [r14c4, r14c5, r14c6, r15c4];
 const sTetrimino = [r14c5, r14c6, r15c5, r15c6]; //square
 const iTetrimino = [r14c4, r14c5, r14c6, r14c7];
 const tTetrimino = [r14c4, r14c5, r14c6, r15c5];
-const zTetrimino = [r14c5, r14c6, r15c4, r15c5];
-const arrayOfTetriminos = [lTetrimino, sTetrimino, iTetrimino, tTetrimino, zTetrimino];
-
+const zaTetrimino = [r14c5, r14c6, r15c4, r15c5];
+const zbTetrimino = [r14c4, r14c5, r15c5, r15c6];
+const arrayOfTetriminos = [laTetrimino, lbTetrimino, sTetrimino, iTetrimino, tTetrimino, zaTetrimino, zbTetrimino];
+const arrayOfShapeOrientations = ['la1', 'lb1', 's1', 'i1', 't1', 'za1', 'zb1']
 
 //TEST TO CHECK IDBELOW PROPERTY
 // console.log(r14c4.idbelow, r14c4.idright, r14c4.idleft);
+
+//need to assign each square in the tetrimino. there are four in each shape, 
+// if we arrange the tetrimino arrays formulaicly (right to left, top to bottom) maybe we can assign universal property name for each of the four squares in every tetrimino.
+function assignSquares() {
+
+}
+
+function rotateLa() {
+    //there are 4 states: la1, la2, la3, la4
+    if (shapeOrientation = 'la1') {
+
+    }
+
+    if (shapeOrientation = 'la2') {
+
+    }
+}
 
 
 //generates random number from zero to max, excluding max
@@ -156,12 +196,14 @@ function getRandomInt(max) {
   }
 
 function generateTetrimino() {
-    const random = getRandomInt(5); 
-    const array = arrayOfTetriminos[random];
+    const num = getRandomInt(7); 
+    const array = arrayOfTetriminos[num]; 
     let i;
     for (i=0;i<array.length;i++) {
         array[i].className = 'filled-square';
     }
+    shapeOrientation = arrayOfShapeOrientations[num];
+    console.log(shapeOrientation);
 }
 
 function generateTestTetrimino(array) {
@@ -177,7 +219,7 @@ function generateTestTetrimino(array) {
 function pathBlocked(array) {
 
     const path = array.map((e) => document.getElementById(`${e.idbelow}`)) //!! What happens if array is at row 0? then there are now elements beneath...
-    console.log(path); //test
+    // console.log(path); //test
     let j;
     for (j=0;j<array.length;j++) {
         if (path[j].className === 'static-square' || path[j].row < 2) {
@@ -214,11 +256,12 @@ function lowerPieces(array) {
 
 //ROTATE
 //individual functions to rotate each l,s,i,t,z
-//needs a global var that holds the tetrimino type, which then determins rotation type.
+//there are up to 4 states per shape: l1234, s1, i12, t1234, z1234
+//needs a global var that holds the tetrimino shape/state, which then determins rotation type.
+// let tetriminoShape = 'l'
+// let shapeOrientation = 'l1'; //should be assigned by generateTetrimino each loop
 
-function rotateL() {
 
-}
 
 
 
@@ -256,8 +299,9 @@ function fall() {
 
 
 //OPERATE
-generateTestTetrimino(testTetrimino);
-setInterval(fall, 500);
+generateTetrimino();
+// generateTestTetrimino(iTetrimino);
+setInterval(fall, 1000);
 
 
 
