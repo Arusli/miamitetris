@@ -137,16 +137,17 @@ let r13c5 = document.getElementById('r13c5');
 let r13c6 = document.getElementById('r13c6');
 let r13c7 = document.getElementById('r13c7');
 
-//test blockage
-r13c4.className = 'static-square';
-r13c5.className = 'static-square';
-r13c6.className = 'static-square';
-r13c7.className = 'static-square';
+//TEST BLOCKAGE
+// r13c4.className = 'static-square';
+// r13c5.className = 'static-square';
+// r13c6.className = 'static-square';
+// r13c7.className = 'static-square';
 
 
+//TEST TETRIMINO
 let r1c1 = document.getElementById('r1c1');
 let r1c2 = document.getElementById('r2c1');
-const testTetrimino = [r3c1, r3c2];
+const testTetrimino = [r2c1, r2c2];  //adjustable
 
 const lTetrimino = [r14c4, r14c5, r14c6, r15c6];
 const sTetrimino = [r14c5, r14c6, r15c5, r15c6]; //square
@@ -156,8 +157,8 @@ const zTetrimino = [r14c5, r14c6, r15c4, r15c5];
 const arrayOfTetriminos = [lTetrimino, sTetrimino, iTetrimino, tTetrimino, zTetrimino];
 
 
-//checks that idofsquarebelow works
-console.log(r14c4.idbelow, r14c4.idright, r14c4.idleft);
+//TEST TO CHECK IDBELOW PROPERTY
+// console.log(r14c4.idbelow, r14c4.idright, r14c4.idleft);
 
 
 //generates random number from zero to max, excluding max
@@ -178,7 +179,7 @@ function generateTestTetrimino(array) {
     array.forEach( e => {e.className = 'filled-square'})
 }
 
-// generateTetrimino(); //initialized
+
 
 
 
@@ -204,10 +205,10 @@ function makeStatic(array) {
 
 
 //PATH TESTING
-generateTestTetrimino(testTetrimino);
-console.log('is array?', Array.isArray(testTetrimino));
+// generateTestTetrimino(testTetrimino);
+// console.log('is array?', Array.isArray(testTetrimino));
 // console.log(testTetrimino[0].row, testTetrimino[0].idbelow);
-console.log('blocked?', pathBlocked(testTetrimino)); //test
+// console.log('blocked?', pathBlocked(testTetrimino)); 
 
 
 //individual functions to rotate each l,s,i,t,z
@@ -235,7 +236,7 @@ function fall() {
     //placeholder:
 
 
-    if (tetrimino[0].row > 1) {
+    if (pathBlocked(tetrimino) == false) {
         let i;
         for(i=0;i<tetrimino.length;i++) {
             let newRowNum = tetrimino[i].row - 1;
@@ -255,7 +256,8 @@ function fall() {
 }
 
 
-
+//OPERATE
+// generateTestTetrimino(testTetrimino);
 // setInterval(fall, 500);
 
 
