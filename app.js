@@ -22,31 +22,6 @@
 
 const board = document.getElementById('board');
 
-// TESTING CODE, WORKS
-// const newdiv = document.createElement('DIV');
-// const newdiv2 = document.createElement('DIV');
-// newdiv.setAttribute('class', 'blank-square');
-// newdiv2.setAttribute('class', 'blank-square');
-// board.appendChild(newdiv);
-// board.appendChild(newdiv2);
-
-// let xpos = 15;
-// let ypos = 30;
-
-// newdiv.xpos = xpos;
-// newdiv.ypos = ypos;
-
-// newdiv2.xpos = 20;
-// newdiv2.ypos = 40;
-
-// newdiv2.style.bottom = '40px';
-
-// console.log(newdiv.xpos, newdiv.ypos);
-// console.log(newdiv2.xpos, newdiv2.ypos);
-// console.log(Object.getOwnPropertyNames(newdiv));
-// newdiv.style.backgroundColor = 'black';
-// console.log(newdiv.style); //QUESTION!!! where is this property hidden? cannot view it in console without directly logging it.
-//
 
 let divArray = [];
 let rowcount = 1; //initial row value
@@ -203,6 +178,17 @@ function makeStatic(array) {
     array.forEach( element => element.setAttribute('class', 'static-square'))
 }
 
+function lowerPieces(array) {
+    let i;
+    for(i=0;i<array.length;i++) {
+        let newRowNum = array[i].row - 1;
+        // console.log(tetrimino[i].className);
+        document.getElementById(`r${newRowNum}c${array[i].column}`).setAttribute('class','filled-square');
+        array[i].setAttribute('class','blank-square');
+        // console.log(tetrimino[i].className);
+        // console.log('loop complete');
+    }
+}
 
 //PATH TESTING
 // generateTestTetrimino(testTetrimino);
@@ -211,19 +197,31 @@ function makeStatic(array) {
 // console.log('blocked?', pathBlocked(testTetrimino)); 
 
 
+
+//ROTATE
 //individual functions to rotate each l,s,i,t,z
+//needs a global var that holds the tetrimino type, which then determins rotation type.
+
+function rotateL() {
+
+}
+
+
+
+
+
+
 
 
 //Write a function that moves all filled-square class divs down one square on an interval.
 function fall() {
 
     // the reason i am making an identical array is so that there is an array with value types, not reference
-
     let tetrimino = [];
     const array = document.getElementsByClassName('filled-square'); 
    
    
-//    creates an identical array, but of value types (not reference)
+    //creates an identical array, but of value types (not reference)
    // technically array is not an array, its only array-like, so i cannot use .map on it.
     let j;
     for (j=0;j<array.length;j++) {
@@ -232,33 +230,20 @@ function fall() {
     // console.log(tetrimino);
     // console.log(tetrimino[0].row, tetrimino[0].column, tetrimino[0].id, tetrimino[0].className);
     
-    //need an if statement that checks that function pathClear (vs pathBlocked) evalutes to true
-    //placeholder:
-
-
+    //checks that function pathClear (vs pathBlocked) evalutes to true
     if (pathBlocked(tetrimino) == false) {
-        let i;
-        for(i=0;i<tetrimino.length;i++) {
-            let newRowNum = tetrimino[i].row - 1;
-            // console.log(tetrimino[i].className);
-            document.getElementById(`r${newRowNum}c${tetrimino[i].column}`).setAttribute('class','filled-square');
-            tetrimino[i].setAttribute('class','blank-square');
-            // console.log(tetrimino[i].className);
-            // console.log('loop complete');
-        }
+        lowerPieces(tetrimino);
         // console.log(tetrimino[0].row, tetrimino[0].column, tetrimino[0].id, tetrimino[0].className);
     } else {
-        makeStatic(tetrimino);
+        makeStatic(tetrimino); //freeze block in place
         generateTetrimino();
-    }
-    //
-    
+    }   
 }
 
 
 //OPERATE
-// generateTestTetrimino(testTetrimino);
-// setInterval(fall, 500);
+generateTestTetrimino(testTetrimino);
+setInterval(fall, 500);
 
 
 
@@ -276,7 +261,31 @@ function fall() {
 
 
 
+// TESTING CODE, WORKS
+// const newdiv = document.createElement('DIV');
+// const newdiv2 = document.createElement('DIV');
+// newdiv.setAttribute('class', 'blank-square');
+// newdiv2.setAttribute('class', 'blank-square');
+// board.appendChild(newdiv);
+// board.appendChild(newdiv2);
 
+// let xpos = 15;
+// let ypos = 30;
+
+// newdiv.xpos = xpos;
+// newdiv.ypos = ypos;
+
+// newdiv2.xpos = 20;
+// newdiv2.ypos = 40;
+
+// newdiv2.style.bottom = '40px';
+
+// console.log(newdiv.xpos, newdiv.ypos);
+// console.log(newdiv2.xpos, newdiv2.ypos);
+// console.log(Object.getOwnPropertyNames(newdiv));
+// newdiv.style.backgroundColor = 'black';
+// console.log(newdiv.style); //QUESTION!!! where is this property hidden? cannot view it in console without directly logging it.
+//
 
 
 
