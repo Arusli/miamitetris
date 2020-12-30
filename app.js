@@ -1,19 +1,9 @@
+//Useful methods
 //document.createElement
 //document.getElementById('parent').appendChild(childelement)
-//
 
-//create a function that creates the board with individual divs. Assign divs increasing
-//...varaible names based on a counter? Consider.
-//divs should inherit some properties from a custom prototype if I can figure out how to do it.
-//probably can use new Class for this and have function call a new class and then reassign certain
-//..custom properties and labels as needed. prototypical members can be inherited from outside
-//...the counstructor.
-//divs should have new properties of xposition, y position, row assignment, column assignment...
-//...status assignment (filled or blank).
-//I may need to assign id's to divs to distinguish and call them, and possibly/probably
-//...also create an array of every div for iterating by property. Ex. - if (divname.property = red) {}
-//I think it may be best to have 2 ids per div: x1, y10, for example...
-//...Then I can select a target div without iterating the entire array of divs to find it's position.
+
+
 
 //create a function on an interval that fills a certain starting set of blocks, 
 //...reassigning their properties (color. position, status). and moves these every interval.
@@ -32,7 +22,7 @@ const tile = 40; //determines grid unit size
 let bottom = 0;
 let left = 0;
 
-// let tetriminoShape = 'l'
+
 let shapeOrientation = 'la1';
 
 
@@ -65,14 +55,13 @@ function createRow() {
     }
 }
 
-// createRow();
+
 //NOTE: we need to add 2 or 3 hidden rows at the top to allow the new shapes to generate 'off-screen'
 function createGrid() {
-    let k; //using k, since we used i on inside loop
+    let k; //using k, since we used i on inside loop (createRow)
     for (k=0;k<maxRows;k++) {
         createRow(); //fills in the entire row, adjusting all necessary variables within this inner function.
-        //Now that the row is created, we reset and adjust variables for next row:
-        left = 0;
+        left = 0; //Now that the row is created, we reset and adjust variables for next row:
         bottom += tile;
         rowcount += 1;
         columncount = 1;
@@ -108,7 +97,9 @@ hideBottomRow();
 hideTopTwoRows();
 //row 16 is the visible top, row 2 is the visible bottom.
 
-//create tetrimino
+
+
+//CREATE TETRIMINO
 //placeholder:
 // document.getElementById('r15c5').className = 'active';
 // document.getElementById('r15c6').className = 'active';
@@ -159,13 +150,13 @@ const testTetrimino = [r2c1, r2c2];  //adjustable
 //nearly all games start the shape in one default position, not randomized
 //sometimes the shape spawns fully on screen and cannot rotate if it will cause shape to move off screen, othertimes
 //othertimes the shape comes from off screen and is not caged by the top. I prefer this, I think.
-const laTetrimino = [r14c4, r14c5, r14c6, r15c6];
-const lbTetrimino = [r14c4, r14c5, r14c6, r15c4];
-const sTetrimino = [r14c5, r14c6, r15c5, r15c6]; //square
+const laTetrimino = [r15c6, r14c4, r14c5, r14c6];
+const lbTetrimino = [r15c4, r14c4, r14c5, r14c6];
+const sTetrimino = [r15c5, r15c6, r14c5, r14c6]; //square shape
 const iTetrimino = [r14c4, r14c5, r14c6, r14c7];
-const tTetrimino = [r14c4, r14c5, r14c6, r15c5];
-const zaTetrimino = [r14c5, r14c6, r15c4, r15c5];
-const zbTetrimino = [r14c4, r14c5, r15c5, r15c6];
+const tTetrimino = [r15c5, r14c4, r14c5, r14c6];
+const zaTetrimino = [r15c4, r15c5, r14c5, r14c6];
+const zbTetrimino = [r15c5, r15c6, r14c4, r14c5];
 const arrayOfTetriminos = [laTetrimino, lbTetrimino, sTetrimino, iTetrimino, tTetrimino, zaTetrimino, zbTetrimino];
 const arrayOfShapeOrientations = ['la1', 'lb1', 's1', 'i1', 't1', 'za1', 'zb1']
 
@@ -174,12 +165,34 @@ const arrayOfShapeOrientations = ['la1', 'lb1', 's1', 'i1', 't1', 'za1', 'zb1']
 
 //need to assign each square in the tetrimino. there are four in each shape, 
 // if we arrange the tetrimino arrays formulaicly (right to left, top to bottom) maybe we can assign universal property name for each of the four squares in every tetrimino.
-function assignSquares() {
-
+function assignSquares(array) {
+    let i;
+   for (i=0;i<array.length;i++) {
+       array[i].assignment = i + 1;
+   }
 }
+
+//TEST ASSIGNSQUARES
+assignSquares(laTetrimino);
+console.log(laTetrimino[0].assignment)
+//
+
+
+
+
+//ROTATE
+//individual functions to rotate each l,s,i,t,z
+//there are up to 4 states per shape: l1234, s1, i12, t1234, z1234
+//needs a global var that holds the tetrimino shape/state, which then determins rotation type.
+// let tetriminoShape = 'l'
+// let shapeOrientation = 'l1'; //should be assigned by generateTetrimino each loop
+
 
 function rotateLa() {
     //there are 4 states: la1, la2, la3, la4
+
+    let array = getArrayOfActiveSquares();
+
     if (shapeOrientation = 'la1') {
 
     }
@@ -187,6 +200,20 @@ function rotateLa() {
     if (shapeOrientation = 'la2') {
 
     }
+}
+
+//FUNCTION FOR GRABBING ARRAY OF ACTIVE SQUARES
+// the reason i am making an identical array is so that there is an array with value types, not reference
+// creates an identical array, but of value types (not reference)
+// technically array is not an array, its only array-like, so i cannot use .map on it.
+function getArrayOfActiveSquares() {
+    let array = [];
+    const arrayLikeObject = document.getElementsByClassName('active');
+    let i;
+    for (i=0;i<arrayLikeObject.length;i++) {
+        array.push(arrayLikeObject[i]);
+    }
+    return array;
 }
 
 
@@ -217,9 +244,8 @@ function generateTestTetrimino(array) {
 
 //function to check if pathblocked
 function pathBlocked(array) {
-
-    const path = array.map((e) => document.getElementById(`${e.idbelow}`)) //!! What happens if array is at row 0? then there are now elements beneath...
-    // console.log(path); //test
+    const path = array.map((e) => document.getElementById(`${e.idbelow}`))
+    // console.log(path);
     let j;
     for (j=0;j<array.length;j++) {
         if (path[j].className === 'static' || path[j].row < 2) {
@@ -238,11 +264,10 @@ function lowerPieces(array) {
     let i;
     for(i=0;i<array.length;i++) {
         let newRowNum = array[i].row - 1;
-        // console.log(tetrimino[i].className);
         document.getElementById(`r${newRowNum}c${array[i].column}`).setAttribute('class','active');
         array[i].setAttribute('class','blank');
-        // console.log(tetrimino[i].className);
-        // console.log('loop complete');
+        //adjustProperties()
+        //adjustClass()
     }
 }
 
@@ -254,46 +279,24 @@ function lowerPieces(array) {
 
 
 
-//ROTATE
-//individual functions to rotate each l,s,i,t,z
-//there are up to 4 states per shape: l1234, s1, i12, t1234, z1234
-//needs a global var that holds the tetrimino shape/state, which then determins rotation type.
-// let tetriminoShape = 'l'
-// let shapeOrientation = 'l1'; //should be assigned by generateTetrimino each loop
-
-
-
-
-
-
-
-
-
 
 //Write a function that moves all active class divs down one square on an interval.
 function fall() {
-
-    // the reason i am making an identical array is so that there is an array with value types, not reference
-    let tetrimino = [];
-    const array = document.getElementsByClassName('active'); 
-   
-   
-    //creates an identical array, but of value types (not reference)
-   // technically array is not an array, its only array-like, so i cannot use .map on it.
-    let j;
-    for (j=0;j<array.length;j++) {
-        tetrimino.push(array[j]);
-    }
+    let tetrimino = getArrayOfActiveSquares();
     // console.log(tetrimino);
     // console.log(tetrimino[0].row, tetrimino[0].column, tetrimino[0].id, tetrimino[0].className);
     
     //checks that function pathClear (vs pathBlocked) evalutes to true
-    if (pathBlocked(tetrimino) == false) {
+    if (!pathBlocked(tetrimino)) {
         lowerPieces(tetrimino);
+        //adjustProperties() - maybe put this function inside lowerPieces
+        //adjustClasses() - put this function inside lowerPieces
+
+
         // console.log(tetrimino[0].row, tetrimino[0].column, tetrimino[0].id, tetrimino[0].className);
     } else {
         makeStatic(tetrimino); //freeze block in place
-        generateTetrimino();
+        generateTetrimino(); //starts new tetrimino at top
     }   
 }
 
