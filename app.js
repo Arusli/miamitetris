@@ -106,35 +106,42 @@ hideTopTwoRows();
 // document.getElementById('r15c7').className = 'active';
 // document.getElementById('r15c8').className = 'active';
 
-//should I use a function to name every single elemnet by their id?  probably should, if i can.
-let r14c4 = document.getElementById('r14c4');
-let r14c5 = document.getElementById('r14c5');
-let r14c6 = document.getElementById('r14c6');
-let r14c7 = document.getElementById('r14c7');
-let r15c4 = document.getElementById('r15c4');
-let r15c5 = document.getElementById('r15c5');
-let r15c6 = document.getElementById('r15c6');
-let r15c7 = document.getElementById('r15c7');
-let r16c4 = document.getElementById('r16c4');
-let r16c5 = document.getElementById('r16c5');
-let r16c6 = document.getElementById('r16c6');
-let r16c7 = document.getElementById('r16c7');
-let r17c4 = document.getElementById('r17c4');
-let r17c5 = document.getElementById('r17c5');
-let r17c6 = document.getElementById('r17c6');
-let r17c7 = document.getElementById('r17c7');
-let r18c4 = document.getElementById('r18c4');
-let r18c5 = document.getElementById('r18c5');
-let r18c6 = document.getElementById('r18c6');
-let r18c7 = document.getElementById('r18c7');
+
+//ASSIGNS EACH ELEMENT TO A VARIABLE THAT IS THE SAME AS THE ELEMENT ID
+divArray.forEach( e => {
+    window[`e.id`] = e;
+})
+
+console.log(r10c5.row, r10c5.column, r10c5.className);
+
+// let r14c4 = document.getElementById('r14c4');
+// let r14c5 = document.getElementById('r14c5');
+// let r14c6 = document.getElementById('r14c6');
+// let r14c7 = document.getElementById('r14c7');
+// let r15c4 = document.getElementById('r15c4');
+// let r15c5 = document.getElementById('r15c5');
+// let r15c6 = document.getElementById('r15c6');
+// let r15c7 = document.getElementById('r15c7');
+// let r16c4 = document.getElementById('r16c4');
+// let r16c5 = document.getElementById('r16c5');
+// let r16c6 = document.getElementById('r16c6');
+// let r16c7 = document.getElementById('r16c7');
+// let r17c4 = document.getElementById('r17c4');
+// let r17c5 = document.getElementById('r17c5');
+// let r17c6 = document.getElementById('r17c6');
+// let r17c7 = document.getElementById('r17c7');
+// let r18c4 = document.getElementById('r18c4');
+// let r18c5 = document.getElementById('r18c5');
+// let r18c6 = document.getElementById('r18c6');
+// let r18c7 = document.getElementById('r18c7');
 
 
 
-//TEST BLOCKAGE
-let r13c4 = document.getElementById('r13c4');
-let r13c5 = document.getElementById('r13c5');
-let r13c6 = document.getElementById('r13c6');
-let r13c7 = document.getElementById('r13c7');
+// //TEST BLOCKAGE
+// let r13c4 = document.getElementById('r13c4');
+// let r13c5 = document.getElementById('r13c5');
+// let r13c6 = document.getElementById('r13c6');
+// let r13c7 = document.getElementById('r13c7');
 // r13c4.className = 'static';
 // r13c5.className = 'static';
 // r13c6.className = 'static';
@@ -195,7 +202,11 @@ function rotateLa() {
     let array = getArrayOfActiveSquares();
 
     if (shapeOrientation = 'la1') {
-
+        //select elements with class active. they should already have inherited the square assignment property.
+        //move element with assignment 1 to new element. 
+        //restyle and reassign new element. 
+        //unstyle unassign old element.
+        //repeat for each element (assignments 2, 3, and 4)
     }
 
     if (shapeOrientation = 'la2') {
@@ -218,18 +229,12 @@ function getArrayOfActiveSquares() {
 }
 
 
-//generates random number from zero to max, excluding max
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-  }
+
 
 function generateTetrimino() {
-    const num = getRandomInt(7); 
+    const num = Math.floor(Math.random() * Math.floor(7)); //generates random number from zero to max, excluding max
     const array = arrayOfTetriminos[num]; 
-    let i;
-    for (i=0;i<array.length;i++) {
-        array[i].className = 'active';
-    }
+    array.forEach(e => e.className = 'active');
     shapeOrientation = arrayOfShapeOrientations[num];
     console.log(shapeOrientation);
 }
@@ -315,8 +320,8 @@ function fall() {
 
 
 //OPERATE
-generateTetrimino();
 // generateTestTetrimino(iTetrimino);
+generateTetrimino();
 setInterval(fall, 1000);
 
 
