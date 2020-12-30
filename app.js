@@ -3,7 +3,9 @@
 //document.getElementById('parent').appendChild(childelement)
 
 
-
+//GRID STYLE (WHAT IM DOING) VS OBJECT STYLE
+//Grid Style: Reassigns divs in the grid to create the illusion of one falling tetrimino.
+//Object Style: Generates a true tetrimino out of 4 divs and repositions those same divs (style.bottom, style.left) with aboslute positioning.
 
 //create a function on an interval that fills a certain starting set of blocks, 
 //...reassigning their properties (color. position, status). and moves these every interval.
@@ -23,7 +25,7 @@ let bottom = 0;
 let left = 0;
 
 
-let shapeOrientation = 'la1';
+
 
 
 
@@ -156,15 +158,16 @@ const testTetrimino = [r2c1, r2c2];  //adjustable
 //nearly all games start the shape in one default position, not randomized
 //sometimes the shape spawns fully on screen and cannot rotate if it will cause shape to move off screen, othertimes
 //othertimes the shape comes from off screen and is not caged by the top. I prefer this, I think.
-const laTetrimino = [r15c6, r14c4, r14c5, r14c6];
-const lbTetrimino = [r15c4, r14c4, r14c5, r14c6];
-const sTetrimino = [r15c5, r15c6, r14c5, r14c6]; //square shape
+const laTetrimino = [r14c4, r14c5, r14c6, r15c6];
+const lbTetrimino = [r14c4, r14c5, r14c6, r15c4];
+const sTetrimino = [r14c5, r14c6, r15c5, r15c6]; //square shape
 const iTetrimino = [r15c4, r15c5, r15c6, r15c7];
-const tTetrimino = [r15c5, r14c4, r14c5, r14c6];
-const zaTetrimino = [r15c4, r15c5, r14c5, r14c6];
-const zbTetrimino = [r15c5, r15c6, r14c4, r14c5];
+const tTetrimino = [r14c4, r14c5, r14c6, r15c5];
+const zaTetrimino = [r14c5, r14c6, r15c4, r15c5];
+const zbTetrimino = [r14c4, r14c5, r15c5, r15c6];
 const arrayOfTetriminos = [laTetrimino, lbTetrimino, sTetrimino, iTetrimino, tTetrimino, zaTetrimino, zbTetrimino];
-const arrayOfShapeOrientations = ['la1', 'lb1', 's1', 'i1', 't1', 'za1', 'zb1']
+const arrayOfShapeOrientations = ['la1', 'lb1', 's1', 'i1', 't1', 'za1', 'zb1'];
+let shapeOrientation = 'za1';
 
 //TEST TO CHECK IDBELOW PROPERTY
 // console.log(r14c4.idbelow, r14c4.idright, r14c4.idleft);
@@ -175,6 +178,18 @@ function assignTracker(array) {
     let i;
    for (i=0;i<array.length;i++) {
        array[i].tracker = i + 1;
+   }
+
+   if (shapeOrientation === 'la1' || shapeOrientation === 'lb1' || shapeOrientation === 's1' || shapeOrientation === 't1') {
+       r14c5.tracker = '0';    
+   }
+
+   if (shapeOrientation === 'i1') {
+       r15c5.tracker = '0';
+   }
+
+   if (shapeOrientation === 'za1' || shapeOrientation === 'zb1') {
+       r15c5.tracker = '0';
    }
 }
 
@@ -193,21 +208,38 @@ function assignTracker(array) {
 // let tetriminoShape = 'l'
 // let shapeOrientation = 'l1'; //should be assigned by generateTetrimino each loop
 
+//NOTES
+//la lb t za zb = rotate around stationary core
+//i s = have no stationary core, but they COULD if i wanted/it was helpful
+//some games allow shape to rotate/push off a boundary/wall, but other games don't.
+//i need to assign a core tracker to each shape.
 
 function rotateLa() {
     //there are 4 states: la1, la2, la3, la4
 
-    let array = getArrayOfActiveSquares();
+    let activeTetrimino = getArrayOfActiveSquares(); //I SHOULD MAKE A TETRIMINO OBJECT THAT CONTAINS FUNCTIONS AND GETS/SETS THE ARRAYOFACTIVESQUARES!
 
-    if (shapeOrientation = 'la1') {
-        //select elements with class active. they should already have inherited the square tracker property.
-        //move element with tracker 1 to new element. 
+    if (shapeOrientation === 'za1') {
+        //select elements with class active. they should already have inherited the square tracker property. - done
+        //move element with tracker 1 to new element. aka identify new element and style/assign new element.
+            //identify new element.
+            //1 goes right 1 space, up 1 space. 2 goes up 2 spaces. 3 goes down 1 space, right 1 space.
+            //fill new tetrimino with coordinates of id's of new spaces, then select elements by those new ids, and style/assign.
+        activeTetrimino.forEach( e => {
+            //should use 0 instead of core for core tracker because then i can order the array numerically.
+            newTetrimino.push(activeTetrimino[0].id); //core
+            newTetrimino.push(`r${activeTetrimino[1].row + 1}c${activeTetrimino[1].column + 1}`) //tracker 1
+            //tracker 2
+            //tracker 3
+
+            //then use window[newTetrimino[0]] to adjust properties and classes.
+        })
         //restyle and reassign new element. 
         //unstyle unassign old element.
         //repeat for each element (trackers 2, 3, and 4)
     }
 
-    if (shapeOrientation = 'la2') {
+    if (shapeOrientation === 'za2') {
 
     }
 }
@@ -232,9 +264,10 @@ function getArrayOfActiveSquares() {
 function generateTetrimino() {
     const num = Math.floor(Math.random() * Math.floor(7)); //generates random number from zero to max, excluding max
     const tetrimino = arrayOfTetriminos[num]; 
+    shapeOrientation = arrayOfShapeOrientations[num];
     assignTracker(arrayOfTetriminos[num]); //creates tracker property  for each square at time of generation
     tetrimino.forEach(e => e.className = 'active');
-    shapeOrientation = arrayOfShapeOrientations[num];
+    
     console.log(shapeOrientation);
 }
 
@@ -272,12 +305,10 @@ function lowerPieces() {
     let i;
     for(i=0;i<array.length;i++) {
         let newRowNum = array[i].row - 1;
-        document.getElementById(`r${newRowNum}c${array[i].column}`).setAttribute('class','active');
-        document.getElementById(`r${newRowNum}c${array[i].column}`).tracker = array[i].tracker;
+        document.getElementById(`r${newRowNum}c${array[i].column}`).setAttribute('class','active');   //adjustClassesDown()
+        document.getElementById(`r${newRowNum}c${array[i].column}`).tracker = array[i].tracker;    //adjustPropertiesDown()
         array[i].setAttribute('class','blank');
-        array[i].tracker = 0;
-        //adjustPropertiesDown()
-        //adjustClassesDown()
+        delete array[i].tracker;
     }
 }
 
@@ -323,18 +354,15 @@ function fall() {
 
 //OPERATE ONCE
 // generateTestTetrimino(iTetrimino);
-generateTetrimino();
-lowerPieces();
-lowerPieces();
-lowerPieces();
-lowerPieces();
-let trackerTest = getArrayOfActiveSquares();
-console.log(trackerTest);
-trackerTest.forEach( e => console.log(e.tracker))
+// generateTetrimino();
+// // lowerPieces();
+// let trackerTest = getArrayOfActiveSquares();
+// console.log(trackerTest);
+// trackerTest.forEach( e => console.log(e.tracker))
 
 //OPERATE FALL
-// generateTetrimino();
-// setInterval(fall, 1000);
+generateTetrimino();
+setInterval(fall, 500);
 
 
 
