@@ -112,8 +112,6 @@ divArray.forEach( e => {
     window[`e.id`] = e;
 })
 
-console.log(r10c5.row, r10c5.column, r10c5.className);
-
 // let r14c4 = document.getElementById('r14c4');
 // let r14c5 = document.getElementById('r14c5');
 // let r14c6 = document.getElementById('r14c6');
@@ -161,7 +159,7 @@ const testTetrimino = [r2c1, r2c2];  //adjustable
 const laTetrimino = [r15c6, r14c4, r14c5, r14c6];
 const lbTetrimino = [r15c4, r14c4, r14c5, r14c6];
 const sTetrimino = [r15c5, r15c6, r14c5, r14c6]; //square shape
-const iTetrimino = [r14c4, r14c5, r14c6, r14c7];
+const iTetrimino = [r15c4, r15c5, r15c6, r15c7];
 const tTetrimino = [r15c5, r14c4, r14c5, r14c6];
 const zaTetrimino = [r15c4, r15c5, r14c5, r14c6];
 const zbTetrimino = [r15c5, r15c6, r14c4, r14c5];
@@ -173,16 +171,16 @@ const arrayOfShapeOrientations = ['la1', 'lb1', 's1', 'i1', 't1', 'za1', 'zb1']
 
 //need to assign each square in the tetrimino. there are four in each shape, 
 // if we arrange the tetrimino arrays formulaicly (right to left, top to bottom) maybe we can assign universal property name for each of the four squares in every tetrimino.
-function assignSquares(array) {
+function assignTracker(array) {
     let i;
    for (i=0;i<array.length;i++) {
-       array[i].assignment = i + 1;
+       array[i].tracker = i + 1;
    }
 }
 
-//TEST ASSIGNSQUARES
-assignSquares(laTetrimino);
-console.log(laTetrimino[0].assignment)
+//TEST assignTracker
+// assignTracker(laTetrimino);
+// console.log(laTetrimino[0].tracker)
 //
 
 
@@ -202,11 +200,11 @@ function rotateLa() {
     let array = getArrayOfActiveSquares();
 
     if (shapeOrientation = 'la1') {
-        //select elements with class active. they should already have inherited the square assignment property.
-        //move element with assignment 1 to new element. 
+        //select elements with class active. they should already have inherited the square tracker property.
+        //move element with tracker 1 to new element. 
         //restyle and reassign new element. 
         //unstyle unassign old element.
-        //repeat for each element (assignments 2, 3, and 4)
+        //repeat for each element (trackers 2, 3, and 4)
     }
 
     if (shapeOrientation = 'la2') {
@@ -233,8 +231,9 @@ function getArrayOfActiveSquares() {
 
 function generateTetrimino() {
     const num = Math.floor(Math.random() * Math.floor(7)); //generates random number from zero to max, excluding max
-    const array = arrayOfTetriminos[num]; 
-    array.forEach(e => e.className = 'active');
+    const tetrimino = arrayOfTetriminos[num]; 
+    assignTracker(arrayOfTetriminos[num]); //creates tracker property  for each square at time of generation
+    tetrimino.forEach(e => e.className = 'active');
     shapeOrientation = arrayOfShapeOrientations[num];
     console.log(shapeOrientation);
 }
@@ -268,12 +267,15 @@ function makeStatic(array) {
 
 
 //MOVEMENT
-function lowerPieces(array) {
+function lowerPieces() {
+    let array = getArrayOfActiveSquares()
     let i;
     for(i=0;i<array.length;i++) {
         let newRowNum = array[i].row - 1;
         document.getElementById(`r${newRowNum}c${array[i].column}`).setAttribute('class','active');
+        document.getElementById(`r${newRowNum}c${array[i].column}`).tracker = array[i].tracker;
         array[i].setAttribute('class','blank');
+        array[i].tracker = 0;
         //adjustPropertiesDown()
         //adjustClassesDown()
     }
@@ -306,7 +308,7 @@ function fall() {
     
     //checks that function pathClear (vs pathBlocked) evalutes to true
     if (!pathBlocked(tetrimino)) {
-        lowerPieces(tetrimino);
+        lowerPieces();
         //adjustProperties() - maybe put this function inside lowerPieces
         //adjustClasses() - put this function inside lowerPieces
 
@@ -319,10 +321,20 @@ function fall() {
 }
 
 
-//OPERATE
+//OPERATE ONCE
 // generateTestTetrimino(iTetrimino);
 generateTetrimino();
-setInterval(fall, 1000);
+lowerPieces();
+lowerPieces();
+lowerPieces();
+lowerPieces();
+let trackerTest = getArrayOfActiveSquares();
+console.log(trackerTest);
+trackerTest.forEach( e => console.log(e.tracker))
+
+//OPERATE FALL
+// generateTetrimino();
+// setInterval(fall, 1000);
 
 
 
