@@ -106,6 +106,7 @@ hideTopTwoRows();
 // document.getElementById('r15c7').className = 'active';
 // document.getElementById('r15c8').className = 'active';
 
+//should I use a function to name every single elemnet by their id?  probably should, if i can.
 let r14c4 = document.getElementById('r14c4');
 let r14c5 = document.getElementById('r14c5');
 let r14c6 = document.getElementById('r14c6');
@@ -260,15 +261,27 @@ function makeStatic(array) {
     array.forEach( element => element.setAttribute('class', 'static'))
 }
 
+
+//MOVEMENT
 function lowerPieces(array) {
     let i;
     for(i=0;i<array.length;i++) {
         let newRowNum = array[i].row - 1;
         document.getElementById(`r${newRowNum}c${array[i].column}`).setAttribute('class','active');
         array[i].setAttribute('class','blank');
-        //adjustProperties()
-        //adjustClass()
+        //adjustPropertiesDown()
+        //adjustClassesDown()
     }
+}
+
+function moveRight() {
+    //adjustPropertiesRight()
+    //adjustClassesRight()
+}
+
+function moveLeft() {
+    //adjustPropertiesLeft()
+    //adjustClassesLeft()
 }
 
 //PATH TESTING
