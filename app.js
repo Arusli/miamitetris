@@ -134,16 +134,46 @@ class Tetrimino {
     
      //lowerPieces()
     lower() {
-        let array = this.actives
+        const array = this.actives
         let i;
+        for(i=0;i<array.length;i++) {
+            // document.getElementById(`r${newRowNum}c${array[i].column}`).tracker = array[i].tracker;    //adjustPropertiesDown()
+            array[i].setAttribute('class','blank');
+            // delete array[i].tracke
+        }
         for(i=0;i<array.length;i++) {
             let newRowNum = array[i].row - 1;
             document.getElementById(`r${newRowNum}c${array[i].column}`).setAttribute('class','active');   //adjustClassesDown()
-            // document.getElementById(`r${newRowNum}c${array[i].column}`).tracker = array[i].tracker;    //adjustPropertiesDown()
-            array[i].setAttribute('class','blank');
-            delete array[i].tracker;
         }
     }
+
+    //move left
+    moveLeft() {
+        const array = this.actives;
+        let i;
+        for(i=0;i<array.length;i++) {
+            array[i].setAttribute('class','blank');
+        }
+        for(i=0;i<array.length;i++) {
+            let newColumnNum = array[i].column - 1;
+            document.getElementById(`r${array[i].row}c${newColumnNum}`).setAttribute('class','active');   //adjustClasses
+        }
+    }
+
+    //move right
+    moveRight() {
+            const array = this.actives;
+            let i;
+            for(i=0;i<array.length;i++) {
+                array[i].setAttribute('class','blank');
+            }
+            for(i=0;i<array.length;i++) {
+                let newColumnNum = array[i].column + 1;
+                document.getElementById(`r${array[i].row}c${newColumnNum}`).setAttribute('class','active');  //adjustClasses
+            }
+            console.log(array);
+            console.log(this.actives);
+        }
 
     //pathBlocked()
     get isBlocked() {
@@ -167,9 +197,7 @@ class Tetrimino {
    
     //assign Tracker - THIS ONE IS HARD BECAUSE IT USES SO MANY OUTSIDE VARIABLES
     
-    //move left
-    
-    //move right
+  
 
     //move down
 
@@ -847,17 +875,25 @@ function fallingJ() {
 // console.log(Mino.actives.sort((a,b) => a.tracker - b.tracker));
 
 // OPERATE FALL
-Mino.generate();
-setInterval(fall, 1000);
+// Mino.generate();
+// setInterval(fall, 1000);
 
 
 //why does ROTATE BACK FAIL?
 
 //STATIC Z1
-// generateZ1Tetrimino();
-// Mino.lower();
-// Mino.rotateZ();
-// Mino.rotateZ(); 
+generateZ1Tetrimino();
+Mino.lower();
+Mino.moveRight();
+Mino.moveLeft();
+Mino.moveLeft();
+Mino.moveRight();
+Mino.moveRight();
+Mino.moveRight();
+Mino.lower();
+
+// Mino.rotate();
+// Mino.rotate(); 
 // console.log('actives alphabetically', Mino.actives);
 // console.log('current orientation', shapeOrientation)
 // Mino.actives.forEach( e => console.log(e.tracker));
@@ -865,10 +901,10 @@ setInterval(fall, 1000);
 
 //STATIC Z2
 // generateZ2Tetrimino();
-// Mino.rotateZ();
-// Mino.rotateZ();
-// Mino.rotateZ();
-// Mino.rotateZ();
+// Mino.rotate();
+// Mino.rotate();
+// Mino.rotate();
+// Mino.rotate();
 // console.log('actives alphabetically', Mino.actives);
 // console.log('current orientation', shapeOrientation)
 // Mino.actives.forEach( e => console.log(e.tracker));
@@ -885,16 +921,16 @@ setInterval(fall, 1000);
 
 
 
-// Mino.rotateT(); //t2
+// Mino.rotate(); //t2
 // console.log('orientation', shapeOrientation)
 // console.log('actives alphabetically', Mino.actives);
-// Mino.rotateT(); //t3
+// Mino.rotate(); //t3
 // console.log('orientation', shapeOrientation)
 // console.log('actives alphabetically', Mino.actives);
-// Mino.rotateT(); //t4
+// Mino.rotate(); //t4
 // console.log('orientation', shapeOrientation)
 // console.log('actives alphabetically', Mino.actives);
-// Mino.rotateT(); //t1
+// Mino.rotate(); //t1
 // console.log('orientation', shapeOrientation)
 // console.log('actives alphabetically', Mino.actives);
 
@@ -906,9 +942,9 @@ setInterval(fall, 1000);
 // STATIC I Tetrimino - WORKS
 // generateITetrimino();
 // console.log('orientation', shapeOrientation)
-// Mino.rotateI();
+// Mino.rotate();
 // console.log('orientation', shapeOrientation)
-// Mino.rotateI();
+// Mino.rotate();
 // console.log('orientation', shapeOrientation)
 
 // FALLING I1 - WORKS
@@ -920,13 +956,13 @@ setInterval(fall, 1000);
 // STATIC S Tetrimino - Works
 // generateSTetrimino();
 // console.log('orientation', shapeOrientation)
-// Mino.rotateS();
+// Mino.rotate();
 // console.log('orientation', shapeOrientation);
-// Mino.rotateS();
+// Mino.rotate();
 // console.log('orientation', shapeOrientation);
-// Mino.rotateS();
+// Mino.rotate();
 // console.log('orientation', shapeOrientation);
-// Mino.rotateS();
+// Mino.rotate();
 // console.log('orientation', shapeOrientation);
 
 // FALLING S1 - Works
@@ -937,16 +973,16 @@ setInterval(fall, 1000);
 // generateLTetrimino(); 
 // console.log('orientation', shapeOrientation);
 // console.log('actives alphabetically', Mino.actives);
-// Mino.rotateL(); //l2
+// Mino.rotate(); //l2
 // console.log('orientation', shapeOrientation);
 // console.log('actives alphabetically', Mino.actives);
-// Mino.rotateL(); //l3
+// Mino.rotate(); //l3
 // console.log('orientation', shapeOrientation);
 // console.log('actives alphabetically', Mino.actives);
-// Mino.rotateL(); //l4
+// Mino.rotate(); //l4
 // console.log('orientation', shapeOrientation);
 // console.log('actives alphabetically', Mino.actives);
-// Mino.rotateL();  //l1
+// Mino.rotate();  //l1
 // console.log('orientation', shapeOrientation);
 // console.log('actives alphabetically', Mino.actives);
 
@@ -959,22 +995,35 @@ setInterval(fall, 1000);
 // generateJTetrimino();
 // console.log('orientation', shapeOrientation);
 // console.log('actives alphabetically', Mino.actives);
-// Mino.rotateJ();
+// Mino.rotate();
 // console.log('orientation', shapeOrientation);
 // console.log('actives alphabetically', Mino.actives);
-// Mino.rotateJ();
+// Mino.rotate();
 // console.log('orientation', shapeOrientation);
 // console.log('actives alphabetically', Mino.actives);
-// Mino.rotateJ();
+// Mino.rotate();
 // console.log('orientation', shapeOrientation);
 // console.log('actives alphabetically', Mino.actives);
-// Mino.rotateJ();
+// Mino.rotate();
 // console.log('orientation', shapeOrientation);
 // console.log('actives alphabetically', Mino.actives);
 
 // FALLING J1 - WORKS
 // generateJTetrimino();
 // setInterval(fallingJ, 1000);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
