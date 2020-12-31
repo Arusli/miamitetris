@@ -332,7 +332,170 @@ rotateI() {
         shapeOrientation = 'i1';
     }
 }
+
+rotateS() {
+    if (shapeOrientation === 's1') {
+        let orderedArray = Mino.actives;
+        let newPositionIds = [];
+        newPositionIds.push(`r${orderedArray[0].row + 2}c${orderedArray[0].column}`);
+     
+        newPositionIds.push(`r${orderedArray[1].row + 1}c${orderedArray[1].column - 1}`);
+        newPositionIds.push(orderedArray[2].id);
+        newPositionIds.push(`r${orderedArray[3].row - 1}c${orderedArray[3].column - 1}`);
+        let i;
+        for (i=0;i<newPositionIds.length;i++) {
+            orderedArray[i].className = 'blank';
+        }
+        for (i=0;i<newPositionIds.length;i++) {
+            window[newPositionIds[i]].className = 'active';
+        }
+        shapeOrientation = 's2';     
+    } else if (shapeOrientation === 's2') {
+        let orderedArray = Mino.actives;
+        let newPositionIds = [];
+        newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[0].column + 1}`);
+        newPositionIds.push(`r${orderedArray[1].row - 1}c${orderedArray[1].column + 1}`);
+        newPositionIds.push(orderedArray[2].id);
+        newPositionIds.push(`r${orderedArray[3].row - 2}c${orderedArray[3].column}`);
+        let i;
+        for (i=0;i<newPositionIds.length;i++) {
+            orderedArray[i].className = 'blank';
+        }
+        for (i=0;i<newPositionIds.length;i++) {
+            window[newPositionIds[i]].className = 'active';
+        }
+        shapeOrientation = 's1';
+    }
+}
+
+rotateL() {
+    if (shapeOrientation === 'l1') {
+        let orderedArray = Mino.actives;
+        let newPositionIds = [];
+        newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[0].column + 1}`);
+        newPositionIds.push(orderedArray[1].id);
+        newPositionIds.push(`r${orderedArray[2].row - 1}c${orderedArray[2].column - 1}`);
+        newPositionIds.push(`r${orderedArray[3].row - 2}c${orderedArray[3].column}`);
+        let i;
+        for (i=0;i<newPositionIds.length;i++) {
+            orderedArray[i].className = 'blank';
+        }
+        for (i=0;i<newPositionIds.length;i++) {
+            window[newPositionIds[i]].className = 'active';
+        }
+        shapeOrientation = 'l2';     
+    } else if (shapeOrientation === 'l2') {
+        let orderedArray = Mino.actives;
+        let newPositionIds = [];
+        newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[0].column - 1}`);
+        newPositionIds.push(`r${orderedArray[1].row}c${orderedArray[1].column - 2}`);
+        newPositionIds.push(orderedArray[2].id);
+        newPositionIds.push(`r${orderedArray[3].row - 1}c${orderedArray[3].column + 1}`);
+        let i;
+        for (i=0;i<newPositionIds.length;i++) {
+            orderedArray[i].className = 'blank';
+        }
+        for (i=0;i<newPositionIds.length;i++) {
+            window[newPositionIds[i]].className = 'active';
+        }
+        shapeOrientation = 'l3';
+    } else if (shapeOrientation === 'l3') {
+        let orderedArray = Mino.actives;
+        let newPositionIds = [];
+        newPositionIds.push(`r${orderedArray[0].row + 2}c${orderedArray[0].column}`);
+        newPositionIds.push(`r${orderedArray[1].row + 1}c${orderedArray[1].column + 1}`);
+        newPositionIds.push(orderedArray[2].id);
+        newPositionIds.push(`r${orderedArray[3].row - 1}c${orderedArray[3].column - 1}`);
+        let i;
+        for (i=0;i<newPositionIds.length;i++) {
+            orderedArray[i].className = 'blank';
+        }
+        for (i=0;i<newPositionIds.length;i++) {
+            window[newPositionIds[i]].className = 'active';
+        }
+        shapeOrientation = 'l4';
+    } else if (shapeOrientation === 'l4') {
+        let orderedArray = Mino.actives;
+        let newPositionIds = [];
+        newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[0].column - 1}`);
+        newPositionIds.push(orderedArray[1].id);
+        newPositionIds.push(`r${orderedArray[2].row}c${orderedArray[2].column + 2}`);
+        newPositionIds.push(`r${orderedArray[3].row - 1}c${orderedArray[3].column + 1}`);
+        let i;
+        for (i=0;i<newPositionIds.length;i++) {
+            orderedArray[i].className = 'blank';
+        }
+        for (i=0;i<newPositionIds.length;i++) {
+            window[newPositionIds[i]].className = 'active';
+        }
+        shapeOrientation = 'l1';
+    }
+}
   
+
+rotateJ() {
+    if (shapeOrientation === 'j1') {
+        let orderedArray = Mino.actives;
+        let newPositionIds = [];
+        newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[0].column + 1}`);
+        newPositionIds.push(orderedArray[1].id);
+        newPositionIds.push(`r${orderedArray[2].row - 1}c${orderedArray[2].column - 1}`);
+        newPositionIds.push(`r${orderedArray[3].row}c${orderedArray[3].column + 2}`);
+        let i;
+        for (i=0;i<newPositionIds.length;i++) {
+            orderedArray[i].className = 'blank';
+        }
+        for (i=0;i<newPositionIds.length;i++) {
+            window[newPositionIds[i]].className = 'active';
+        }
+        shapeOrientation = 'j2';     
+    } else if (shapeOrientation === 'j2') {
+        let orderedArray = Mino.actives;
+        let newPositionIds = [];
+        newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[0].column - 1}`);
+        newPositionIds.push(orderedArray[1].id);
+        newPositionIds.push(`r${orderedArray[2].row - 1}c${orderedArray[2].column + 1}`);
+        newPositionIds.push(`r${orderedArray[3].row - 2}c${orderedArray[3].column}`);
+        let i;
+        for (i=0;i<newPositionIds.length;i++) {
+            orderedArray[i].className = 'blank';
+        }
+        for (i=0;i<newPositionIds.length;i++) {
+            window[newPositionIds[i]].className = 'active';
+        }
+        shapeOrientation = 'j3';
+    } else if (shapeOrientation === 'j3') {
+        let orderedArray = Mino.actives;
+        let newPositionIds = [];
+        newPositionIds.push(`r${orderedArray[0].row}c${orderedArray[0].column - 2}`);
+        newPositionIds.push(`r${orderedArray[1].row + 1}c${orderedArray[1].column + 1}`);
+        newPositionIds.push(orderedArray[2].id);
+        newPositionIds.push(`r${orderedArray[3].row - 1}c${orderedArray[3].column - 1}`);
+        let i;
+        for (i=0;i<newPositionIds.length;i++) {
+            orderedArray[i].className = 'blank';
+        }
+        for (i=0;i<newPositionIds.length;i++) {
+            window[newPositionIds[i]].className = 'active';
+        }
+        shapeOrientation = 'j4';
+    } else if (shapeOrientation === 'j4') {
+        let orderedArray = Mino.actives;
+        let newPositionIds = [];
+        newPositionIds.push(`r${orderedArray[0].row + 2}c${orderedArray[0].column}`);
+        newPositionIds.push(`r${orderedArray[1].row + 1}c${orderedArray[1].column - 1}`);
+        newPositionIds.push(orderedArray[2].id);
+        newPositionIds.push(`r${orderedArray[3].row - 1}c${orderedArray[3].column + 1}`);
+        let i;
+        for (i=0;i<newPositionIds.length;i++) {
+            orderedArray[i].className = 'blank';
+        }
+        for (i=0;i<newPositionIds.length;i++) {
+            window[newPositionIds[i]].className = 'active';
+        }
+        shapeOrientation = 'j1';
+    }
+}
         
     
 } //end of class
@@ -407,7 +570,7 @@ const sqTetrimino = [r14c5, r14c6, r15c5, r15c6]; //square shape
 const iTetrimino = [r14c4, r14c5, r14c6, r14c7];
 const tTetrimino = [r14c4, r14c5, r14c6, r15c5];
 const z1Tetrimino = [r14c5, r14c6, r15c4, r15c5];
-const z2Tetrimino = [r14c8, r15c8, r15c9, r16c9]; //testing z2
+const z2Tetrimino = [r14c8, r15c8, r15c9, r16c9]; //testing only
 const sTetrimino = [r14c4, r14c5, r15c5, r15c6];
 const arrayOfTetriminos = [lTetrimino, jTetrimino, sqTetrimino, iTetrimino, tTetrimino, z1Tetrimino, sTetrimino];
 const arrayOfShapeOrientations = ['l1', 'j1', 'sq1', 'i1', 't1', 'z1', 's1'];
@@ -544,6 +707,20 @@ function generateITetrimino() {
     shapeOrientation = 'i1';
 }
 
+function generateSTetrimino() {
+    sTetrimino.forEach( e => {e.className = 'active'});
+    shapeOrientation = 's1';
+}
+
+function generateLTetrimino() {
+    lTetrimino.forEach( e => {e.className = 'active'});
+    shapeOrientation = 'l1';
+}
+
+function generateJTetrimino() {
+    jTetrimino.forEach( e => {e.className = 'active'});
+    shapeOrientation = 'j1';
+}
 
 // function pathBlocked() {
 //     const path = Mino.actives.map((e) => document.getElementById(`${e.idbelow}`))
@@ -646,7 +823,39 @@ function fallingI() {
     }
 }
 
+function fallingS() {
+    if (!Mino.isBlocked) {
+        Mino.rotateS();
+        Mino.lower();
+    } else {
+    console.log('blocked?', Mino.isBlocked);
+    Mino.makeStatic(); //freeze block in place
+    generateSTetrimino();
+    }
+}
 
+function fallingL() {
+    if (!Mino.isBlocked) {
+        Mino.rotateL();
+        Mino.lower();
+    } else {
+    console.log('blocked?', Mino.isBlocked);
+    Mino.makeStatic(); //freeze block in place
+    generateLTetrimino();
+    }
+}
+
+
+function fallingJ() {
+    if (!Mino.isBlocked) {
+        Mino.rotateJ();
+        Mino.lower();
+    } else {
+    console.log('blocked?', Mino.isBlocked);
+    Mino.makeStatic(); //freeze block in place
+    generateJTetrimino();
+    }
+}
 
 //OPERATE ONCE
 // Mino.generate();
@@ -713,21 +922,78 @@ function fallingI() {
 // setInterval(fallingT, 1000);
 
 
-//STATIC I Tetrimino - WORKS
-generateITetrimino();
-console.log('orientation', shapeOrientation)
-Mino.rotateI();
-console.log('orientation', shapeOrientation)
-Mino.rotateI();
-console.log('orientation', shapeOrientation)
+// STATIC I Tetrimino - WORKS
+// generateITetrimino();
+// console.log('orientation', shapeOrientation)
+// Mino.rotateI();
+// console.log('orientation', shapeOrientation)
+// Mino.rotateI();
+// console.log('orientation', shapeOrientation)
 
-//FALLING I1 - WORKS
-generateITetrimino();
-setInterval(fallingI, 1000);
-
-
+// FALLING I1 - WORKS
+// generateITetrimino();
+// setInterval(fallingI, 1000);
 
 
+
+// STATIC S Tetrimino - Works
+// generateSTetrimino();
+// console.log('orientation', shapeOrientation)
+// Mino.rotateS();
+// console.log('orientation', shapeOrientation);
+// Mino.rotateS();
+// console.log('orientation', shapeOrientation);
+// Mino.rotateS();
+// console.log('orientation', shapeOrientation);
+// Mino.rotateS();
+// console.log('orientation', shapeOrientation);
+
+// FALLING S1 - Works
+// generateSTetrimino();
+// setInterval(fallingS, 1000);
+
+// STATIC L Tetrimino - WORKS
+// generateLTetrimino(); 
+// console.log('orientation', shapeOrientation);
+// console.log('actives alphabetically', Mino.actives);
+// Mino.rotateL(); //l2
+// console.log('orientation', shapeOrientation);
+// console.log('actives alphabetically', Mino.actives);
+// Mino.rotateL(); //l3
+// console.log('orientation', shapeOrientation);
+// console.log('actives alphabetically', Mino.actives);
+// Mino.rotateL(); //l4
+// console.log('orientation', shapeOrientation);
+// console.log('actives alphabetically', Mino.actives);
+// Mino.rotateL();  //l1
+// console.log('orientation', shapeOrientation);
+// console.log('actives alphabetically', Mino.actives);
+
+
+// FALLING L1 - Works
+// generateLTetrimino();
+// setInterval(fallingL, 1000);
+
+//STATIC J - WORKS
+// generateJTetrimino();
+// console.log('orientation', shapeOrientation);
+// console.log('actives alphabetically', Mino.actives);
+// Mino.rotateJ();
+// console.log('orientation', shapeOrientation);
+// console.log('actives alphabetically', Mino.actives);
+// Mino.rotateJ();
+// console.log('orientation', shapeOrientation);
+// console.log('actives alphabetically', Mino.actives);
+// Mino.rotateJ();
+// console.log('orientation', shapeOrientation);
+// console.log('actives alphabetically', Mino.actives);
+// Mino.rotateJ();
+// console.log('orientation', shapeOrientation);
+// console.log('actives alphabetically', Mino.actives);
+
+// FALLING J1 - WORKS
+// generateJTetrimino();
+// setInterval(fallingJ, 1000);
 
 
 
