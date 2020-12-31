@@ -25,7 +25,7 @@ let bottom = 0;
 let left = 0;
 
 
-
+////ATTEMPTING TO CREATE TETRIMINO OBJECT TO HOUSE METHODS AND A GET/SET FOR THE ARRAY OF ACTIVE ELEMENTS (AKA THE TETRIMINO)
 
 
 
@@ -102,6 +102,83 @@ hideTopTwoRows();
 
 
 //CREATE TETRIMINO
+
+
+
+class Tetrimino {
+    constructor(){
+        this.name = 'terminino object'
+    }
+
+     //getArrayOfActiveSquares()
+    get actives() {
+        let array = [];
+        const arrayLikeObject = document.getElementsByClassName('active');
+        let i;
+        for (i=0;i<arrayLikeObject.length;i++) {
+            array.push(arrayLikeObject[i]);
+        }
+        return array;
+    }
+
+     //generateTetriminos()
+    generate() {
+        const num = Math.floor(Math.random() * Math.floor(7)); //generates random number from zero to max, excluding max
+        const tetrimino = arrayOfTetriminos[num]; 
+        shapeOrientation = arrayOfShapeOrientations[num];
+        assignTracker(arrayOfTetriminos[num]); //creates tracker property for each square at time of generation. THIS USES OUTSIDE FUNCTION.
+        tetrimino.forEach(e => e.className = 'active');
+        
+        console.log(shapeOrientation);
+    }
+    
+     //lowerPieces()
+    lower() {
+        let array = this.actives
+        let i;
+        for(i=0;i<array.length;i++) {
+            let newRowNum = array[i].row - 1;
+            document.getElementById(`r${newRowNum}c${array[i].column}`).setAttribute('class','active');   //adjustClassesDown()
+            document.getElementById(`r${newRowNum}c${array[i].column}`).tracker = array[i].tracker;    //adjustPropertiesDown()
+            array[i].setAttribute('class','blank');
+            delete array[i].tracker;
+        }
+    }
+
+    //pathBlocked()
+    get isBlocked() {
+        const path = Mino.actives.map((e) => document.getElementById(`${e.idbelow}`))
+        // console.log(path);
+        let j;
+        for (j=0;j<Mino.actives.length;j++) {
+            if (path[j].className === 'static' || path[j].row < 2) {
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+
+    //makeStatic()
+    makeStatic() {
+        Mino.actives.forEach( element => element.setAttribute('class', 'static'))
+    }
+
+   
+    //assign Tracker - THIS ONE IS HARD BECAUSE IT USES SO MANY OUTSIDE VARIABLES
+    
+    //move left
+    
+    //move right
+
+}
+
+let Mino = new Tetrimino();
+
+
+
+
+/////
 //placeholder:
 // document.getElementById('r15c5').className = 'active';
 // document.getElementById('r15c6').className = 'active';
@@ -248,6 +325,8 @@ function rotateLa() {
 // the reason i am making an identical array is so that there is an array with value types, not reference
 // creates an identical array, but of value types (not reference)
 // technically array is not an array, its only array-like, so i cannot use .map on it.
+
+
 function getArrayOfActiveSquares() {
     let array = [];
     const arrayLikeObject = document.getElementsByClassName('active');
@@ -265,7 +344,7 @@ function generateTetrimino() {
     const num = Math.floor(Math.random() * Math.floor(7)); //generates random number from zero to max, excluding max
     const tetrimino = arrayOfTetriminos[num]; 
     shapeOrientation = arrayOfShapeOrientations[num];
-    assignTracker(arrayOfTetriminos[num]); //creates tracker property  for each square at time of generation
+    assignTracker(arrayOfTetriminos[num]); //creates tracker property for each square at time of generation
     tetrimino.forEach(e => e.className = 'active');
     
     console.log(shapeOrientation);
@@ -281,11 +360,11 @@ function generateTestTetrimino(array) {
 
 
 //function to check if pathblocked
-function pathBlocked(array) {
-    const path = array.map((e) => document.getElementById(`${e.idbelow}`))
+function pathBlocked() {
+    const path = Mino.actives.map((e) => document.getElementById(`${e.idbelow}`))
     // console.log(path);
     let j;
-    for (j=0;j<array.length;j++) {
+    for (j=0;j<Mino.actives.length;j++) {
         if (path[j].className === 'static' || path[j].row < 2) {
             return true;
             break;
@@ -294,8 +373,8 @@ function pathBlocked(array) {
     return false;
 }
 
-function makeStatic(array) {
-    array.forEach( element => element.setAttribute('class', 'static'))
+function makeStatic() {
+    Mino.actives.forEach( element => element.setAttribute('class', 'static'))
 }
 
 
@@ -333,37 +412,49 @@ function moveLeft() {
 
 //Write a function that moves all active class divs down one square on an interval.
 function fall() {
-    let tetrimino = getArrayOfActiveSquares();
+    // let tetrimino = Mino.actives
+    // let tetrimino = getArrayOfActiveSquares();
     // console.log(tetrimino);
     // console.log(tetrimino[0].row, tetrimino[0].column, tetrimino[0].id, tetrimino[0].className);
     
     //checks that function pathClear (vs pathBlocked) evalutes to true
-    if (!pathBlocked(tetrimino)) {
-        lowerPieces();
-        //adjustProperties() - maybe put this function inside lowerPieces
-        //adjustClasses() - put this function inside lowerPieces
-
+    if (!Mino.isBlocked) {
+        Mino.lower();
+        // lowerPieces();
 
         // console.log(tetrimino[0].row, tetrimino[0].column, tetrimino[0].id, tetrimino[0].className);
     } else {
-        makeStatic(tetrimino); //freeze block in place
-        generateTetrimino(); //starts new tetrimino at top
+        Mino.makeStatic(); //freeze block in place
+        Mino.generate();
+        // generateTetrimino(); //starts new tetrimino at top
     }   
 }
 
 
-//OPERATE ONCE
+// Old Code
 // generateTestTetrimino(iTetrimino);
 // generateTetrimino();
-// // lowerPieces();
-// let trackerTest = getArrayOfActiveSquares();
-// console.log(trackerTest);
-// trackerTest.forEach( e => console.log(e.tracker))
+// lowerPieces();
+// let trackerTest = Mino.actives;
+
+//OPERATE ONCE
+// Mino.generate();
+// Mino.lower();
+// Mino.lower();
+// Mino.lower();
+// console.log(Mino.actives);
+// Mino.actives.forEach( e => console.log(e.tracker))
 
 //OPERATE FALL
-generateTetrimino();
+// generateTetrimino();
+
+Mino.generate();
 setInterval(fall, 500);
 
+
+//test
+// Mino.name = 'andrew'
+// console.log('Mino.name', Mino.name);
 
 
 
