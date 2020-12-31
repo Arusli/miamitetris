@@ -171,9 +171,15 @@ class Tetrimino {
     
     //move right
 
-    //Rotate
+    //move down
 
-    
+    //isRightBound
+
+    //isLeftBound
+
+    //isTopBound (game over)
+
+    //Rotate
     rotateZ() {
         if (shapeOrientation === 'z1') {
             let orderedArray = Mino.actives
@@ -196,13 +202,12 @@ class Tetrimino {
             //then use window[newPosition[0]] to adjust properties and classes.
             let i;
             for (i=0;i<newPositionIds.length;i++) {
-                if (i !== 3) {
-                window[newPositionIds[i]].className = 'active';
                 orderedArray[i].className = 'blank';
-                // window[newPositionIds[i]].tracker = orderedArray[i].tracker;
-                // delete orderedArray[i].tracker;
-                }
             }
+            for (i=0;i<newPositionIds.length;i++) {
+                window[newPositionIds[i]].className = 'active';
+            }
+            
             // console.log('active arrays after rotation z1 to z2', Mino.actives.sort((a,b) => a.tracker - b.tracker));
             shapeOrientation = 'z2';     
         } else if (shapeOrientation === 'z2') {
@@ -217,18 +222,116 @@ class Tetrimino {
         console.log('z2', newPositionIds);
         let i;
         for (i=0;i<newPositionIds.length;i++) {
-            if (i !== 1) {
-            window[newPositionIds[i]].className = 'active';
             orderedArray[i].className = 'blank';
-            // window[newPositionIds[i]].tracker = orderedArray[i].tracker;
-            // delete orderedArray[i].tracker;
-            }
         }
-        console.log('active arrays after rotation z2 to z1', Mino.actives)
+        for (i=0;i<newPositionIds.length;i++) {
+            window[newPositionIds[i]].className = 'active';
+        }
         shapeOrientation = 'z1';   
     } 
 } //end rotateZ()
 
+    rotateT() {
+        if (shapeOrientation === 't1') {
+            let orderedArray = Mino.actives;
+            let newPositionIds = [];
+            newPositionIds.push(`r${orderedArray[0].row - 1}c${orderedArray[0].column + 1}`);
+            newPositionIds.push(orderedArray[1].id);
+            newPositionIds.push(orderedArray[2].id);
+            newPositionIds.push(orderedArray[3].id);
+            let i;
+            for (i=0;i<newPositionIds.length;i++) {
+                orderedArray[i].className = 'blank';
+            }
+            for (i=0;i<newPositionIds.length;i++) {
+                window[newPositionIds[i]].className = 'active';
+            }
+            shapeOrientation = 't2';     
+        } else if (shapeOrientation === 't2') {
+        let orderedArray = Mino.actives
+        let newPositionIds = [];
+        newPositionIds.push(orderedArray[0].id);
+        newPositionIds.push(orderedArray[1].id);
+        newPositionIds.push(orderedArray[2].id);
+        newPositionIds.push(`r${orderedArray[3].row - 1}c${orderedArray[3].column - 1}`) 
+        let i;
+        for (i=0;i<newPositionIds.length;i++) {
+            orderedArray[i].className = 'blank';
+        }
+        for (i=0;i<newPositionIds.length;i++) {
+            window[newPositionIds[i]].className = 'active';
+        }
+        shapeOrientation = 't3';   
+    } else if (shapeOrientation === 't3') {
+        let orderedArray = Mino.actives
+        let newPositionIds = [];
+        newPositionIds.push(orderedArray[0].id);
+        newPositionIds.push(orderedArray[1].id);
+        newPositionIds.push(orderedArray[2].id);
+        newPositionIds.push(`r${orderedArray[3].row + 1}c${orderedArray[3].column - 1}`) 
+        let i;
+        for (i=0;i<newPositionIds.length;i++) {
+            orderedArray[i].className = 'blank';
+        }
+        for (i=0;i<newPositionIds.length;i++) {
+            window[newPositionIds[i]].className = 'active';
+        }
+        console.log('active arrays after rotation z2 to z1', Mino.actives)
+        shapeOrientation = 't4';   
+    } else if (shapeOrientation === 't4') {
+        let orderedArray = Mino.actives
+        let newPositionIds = [];
+        newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[3].column + 1}`) 
+        newPositionIds.push(orderedArray[1].id);
+        newPositionIds.push(orderedArray[2].id);
+        newPositionIds.push(orderedArray[3].id);
+   
+        console.log('z2', newPositionIds);
+        let i;
+        for (i=0;i<newPositionIds.length;i++) {
+            orderedArray[i].className = 'blank';
+        }
+        for (i=0;i<newPositionIds.length;i++) {
+            window[newPositionIds[i]].className = 'active';
+        }
+        console.log('active arrays after rotation z2 to z1', Mino.actives)
+        shapeOrientation = 't1';   
+    }
+} //end rotateT()
+
+rotateI() {
+    if (shapeOrientation === 'i1') {
+        let orderedArray = Mino.actives;
+        let newPositionIds = [];
+        newPositionIds.push(`r${orderedArray[0].row - 1}c${orderedArray[0].column + 1}`);
+        newPositionIds.push(orderedArray[1].id);
+        newPositionIds.push(`r${orderedArray[2].row + 1}c${orderedArray[2].column - 1}`);
+        newPositionIds.push(`r${orderedArray[3].row + 2}c${orderedArray[3].column - 2}`);
+        let i;
+        for (i=0;i<newPositionIds.length;i++) {
+            orderedArray[i].className = 'blank';
+        }
+        for (i=0;i<newPositionIds.length;i++) {
+            window[newPositionIds[i]].className = 'active';
+        }
+        shapeOrientation = 'i2';     
+    } else if (shapeOrientation === 'i2') {
+        let orderedArray = Mino.actives;
+        let newPositionIds = [];
+        newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[0].column - 1}`);
+        newPositionIds.push(orderedArray[1].id);
+        newPositionIds.push(`r${orderedArray[2].row - 1}c${orderedArray[2].column + 1}`);
+        newPositionIds.push(`r${orderedArray[3].row - 2}c${orderedArray[3].column + 2}`);
+        let i;
+        for (i=0;i<newPositionIds.length;i++) {
+            orderedArray[i].className = 'blank';
+        }
+        for (i=0;i<newPositionIds.length;i++) {
+            window[newPositionIds[i]].className = 'active';
+        }
+        shapeOrientation = 'i1';
+    }
+}
   
         
     
@@ -301,14 +404,14 @@ divArray.forEach( e => {
 const lTetrimino = [r14c4, r14c5, r14c6, r15c6];
 const jTetrimino = [r14c4, r14c5, r14c6, r15c4];
 const sqTetrimino = [r14c5, r14c6, r15c5, r15c6]; //square shape
-const iTetrimino = [r15c4, r15c5, r15c6, r15c7];
+const iTetrimino = [r14c4, r14c5, r14c6, r14c7];
 const tTetrimino = [r14c4, r14c5, r14c6, r15c5];
 const z1Tetrimino = [r14c5, r14c6, r15c4, r15c5];
 const z2Tetrimino = [r14c8, r15c8, r15c9, r16c9]; //testing z2
 const sTetrimino = [r14c4, r14c5, r15c5, r15c6];
 const arrayOfTetriminos = [lTetrimino, jTetrimino, sqTetrimino, iTetrimino, tTetrimino, z1Tetrimino, sTetrimino];
 const arrayOfShapeOrientations = ['l1', 'j1', 'sq1', 'i1', 't1', 'z1', 's1'];
-let shapeOrientation = 'z1';
+let shapeOrientation;
 
 //TEST TO CHECK IDBELOW PROPERTY
 // console.log(r14c4.idbelow, r14c4.idright, r14c4.idleft);
@@ -397,32 +500,32 @@ function assignTracker(array) {
 // technically array is not an array, its only array-like, so i cannot use .map on it.
 
 
-function getArrayOfActiveSquares() {
-    let array = [];
-    const arrayLikeObject = document.getElementsByClassName('active');
-    let i;
-    for (i=0;i<arrayLikeObject.length;i++) {
-        array.push(arrayLikeObject[i]);
-    }
-    return array;
-}
+// function getArrayOfActiveSquares() {
+//     let array = [];
+//     const arrayLikeObject = document.getElementsByClassName('active');
+//     let i;
+//     for (i=0;i<arrayLikeObject.length;i++) {
+//         array.push(arrayLikeObject[i]);
+//     }
+//     return array;
+// }
 
 
 
-function generateTetrimino() {
-    const num = Math.floor(Math.random() * Math.floor(7)); //generates random number from zero to max, excluding max
-    const tetrimino = arrayOfTetriminos[num]; 
-    shapeOrientation = arrayOfShapeOrientations[num];
-    assignTracker(arrayOfTetriminos[num]); //creates tracker property for each square at time of generation
-    tetrimino.forEach(e => e.className = 'active');
+// function generateTetrimino() {
+//     const num = Math.floor(Math.random() * Math.floor(7)); //generates random number from zero to max, excluding max
+//     const tetrimino = arrayOfTetriminos[num]; 
+//     shapeOrientation = arrayOfShapeOrientations[num];
+//     assignTracker(arrayOfTetriminos[num]); //creates tracker property for each square at time of generation
+//     tetrimino.forEach(e => e.className = 'active');
     
-    console.log(shapeOrientation);
-}
+//     console.log(shapeOrientation);
+// }
 
 function generateZ1Tetrimino() {
     z1Tetrimino.forEach( e => {e.className = 'active'});
     // assignTracker(z1Tetrimino);
-    shapeOrientation = 'z1'
+    shapeOrientation = 'z1';
 }
 
 function generateZ2Tetrimino() {
@@ -431,6 +534,15 @@ function generateZ2Tetrimino() {
     shapeOrientation = 'z2';
 }
 
+function generateTTetrimino() {
+    tTetrimino.forEach( e => {e.className = 'active'});
+    shapeOrientation = 't1';
+}
+
+function generateITetrimino() {
+    iTetrimino.forEach( e => {e.className = 'active'});
+    shapeOrientation = 'i1';
+}
 
 
 // function pathBlocked() {
@@ -512,6 +624,27 @@ function fallingZ() {
     }
 }
 
+function fallingT() {
+    if (!Mino.isBlocked) {
+        Mino.rotateT();
+        Mino.lower();
+    } else {
+    console.log('blocked?', Mino.isBlocked);
+    Mino.makeStatic(); //freeze block in place
+    generateTTetrimino();
+    }
+}
+
+function fallingI() {
+    if (!Mino.isBlocked) {
+        Mino.rotateI();
+        Mino.lower();
+    } else {
+    console.log('blocked?', Mino.isBlocked);
+    Mino.makeStatic(); //freeze block in place
+    generateITetrimino();
+    }
+}
 
 
 
@@ -532,8 +665,8 @@ function fallingZ() {
 //STATIC Z1
 // generateZ1Tetrimino();
 // Mino.lower();
-// Mino.rotateZ1();
-// // Mino.rotateZ2(); 
+// Mino.rotateZ();
+// Mino.rotateZ(); 
 // console.log('actives alphabetically', Mino.actives);
 // console.log('current orientation', shapeOrientation)
 // Mino.actives.forEach( e => console.log(e.tracker));
@@ -551,19 +684,46 @@ function fallingZ() {
 // console.log('sorted by ascending trackers', Mino.actives.sort((a,b) => a.tracker - b.tracker));
 
 //FALLING Z1
-generateZ2Tetrimino();
-Mino.rotateZ();
-setInterval(fallingZ, 1000);
+// generateZ2Tetrimino();
+// Mino.rotateZ();
+// setInterval(fallingZ, 1000);
+
+
+//STATIC T Tetrimino - WORKS
+// generateTTetrimino();
+// console.log('orientation', shapeOrientation)
 
 
 
+// Mino.rotateT(); //t2
+// console.log('orientation', shapeOrientation)
+// console.log('actives alphabetically', Mino.actives);
+// Mino.rotateT(); //t3
+// console.log('orientation', shapeOrientation)
+// console.log('actives alphabetically', Mino.actives);
+// Mino.rotateT(); //t4
+// console.log('orientation', shapeOrientation)
+// console.log('actives alphabetically', Mino.actives);
+// Mino.rotateT(); //t1
+// console.log('orientation', shapeOrientation)
+// console.log('actives alphabetically', Mino.actives);
+
+//FALLING T1 - WORKS
+// generateTTetrimino();
+// setInterval(fallingT, 1000);
 
 
+//STATIC I Tetrimino - WORKS
+generateITetrimino();
+console.log('orientation', shapeOrientation)
+Mino.rotateI();
+console.log('orientation', shapeOrientation)
+Mino.rotateI();
+console.log('orientation', shapeOrientation)
 
-
-
-
-
+//FALLING I1 - WORKS
+generateITetrimino();
+setInterval(fallingI, 1000);
 
 
 
