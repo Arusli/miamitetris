@@ -177,10 +177,10 @@ class Tetrimino {
 
     //pathBlocked()
     get isBlocked() {
-        const path = Mino.actives.map((e) => document.getElementById(`${e.idbelow}`))
+        const path = this.actives.map((e) => document.getElementById(`${e.idbelow}`))
         // console.log(path);
         let j;
-        for (j=0;j<Mino.actives.length;j++) {
+        for (j=0;j<this.actives.length;j++) {
             if (path[j].className === 'static' || path[j].row < 2) {
                 return true;
                 break;
@@ -192,10 +192,10 @@ class Tetrimino {
     //rightBlocked - NEED TO ASSIGN idright PROPERTY! (and idleft property too)
 
     get isRightBlocked() {
-        const path = Mino.actives.map((e) => document.getElementById(`${e.idright}`))
+        const path = this.actives.map((e) => document.getElementById(`${e.idright}`))
         // console.log(path);
         let j;
-        for (j=0;j<Mino.actives.length;j++) {
+        for (j=0;j<this.actives.length;j++) {
             if (path[j].className === 'static' || path[j].column > 10) {
                 return true;
                 break;
@@ -205,10 +205,10 @@ class Tetrimino {
     }
 
     get isLeftBlocked() {
-        const path = Mino.actives.map((e) => document.getElementById(`${e.idleft}`))
+        const path = this.actives.map((e) => document.getElementById(`${e.idleft}`))
         // console.log(path);
         let j;
-        for (j=0;j<Mino.actives.length;j++) {
+        for (j=0;j<this.actives.length;j++) {
             if (path[j].className === 'static' || path[j].column < 1) {
                 return true;
                 break;
@@ -217,20 +217,27 @@ class Tetrimino {
         return false;
     }
 
-    get isDownRotateBlocked() {
+    // get isDownRotateBlocked() {
+    //     let blocked = false;
+    //     array.forEach( e => {
+    //         if (window[e].className === 'static' || window[e].row < 2) {
+    //             blocked = true;
+    //         }
+    //     })
+    //     return blocked;
+    // }
 
-    }
+    // get isRightRotateBlocked() {
 
-    get isRightRotateBlocked() {
+    // }
 
-    }
-
-    get isLeftRotateBlocked() {
+    // get isLeftRotateBlocked() {
         
-    }
+    // }
+
     //makeStatic()
     makeStatic() {
-        Mino.actives.forEach( element => element.setAttribute('class', 'static'))
+        this.actives.forEach( element => element.setAttribute('class', 'static'))
     }
 
    
@@ -248,8 +255,49 @@ class Tetrimino {
 
     //Rotate
     rotate() {
+
+        function isDownRotateBlocked(array) {
+            let j;
+            for (j=0;j<array.length;j++) {
+                if (window[array[j]].className === 'static' || window[array[j]].row < 2) {
+                    return true;
+                    break;
+                }
+            }
+            return false;
+        };
+
+        function isRightRotateBlocked(array) {
+            let j;
+            for (j=0;j<array.length;j++) {
+                if (window[array[j]].className === 'static' || window[array[j]].column > 10) {
+                    return true;
+                    break;
+                }
+            }
+            return false;
+        }
+
+        function isLeftRotateBlocked(array) {
+            let j;
+            for (j=0;j<array.length;j++) {
+                if (window[array[j]].className === 'static' || window[array[j]].column < 1) {
+                    return true;
+                    break;
+                }
+            }
+            return false;
+        }
+
+        function isRotateBlocked(array) {
+            if (isDownRotateBlocked(array) || isRightRotateBlocked(array) || isLeftRotateBlocked(array)) {
+                return true;
+            }
+            return false;
+        }
+
         if (shapeOrientation === 'z1') {
-            let orderedArray = Mino.actives
+            let orderedArray = this.actives
             let newPositionIds = []; //these are ids not objects
             //select elements with class active. they should already have inherited the square tracker property. - done
             //move element with tracker 1 to new element. aka identify new element and style/assign new element.
@@ -264,21 +312,23 @@ class Tetrimino {
             newPositionIds.push(`r${orderedArray[2].row - 1}c${orderedArray[2].column + 1}`) 
             newPositionIds.push(orderedArray[3].id);
 
-            console.log(newPositionIds);
+            console.log(newPositionIds); //check if these are left right or down bound?
     
             //then use window[newPosition[0]] to adjust properties and classes.
-            let i;
-            for (i=0;i<newPositionIds.length;i++) {
-                orderedArray[i].className = 'blank';
-            }
-            for (i=0;i<newPositionIds.length;i++) {
-                window[newPositionIds[i]].className = 'active';
-            }
-            
-            // console.log('active arrays after rotation z1 to z2', Mino.actives.sort((a,b) => a.tracker - b.tracker));
-            shapeOrientation = 'z2';     
+
+            // if (!isDownRotateBlocked(newPositionIds)) {
+                let i;
+                for (i=0;i<newPositionIds.length;i++) {
+                    orderedArray[i].className = 'blank';
+                }
+                for (i=0;i<newPositionIds.length;i++) {
+                    window[newPositionIds[i]].className = 'active';
+                }
+                shapeOrientation = 'z2'; 
+            // }
+               
         } else if (shapeOrientation === 'z2') {
-        let orderedArray = Mino.actives
+        let orderedArray = this.actives
         let newPositionIds = [];
 
          //core aka tracker 0
@@ -296,7 +346,7 @@ class Tetrimino {
         }
         shapeOrientation = 'z1';   
     } else if (shapeOrientation === 't1') {
-            let orderedArray = Mino.actives;
+            let orderedArray = this.actives;
             let newPositionIds = [];
             newPositionIds.push(`r${orderedArray[0].row - 1}c${orderedArray[0].column + 1}`);
             newPositionIds.push(orderedArray[1].id);
@@ -311,7 +361,7 @@ class Tetrimino {
             }
             shapeOrientation = 't2';     
         } else if (shapeOrientation === 't2') {
-        let orderedArray = Mino.actives
+        let orderedArray = this.actives
         let newPositionIds = [];
         newPositionIds.push(orderedArray[0].id);
         newPositionIds.push(orderedArray[1].id);
@@ -326,7 +376,7 @@ class Tetrimino {
         }
         shapeOrientation = 't3';   
     } else if (shapeOrientation === 't3') {
-        let orderedArray = Mino.actives
+        let orderedArray = this.actives
         let newPositionIds = [];
         newPositionIds.push(orderedArray[0].id);
         newPositionIds.push(orderedArray[1].id);
@@ -339,10 +389,10 @@ class Tetrimino {
         for (i=0;i<newPositionIds.length;i++) {
             window[newPositionIds[i]].className = 'active';
         }
-        console.log('active arrays after rotation z2 to z1', Mino.actives)
+        console.log('active arrays after rotation z2 to z1', this.actives)
         shapeOrientation = 't4';   
     } else if (shapeOrientation === 't4') {
-        let orderedArray = Mino.actives
+        let orderedArray = this.actives
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[3].column + 1}`) 
         newPositionIds.push(orderedArray[1].id);
@@ -357,25 +407,30 @@ class Tetrimino {
         for (i=0;i<newPositionIds.length;i++) {
             window[newPositionIds[i]].className = 'active';
         }
-        console.log('active arrays after rotation z2 to z1', Mino.actives)
+        console.log('active arrays after rotation z2 to z1', this.actives)
         shapeOrientation = 't1';   
     } else if (shapeOrientation === 'i1') {
-        let orderedArray = Mino.actives;
+
+        let orderedArray = this.actives;
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row - 1}c${orderedArray[0].column + 1}`);
         newPositionIds.push(orderedArray[1].id);
         newPositionIds.push(`r${orderedArray[2].row + 1}c${orderedArray[2].column - 1}`);
         newPositionIds.push(`r${orderedArray[3].row + 2}c${orderedArray[3].column - 2}`);
-        let i;
-        for (i=0;i<newPositionIds.length;i++) {
-            orderedArray[i].className = 'blank';
+
+        if (!isDownRotateBlocked(newPositionIds)) {
+            let i;
+            for (i=0;i<newPositionIds.length;i++) {
+                orderedArray[i].className = 'blank';
+            }
+            for (i=0;i<newPositionIds.length;i++) {
+                window[newPositionIds[i]].className = 'active';
+            }
+            shapeOrientation = 'i2';     
         }
-        for (i=0;i<newPositionIds.length;i++) {
-            window[newPositionIds[i]].className = 'active';
-        }
-        shapeOrientation = 'i2';     
+       
     } else if (shapeOrientation === 'i2') {
-        let orderedArray = Mino.actives;
+        let orderedArray = this.actives;
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[0].column - 1}`);
         newPositionIds.push(orderedArray[1].id);
@@ -390,7 +445,7 @@ class Tetrimino {
         }
         shapeOrientation = 'i1';
     } else if (shapeOrientation === 's1') {
-        let orderedArray = Mino.actives;
+        let orderedArray = this.actives;
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row + 2}c${orderedArray[0].column}`);
      
@@ -406,7 +461,7 @@ class Tetrimino {
         }
         shapeOrientation = 's2';     
     } else if (shapeOrientation === 's2') {
-        let orderedArray = Mino.actives;
+        let orderedArray = this.actives;
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[0].column + 1}`);
         newPositionIds.push(`r${orderedArray[1].row - 1}c${orderedArray[1].column + 1}`);
@@ -421,67 +476,81 @@ class Tetrimino {
         }
         shapeOrientation = 's1';
     } else if (shapeOrientation === 'l1') {
-        let orderedArray = Mino.actives;
+        let orderedArray = this.actives;
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[0].column + 1}`);
         newPositionIds.push(orderedArray[1].id);
         newPositionIds.push(`r${orderedArray[2].row - 1}c${orderedArray[2].column - 1}`);
         newPositionIds.push(`r${orderedArray[3].row - 2}c${orderedArray[3].column}`);
-        let i;
-        for (i=0;i<newPositionIds.length;i++) {
-            orderedArray[i].className = 'blank';
+
+        if (!isRotateBlocked(newPositionIds)) {
+            let i;
+            for (i=0;i<newPositionIds.length;i++) {
+                orderedArray[i].className = 'blank';
+            }
+            for (i=0;i<newPositionIds.length;i++) {
+                window[newPositionIds[i]].className = 'active';
+            }
+            shapeOrientation = 'l2'; 
         }
-        for (i=0;i<newPositionIds.length;i++) {
-            window[newPositionIds[i]].className = 'active';
-        }
-        shapeOrientation = 'l2';     
+           
     } else if (shapeOrientation === 'l2') {
-        let orderedArray = Mino.actives;
+        let orderedArray = this.actives;
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[0].column - 1}`);
         newPositionIds.push(`r${orderedArray[1].row}c${orderedArray[1].column - 2}`);
         newPositionIds.push(orderedArray[2].id);
         newPositionIds.push(`r${orderedArray[3].row - 1}c${orderedArray[3].column + 1}`);
-        let i;
-        for (i=0;i<newPositionIds.length;i++) {
+
+        if (!isRotateBlocked(newPositionIds)) {
+            let i;
+            for (i=0;i<newPositionIds.length;i++) {
             orderedArray[i].className = 'blank';
-        }
-        for (i=0;i<newPositionIds.length;i++) {
+            }
+            for (i=0;i<newPositionIds.length;i++) {
             window[newPositionIds[i]].className = 'active';
+            }
+            shapeOrientation = 'l3';
         }
-        shapeOrientation = 'l3';
+        
     } else if (shapeOrientation === 'l3') {
-        let orderedArray = Mino.actives;
+        let orderedArray = this.actives;
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row + 2}c${orderedArray[0].column}`);
         newPositionIds.push(`r${orderedArray[1].row + 1}c${orderedArray[1].column + 1}`);
         newPositionIds.push(orderedArray[2].id);
         newPositionIds.push(`r${orderedArray[3].row - 1}c${orderedArray[3].column - 1}`);
-        let i;
-        for (i=0;i<newPositionIds.length;i++) {
+        
+        if (!isRotateBlocked(newPositionIds)) {
+            let i;
+            for (i=0;i<newPositionIds.length;i++) {
             orderedArray[i].className = 'blank';
-        }
-        for (i=0;i<newPositionIds.length;i++) {
+            }
+            for (i=0;i<newPositionIds.length;i++) {
             window[newPositionIds[i]].className = 'active';
+            }
+            shapeOrientation = 'l4';
         }
-        shapeOrientation = 'l4';
     } else if (shapeOrientation === 'l4') {
-        let orderedArray = Mino.actives;
+        let orderedArray = this.actives;
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[0].column - 1}`);
         newPositionIds.push(orderedArray[1].id);
         newPositionIds.push(`r${orderedArray[2].row}c${orderedArray[2].column + 2}`);
         newPositionIds.push(`r${orderedArray[3].row - 1}c${orderedArray[3].column + 1}`);
-        let i;
-        for (i=0;i<newPositionIds.length;i++) {
+        
+        if (!isRotateBlocked(newPositionIds)) {
+            let i;
+            for (i=0;i<newPositionIds.length;i++) {
             orderedArray[i].className = 'blank';
-        }
-        for (i=0;i<newPositionIds.length;i++) {
+            }
+            for (i=0;i<newPositionIds.length;i++) {
             window[newPositionIds[i]].className = 'active';
+            }
+            shapeOrientation = 'l1';
         }
-        shapeOrientation = 'l1';
     } else if (shapeOrientation === 'j1') {
-        let orderedArray = Mino.actives;
+        let orderedArray = this.actives;
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[0].column + 1}`);
         newPositionIds.push(orderedArray[1].id);
@@ -496,7 +565,7 @@ class Tetrimino {
         }
         shapeOrientation = 'j2';     
     } else if (shapeOrientation === 'j2') {
-        let orderedArray = Mino.actives;
+        let orderedArray = this.actives;
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[0].column - 1}`);
         newPositionIds.push(orderedArray[1].id);
@@ -511,7 +580,7 @@ class Tetrimino {
         }
         shapeOrientation = 'j3';
     } else if (shapeOrientation === 'j3') {
-        let orderedArray = Mino.actives;
+        let orderedArray = this.actives;
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row}c${orderedArray[0].column - 2}`);
         newPositionIds.push(`r${orderedArray[1].row + 1}c${orderedArray[1].column + 1}`);
@@ -526,7 +595,7 @@ class Tetrimino {
         }
         shapeOrientation = 'j4';
     } else if (shapeOrientation === 'j4') {
-        let orderedArray = Mino.actives;
+        let orderedArray = this.actives;
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row + 2}c${orderedArray[0].column}`);
         newPositionIds.push(`r${orderedArray[1].row + 1}c${orderedArray[1].column - 1}`);
@@ -948,8 +1017,8 @@ function fallingJ() {
 // console.log(Mino.actives.sort((a,b) => a.tracker - b.tracker));
 
 // OPERATE FALL
-Mino.generate();
-setInterval(fall, 1000);
+// Mino.generate();
+// setInterval(fall, 1000);
 
 
 //why does ROTATE BACK FAIL?
@@ -1043,7 +1112,7 @@ setInterval(fall, 1000);
 // setInterval(fallingS, 1000);
 
 // STATIC L Tetrimino - WORKS
-// generateLTetrimino(); 
+generateLTetrimino(); 
 // console.log('orientation', shapeOrientation);
 // console.log('actives alphabetically', Mino.actives);
 // Mino.rotate(); //l2
