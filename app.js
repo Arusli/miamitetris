@@ -171,10 +171,51 @@ class Tetrimino {
     
     //move right
 
-}
+    //Rotate
+
+    rotateZa() {
+        //there are 2 shapeOrientations: za1, za2
+        
+
+        if (shapeOrientation === 'za1') {
+            const orderedArray = Mino.actives.sort((a,b) => a.tracker - b.tracker); //sorts array by ascending tracker number
+            let newPositionIds = []; //these are ids not objects
+            //select elements with class active. they should already have inherited the square tracker property. - done
+            //move element with tracker 1 to new element. aka identify new element and style/assign new element.
+                //identify new element.
+                //1 goes one up up right. 2 goes 2 up. 3 goes down one right one.
+                //fill new tetrimino with coordinates of id's of new spaces, then select elements by those new ids, and style/assign.
+            
+
+            newPositionIds.push(orderedArray[0].id); //core aka tracker 0
+            newPositionIds.push(`r${orderedArray[1].row + 1}c${orderedArray[1].column + 1}`) //tracker 1
+            newPositionIds.push(`r${orderedArray[2].row + 2}c${orderedArray[2].column}`) //tracker 2
+            newPositionIds.push(`r${orderedArray[3].row - 1}c${orderedArray[3].column + 1}`) //tracker 3
+
+            console.log(newPositionIds);
+    
+            //then use window[newPosition[0]] to adjust properties and classes.
+            let i;
+            for (i=0;i<newPositionIds.length;i++) {
+                if (i !== 0) {
+                window[newPositionIds[i]].className = 'active' ;
+                orderedArray[i].className = 'blank' ;
+                window[newPositionIds[i]].tracker = orderedArray[i].tracker;
+                delete orderedArray[i].tracker;
+                }
+            }
+
+            shapeOrientation = 'za2'                
+        }
+    
+        if (shapeOrientation === 'za2') {
+            
+        }
+    } //end rotateZa()
+
+} //end of class
 
 let Mino = new Tetrimino();
-
 
 
 
@@ -291,10 +332,11 @@ function assignTracker(array) {
 //some games allow shape to rotate/push off a boundary/wall, but other games don't.
 //i need to assign a core tracker to each shape.
 
-function rotateLa() {
+function rotateZa() {
     //there are 4 states: la1, la2, la3, la4
 
     let activeTetrimino = getArrayOfActiveSquares(); //I SHOULD MAKE A TETRIMINO OBJECT THAT CONTAINS FUNCTIONS AND GETS/SETS THE ARRAYOFACTIVESQUARES!
+    let newTetrimino = [];
 
     if (shapeOrientation === 'za1') {
         //select elements with class active. they should already have inherited the square tracker property. - done
@@ -350,8 +392,10 @@ function generateTetrimino() {
     console.log(shapeOrientation);
 }
 
-function generateTestTetrimino(array) {
-    array.forEach( e => {e.className = 'active'})
+function generateTestTetrimino() {
+    zaTetrimino.forEach( e => {e.className = 'active'});
+    assignTracker(zaTetrimino);
+    shapeOrientation = 'za1'
 }
 
 
@@ -443,13 +487,21 @@ function fall() {
 // Mino.lower();
 // Mino.lower();
 // console.log(Mino.actives);
-// Mino.actives.forEach( e => console.log(e.tracker))
+// Mino.actives.forEach( e => console.log(e.tracker));
+// console.log(Mino.actives.sort((a,b) => a.tracker - b.tracker));
 
 //OPERATE FALL
-// generateTetrimino();
+generateTestTetrimino();
+Mino.rotateZa();
+Mino.lower();
+Mino.lower();
+console.log(Mino.actives);
+console.log('orientation', shapeOrientation)
+Mino.actives.forEach( e => console.log(e.tracker));
+console.log(Mino.actives.sort((a,b) => a.tracker - b.tracker));
 
-Mino.generate();
-setInterval(fall, 500);
+// Mino.generate();
+// setInterval(fall, 500);
 
 
 //test
