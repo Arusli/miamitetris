@@ -149,15 +149,15 @@ class Tetrimino {
 
     //move left
     moveLeft() {
-        const array = this.actives;
-        let i;
-        for(i=0;i<array.length;i++) {
-            array[i].setAttribute('class','blank');
-        }
-        for(i=0;i<array.length;i++) {
-            let newColumnNum = array[i].column - 1;
-            document.getElementById(`r${array[i].row}c${newColumnNum}`).setAttribute('class','active');   //adjustClasses
-        }
+            const array = this.actives;
+            let i;
+            for(i=0;i<array.length;i++) {
+                array[i].setAttribute('class','blank');
+            }
+            for(i=0;i<array.length;i++) {
+                let newColumnNum = array[i].column - 1;
+                document.getElementById(`r${array[i].row}c${newColumnNum}`).setAttribute('class','active');   //adjustClasses
+            }  
     }
 
     //move right
@@ -502,15 +502,49 @@ class Tetrimino {
         }
         shapeOrientation = 'j1';
     }
-} //end rotate()
-        
-    
+} //end rotate()  
 } //end of class
 
 
 
 
 let Mino = new Tetrimino();
+
+
+
+
+//EVENT LISTENERS
+
+function leftEventHandler(e) {
+    if (e.keyCode == 37) {
+        Mino.moveLeft();
+    }
+}
+
+function rightEventHandler(e) {
+    if (e.keyCode == 39) {
+        Mino.moveRight();
+    }
+}
+
+function downEventHandler(e) {
+    if (e.keyCode == 40) {
+        Mino.lower();
+    }
+}
+
+function rotateEventHandler(e) {
+    if (e.keyCode == 38) {
+        Mino.rotate();
+    }
+}
+
+document.addEventListener('keydown', leftEventHandler);
+document.addEventListener('keydown', rightEventHandler);
+document.addEventListener('keydown', downEventHandler);
+document.addEventListener('keydown', rotateEventHandler);
+
+
 
 
 
@@ -787,7 +821,7 @@ function fall() {
     //checks that function pathClear (vs pathBlocked) evalutes to true
     if (!Mino.isBlocked) {
         Mino.lower();
-        Mino.rotate();
+        // Mino.rotate();
         // Mino.rotateZ();
         // lowerPieces();
 
@@ -875,22 +909,22 @@ function fallingJ() {
 // console.log(Mino.actives.sort((a,b) => a.tracker - b.tracker));
 
 // OPERATE FALL
-// Mino.generate();
-// setInterval(fall, 1000);
+Mino.generate();
+setInterval(fall, 1000);
 
 
 //why does ROTATE BACK FAIL?
 
 //STATIC Z1
-generateZ1Tetrimino();
-Mino.lower();
-Mino.moveRight();
-Mino.moveLeft();
-Mino.moveLeft();
-Mino.moveRight();
-Mino.moveRight();
-Mino.moveRight();
-Mino.lower();
+// generateZ1Tetrimino();
+// Mino.lower();
+// Mino.moveRight();
+// Mino.moveLeft();
+// Mino.moveLeft();
+// Mino.moveRight();
+// Mino.moveRight();
+// Mino.moveRight();
+// Mino.lower();
 
 // Mino.rotate();
 // Mino.rotate(); 
