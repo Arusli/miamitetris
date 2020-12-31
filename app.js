@@ -180,7 +180,7 @@ class Tetrimino {
     //isTopBound (game over)
 
     //Rotate
-    rotateZ() {
+    rotate() {
         if (shapeOrientation === 'z1') {
             let orderedArray = Mino.actives
             let newPositionIds = []; //these are ids not objects
@@ -228,11 +228,7 @@ class Tetrimino {
             window[newPositionIds[i]].className = 'active';
         }
         shapeOrientation = 'z1';   
-    } 
-} //end rotateZ()
-
-    rotateT() {
-        if (shapeOrientation === 't1') {
+    } else if (shapeOrientation === 't1') {
             let orderedArray = Mino.actives;
             let newPositionIds = [];
             newPositionIds.push(`r${orderedArray[0].row - 1}c${orderedArray[0].column + 1}`);
@@ -296,11 +292,7 @@ class Tetrimino {
         }
         console.log('active arrays after rotation z2 to z1', Mino.actives)
         shapeOrientation = 't1';   
-    }
-} //end rotateT()
-
-rotateI() {
-    if (shapeOrientation === 'i1') {
+    } else if (shapeOrientation === 'i1') {
         let orderedArray = Mino.actives;
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row - 1}c${orderedArray[0].column + 1}`);
@@ -330,11 +322,7 @@ rotateI() {
             window[newPositionIds[i]].className = 'active';
         }
         shapeOrientation = 'i1';
-    }
-}
-
-rotateS() {
-    if (shapeOrientation === 's1') {
+    } else if (shapeOrientation === 's1') {
         let orderedArray = Mino.actives;
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row + 2}c${orderedArray[0].column}`);
@@ -365,11 +353,7 @@ rotateS() {
             window[newPositionIds[i]].className = 'active';
         }
         shapeOrientation = 's1';
-    }
-}
-
-rotateL() {
-    if (shapeOrientation === 'l1') {
+    } else if (shapeOrientation === 'l1') {
         let orderedArray = Mino.actives;
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[0].column + 1}`);
@@ -429,12 +413,7 @@ rotateL() {
             window[newPositionIds[i]].className = 'active';
         }
         shapeOrientation = 'l1';
-    }
-}
-  
-
-rotateJ() {
-    if (shapeOrientation === 'j1') {
+    } else if (shapeOrientation === 'j1') {
         let orderedArray = Mino.actives;
         let newPositionIds = [];
         newPositionIds.push(`r${orderedArray[0].row + 1}c${orderedArray[0].column + 1}`);
@@ -495,7 +474,7 @@ rotateJ() {
         }
         shapeOrientation = 'j1';
     }
-}
+} //end rotate()
         
     
 } //end of class
@@ -780,6 +759,7 @@ function fall() {
     //checks that function pathClear (vs pathBlocked) evalutes to true
     if (!Mino.isBlocked) {
         Mino.lower();
+        Mino.rotate();
         // Mino.rotateZ();
         // lowerPieces();
 
@@ -791,9 +771,11 @@ function fall() {
     }   
 }
 
+
+
 function fallingZ() {
     if (!Mino.isBlocked) {
-        Mino.rotateZ();
+        Mino.rotate();
         Mino.lower();
     } else {
     Mino.makeStatic(); //freeze block in place
@@ -803,7 +785,7 @@ function fallingZ() {
 
 function fallingT() {
     if (!Mino.isBlocked) {
-        Mino.rotateT();
+        Mino.rotate();
         Mino.lower();
     } else {
     console.log('blocked?', Mino.isBlocked);
@@ -814,7 +796,7 @@ function fallingT() {
 
 function fallingI() {
     if (!Mino.isBlocked) {
-        Mino.rotateI();
+        Mino.rotate();
         Mino.lower();
     } else {
     console.log('blocked?', Mino.isBlocked);
@@ -825,7 +807,7 @@ function fallingI() {
 
 function fallingS() {
     if (!Mino.isBlocked) {
-        Mino.rotateS();
+        Mino.rotate();
         Mino.lower();
     } else {
     console.log('blocked?', Mino.isBlocked);
@@ -836,7 +818,7 @@ function fallingS() {
 
 function fallingL() {
     if (!Mino.isBlocked) {
-        Mino.rotateL();
+        Mino.rotate();
         Mino.lower();
     } else {
     console.log('blocked?', Mino.isBlocked);
@@ -848,7 +830,7 @@ function fallingL() {
 
 function fallingJ() {
     if (!Mino.isBlocked) {
-        Mino.rotateJ();
+        Mino.rotate();
         Mino.lower();
     } else {
     console.log('blocked?', Mino.isBlocked);
@@ -864,9 +846,9 @@ function fallingJ() {
 // Mino.actives.forEach( e => console.log(e.tracker));
 // console.log(Mino.actives.sort((a,b) => a.tracker - b.tracker));
 
-//OPERATE FALL
-// Mino.generate();
-// setInterval(fall, 1000);
+// OPERATE FALL
+Mino.generate();
+setInterval(fall, 1000);
 
 
 //why does ROTATE BACK FAIL?
@@ -892,9 +874,8 @@ function fallingJ() {
 // Mino.actives.forEach( e => console.log(e.tracker));
 // console.log('sorted by ascending trackers', Mino.actives.sort((a,b) => a.tracker - b.tracker));
 
-//FALLING Z1
+// FALLING Z2
 // generateZ2Tetrimino();
-// Mino.rotateZ();
 // setInterval(fallingZ, 1000);
 
 
