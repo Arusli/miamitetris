@@ -189,6 +189,45 @@ class Tetrimino {
         return false;
     }
 
+    //rightBlocked - NEED TO ASSIGN idright PROPERTY! (and idleft property too)
+
+    get isRightBlocked() {
+        const path = Mino.actives.map((e) => document.getElementById(`${e.idright}`))
+        // console.log(path);
+        let j;
+        for (j=0;j<Mino.actives.length;j++) {
+            if (path[j].className === 'static' || path[j].column > 10) {
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+
+    get isLeftBlocked() {
+        const path = Mino.actives.map((e) => document.getElementById(`${e.idleft}`))
+        // console.log(path);
+        let j;
+        for (j=0;j<Mino.actives.length;j++) {
+            if (path[j].className === 'static' || path[j].column < 1) {
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+
+    get isDownRotateBlocked() {
+
+    }
+
+    get isRightRotateBlocked() {
+
+    }
+
+    get isLeftRotateBlocked() {
+        
+    }
     //makeStatic()
     makeStatic() {
         Mino.actives.forEach( element => element.setAttribute('class', 'static'))
@@ -516,19 +555,19 @@ let Mino = new Tetrimino();
 //EVENT LISTENERS
 
 function leftEventHandler(e) {
-    if (e.keyCode == 37) {
+    if (e.keyCode == 37 && !Mino.isLeftBlocked) {
         Mino.moveLeft();
     }
 }
 
 function rightEventHandler(e) {
-    if (e.keyCode == 39) {
+    if (e.keyCode == 39 && !Mino.isRightBlocked) {
         Mino.moveRight();
     }
 }
 
 function downEventHandler(e) {
-    if (e.keyCode == 40) {
+    if (e.keyCode == 40 && !Mino.isBlocked) {
         Mino.lower();
     }
 }
