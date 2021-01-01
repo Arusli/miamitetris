@@ -460,6 +460,35 @@ class Tetrimino {
             
     //     }
     // }
+
+        function getActives() {
+            let array = [];
+            const arrayLikeObject = document.getElementsByClassName('active');
+            let i;
+            for (i=0;i<arrayLikeObject.length;i++) {
+                array.push(arrayLikeObject[i]);
+            }
+            return array;
+        }
+
+        function handleRotation(activeArray, nextArray, nextShape) {
+            if (isLeftRotateBlocked(activeArray(), nextArray())) {
+                _this.moveRight();
+                reassign(activeArray(), nextArray());
+                shapeOrientation = nextShape; 
+            } else if (isRightRotateBlocked(activeArray(), nextArray())) {
+                _this.moveLeft();
+                reassign(activeArray(), nextArray());
+                shapeOrientation = nextShape; 
+            } else if (isDownRotateBlocked(activeArray(), nextArray())) {
+                _this.moveUp();
+                reassign(activeArray(), nextArray());
+                shapeOrientation = nextShape; 
+            } else {
+                reassign(activeArray(), nextArray());
+                shapeOrientation = nextShape; 
+            } 
+        }
         
 
         if (shapeOrientation === 'z1') {
@@ -758,22 +787,7 @@ class Tetrimino {
         //     shapeOrientation = 'l2'; 
         // }
 
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'l2'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'l2'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveUp();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'l2'; 
-        } else {
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'l2'; 
-        }
+        handleRotation(getActives, makeNewArray, 'l2');
 
            
     } else if (shapeOrientation === 'l2') {
@@ -786,22 +800,7 @@ class Tetrimino {
             return newPositionArray;
         }
 
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'l3'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'l3'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveUp();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'l3'; 
-        } else {
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'l3'; 
-        }
+        handleRotation(getActives, makeNewArray, 'l3');
         
     } else if (shapeOrientation === 'l3') {
         function makeNewArray() {
@@ -813,22 +812,8 @@ class Tetrimino {
             return newPositionArray;
         }
 
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'l4'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'l4'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveUp();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'l4'; 
-        } else {
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'l4'; 
-        }
+         handleRotation(getActives, makeNewArray, 'l4');
+
     } else if (shapeOrientation === 'l4') {
 
         function makeNewArray() {
@@ -840,22 +825,8 @@ class Tetrimino {
             return newPositionArray;
         }
 
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'l1'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'l1'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveUp();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'l1'; 
-        } else {
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'l1'; 
-        }
+        handleRotation(getActives, makeNewArray, 'l1');
+
     } else if (shapeOrientation === 'j1') {
         
         function makeNewArray() {
@@ -1393,11 +1364,11 @@ function testStatic() {
 
 // OPERATE FALL
 // testStatic();
-Mino.generate();
-setInterval(fall, 1000);
+// Mino.generate();
+// setInterval(fall, 1000);
 
 
-// generateLTetrimino();
+generateLTetrimino();
 // generateITetrimino();
 // generateJTetrimino();
 
