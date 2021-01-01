@@ -327,6 +327,35 @@ class Tetrimino {
             return false;
         }
 
+        function isRightRotateBlockedOneSpace(currentArray, nextArray) {
+            let j;
+            const currentColumnMax = Math.max(...currentArray.map( e => e.column));
+            const nextColumnMax = Math.max(...nextArray.map( e => e.column));
+            console.log(currentColumnMax);
+            console.log(nextColumnMax);
+            for (j=0;j<currentArray.length;j++) {
+                if (((nextColumnMax - currentColumnMax === 1) && nextArray[j].className === 'static') || ((nextColumnMax - currentColumnMax === 1) && nextArray[j].column > rightedge)) {
+                    return true;
+                    break;
+                }
+            }
+            return false;
+        }
+
+        function isRightRotateBlockedTwoSpaces(currentArray, nextArray) {
+            let j;
+            const currentColumnMax = Math.max(...currentArray.map( e => e.column));
+            const nextColumnMax = Math.max(...nextArray.map( e => e.column));
+            console.log(currentColumnMax);
+            console.log(nextColumnMax);
+            for (j=0;j<currentArray.length;j++) {
+                if (((nextColumnMax - currentColumnMax === 2) && nextArray[j].className === 'static') || ((nextColumnMax - currentColumnMax === 2) && nextArray[j].column > rightedge)) {
+                    return true;
+                    break;
+                }
+            }
+            return false;
+        }
         // function shift(array) { //the array will be an array of id strings: newPositionIds
         //     //check all directions that an array could shift and if that shift will not cause a rotate block, shift it.
         //     let shiftUpArray = [];
@@ -363,169 +392,324 @@ class Tetrimino {
 
         //this function needs to, if blocked, rotate the piece first, then shift it appropriately.
         //I may need to create an extra invisible column on left and 2 invisibles on the right? maybe not. need special scenario for the iTetrimino only.
-        function handleRotation(currentArray, newPosition) {
-        if (isDownRotateBlocked(newPosition)) { //HERE IS THE FLOW: IF YOU PRESS ROTATE: IT ROTATES. IF DOWN ROTATE BLOCKED, THIS.MOVEUP(), THEN INSTANTLY ROTATES.
-            let shiftUpArray = [];
-            currentArray.forEach( e => {shiftUpArray.push(`r${e.row + 1}c${e.column}`)}) //array of next ids, for using to reassing classes via window[id].class =
-            //What do I do with this shiftUpArray now?
-            currentArray.forEach( e => {
-                e.className = 'blank';  //WE STILL NEED TO ROTATE THE PIECE. CAN WE PERMANENTLY ASSIGN 'THIS' TO THE OUTSIDE OBJECT? (i think we did with _this...)
-            })
-            shiftUpArray.forEach(e => {
-                window[e].className = 'active';
-            })      
-            reassign() //rotates the piece
-        } else if (isLeftRotateBlocked(newPosition)) {
-            let shiftRightArray = [];
-            currentArray.forEach( e => {
-            shiftRightArray.push(e.column + 1)    
-            })
-            reassign()
-        } else if (isRightRotateBlocked(newPosition)) {
-            //special scenario for the i Tetrimino
-            let shiftLeftArray = [];
-            currentArray.forEach( e => {
-            shiftLeftArray.push(e.column - 1) //or - 2
-            })
-            reassign()
-        } else {
-            reassign() //reassign based on
+    //     function handleRotation(currentArray, newPosition) {
+    //     if (isDownRotateBlocked(newPosition)) { //HERE IS THE FLOW: IF YOU PRESS ROTATE: IT ROTATES. IF DOWN ROTATE BLOCKED, THIS.MOVEUP(), THEN INSTANTLY ROTATES.
+    //         let shiftUpArray = [];
+    //         currentArray.forEach( e => {shiftUpArray.push(`r${e.row + 1}c${e.column}`)}) //array of next ids, for using to reassing classes via window[id].class =
+    //         //What do I do with this shiftUpArray now?
+    //         currentArray.forEach( e => {
+    //             e.className = 'blank';  //WE STILL NEED TO ROTATE THE PIECE. CAN WE PERMANENTLY ASSIGN 'THIS' TO THE OUTSIDE OBJECT? (i think we did with _this...)
+    //         })
+    //         shiftUpArray.forEach(e => {
+    //             window[e].className = 'active';
+    //         })      
+    //         reassign() //rotates the piece
+    //     } else if (isLeftRotateBlocked(newPosition)) {
+    //         let shiftRightArray = [];
+    //         currentArray.forEach( e => {
+    //         shiftRightArray.push(e.column + 1)    
+    //         })
+    //         reassign()
+    //     } else if (isRightRotateBlocked(newPosition)) {
+    //         //special scenario for the i Tetrimino
+    //         let shiftLeftArray = [];
+    //         currentArray.forEach( e => {
+    //         shiftLeftArray.push(e.column - 1) //or - 2
+    //         })
+    //         reassign()
+    //     } else {
+    //         reassign() //reassign based on
             
-        }
-    }
+    //     }
+    // }
         
 
         if (shapeOrientation === 'z1') {
-            let currentArray = this.actives;
-            let newPositionArray = []; //these are ids not objects. MAKE THEM OBJECTS BELOW SO THEY CAN EASILY FIT INTO HANDLEROTATION()
-        
-            newPositionArray.push(window[`r${currentArray[0].row + 1}c${currentArray[0].column + 1}`]) 
-            newPositionArray.push(window[`r${currentArray[1].row + 2}c${currentArray[1].column}`]) 
-            newPositionArray.push(window[`r${currentArray[2].row - 1}c${currentArray[2].column + 1}`]) 
-            newPositionArray.push(window[currentArray[3].id]);
+            function makeNewArray() {
+                let newPositionArray = []; //these are ids not objects. MAKE THEM OBJECTS BELOW SO THEY CAN EASILY FIT INTO HANDLEROTATION()
+                newPositionArray.push(window[`r${_this.actives[0].row + 1}c${_this.actives[0].column + 1}`]) 
+                newPositionArray.push(window[`r${_this.actives[1].row + 2}c${_this.actives[1].column}`]) 
+                newPositionArray.push(window[`r${_this.actives[2].row - 1}c${_this.actives[2].column + 1}`]) 
+                newPositionArray.push(window[_this.actives[3].id]);
+                return newPositionArray;
+         }
 
-            console.log('z1 to z2', newPositionArray); //check if these are left right or down bound?
-    
-            //then use window[newPosition[0]] to adjust properties and classes.
+              //then use window[newPosition[0]] to adjust properties and classes.
 
-            if (!isRotateBlocked(newPositionArray)) {
-                reassign(currentArray, newPositionArray);
-                // let i;
-                // for (i=0;i<newPositionIds.length;i++) {  //might want to extract this function into a self contained function, perhaps reassign();
-                //     orderedArray[i].className = 'blank';
-                // }
-                // for (i=0;i<newPositionIds.length;i++) {
-                //     window[newPositionIds[i]].className = 'active';
-                // }
-                shapeOrientation = 'z2'; 
-            } 
+            // if (!isRotateBlocked(newPositionArray)) {
+            //     reassign(_this.actives, newPositionArray);
+            //     let i;
+            //     for (i=0;i<newPositionIds.length;i++) {  //might want to extract this function into a self contained function, perhaps reassign();
+            //         orderedArray[i].className = 'blank';
+            //     }
+            //     for (i=0;i<newPositionIds.length;i++) {
+            //         window[newPositionIds[i]].className = 'active';
+            //     }
+            //     shapeOrientation = 'z2'; 
+            // } 
                
-        } else if (shapeOrientation === 'z2') {
-        let currentArray = this.actives;
-        let newPositionArray = [];
-        newPositionArray.push(window[currentArray[1].id]);
-        newPositionArray.push(window[`r${currentArray[0].row + 1}c${currentArray[1].column - 1}`]) 
-        newPositionArray.push(window[`r${currentArray[2].row - 1}c${currentArray[2].column - 1}`]) 
-        newPositionArray.push(window[`r${currentArray[3].row - 2}c${currentArray[3].column}`]) 
-        console.log('z2 to z1', newPositionArray);
-        if (!isRotateBlocked(newPositionArray)) {
-            reassign(currentArray, newPositionArray);
-            shapeOrientation = 'z1'; 
-        } 
-    } else if (shapeOrientation === 't1') {
-            let currentArray = this.actives;
-            let newPositionArray = [];
-            newPositionArray.push(window[`r${currentArray[0].row - 1}c${currentArray[0].column + 1}`]);
-            newPositionArray.push(window[currentArray[1].id]);
-            newPositionArray.push(window[currentArray[2].id]);
-            newPositionArray.push(window[currentArray[3].id]);
-            
-            if (!isRotateBlocked(newPositionArray)) {
-                reassign(currentArray, newPositionArray);
-                shapeOrientation = 't2'; 
-            }    
-        } else if (shapeOrientation === 't2') {
-        let currentArray = this.actives
-        let newPositionArray = [];
-        newPositionArray.push(window[currentArray[1].id]);
-        newPositionArray.push(window[currentArray[2].id]);
-        newPositionArray.push(window[currentArray[0].id]);
-        newPositionArray.push(window[`r${currentArray[3].row - 1}c${currentArray[3].column - 1}`]); 
+    
+         if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveRight();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'z2'; 
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveLeft();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'z2'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'z2'; 
+        } else {
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'z2'; 
+        }
+       
+    } else if (shapeOrientation === 'z2') {
         
-        if (!isRotateBlocked(newPositionArray)) {
-            reassign(currentArray, newPositionArray);
-            shapeOrientation = 't3'; 
-        }   
-    } else if (shapeOrientation === 't3') {
-        let currentArray = this.actives
-        let newPositionArray = [];
-        newPositionArray.push(window[currentArray[0].id]);
-        newPositionArray.push(window[currentArray[1].id]);
-        newPositionArray.push(window[currentArray[2].id]);
-        newPositionArray.push(window[`r${currentArray[3].row + 1}c${currentArray[3].column - 1}`]); 
-        if (!isRotateBlocked(newPositionArray)) {
-            reassign(currentArray, newPositionArray);
-            shapeOrientation = 't4'; 
-        } 
-    } else if (shapeOrientation === 't4') {
-        let currentArray = this.actives
-        let newPositionArray = [];
-        newPositionArray.push(window[`r${currentArray[0].row + 1}c${currentArray[3].column + 1}`]); 
-        newPositionArray.push(window[currentArray[1].id]);
-        newPositionArray.push(window[currentArray[2].id]);
-        newPositionArray.push(window[currentArray[3].id]);
-   
-        if (!isRotateBlocked(newPositionArray)) {
-            reassign(currentArray, newPositionArray);
-            shapeOrientation = 't1'; 
-        } 
-    } else if (shapeOrientation === 'i1') {
-        let currentArray = this.actives;
-        let newPositionArray = [];
-        newPositionArray.push(window[`r${currentArray[0].row - 1}c${currentArray[0].column + 1}`]);
-        newPositionArray.push(window[currentArray[1].id]);
-        newPositionArray.push(window[`r${currentArray[2].row + 1}c${currentArray[2].column - 1}`]);
-        newPositionArray.push(window[`r${currentArray[3].row + 2}c${currentArray[3].column - 2}`]);
+        function makeNewArray() {
+            let newPositionArray = [];
+            newPositionArray.push(window[_this.actives[1].id]);
+            newPositionArray.push(window[`r${_this.actives[0].row + 1}c${_this.actives[1].column - 1}`]) 
+            newPositionArray.push(window[`r${_this.actives[2].row - 1}c${_this.actives[2].column - 1}`]) 
+            newPositionArray.push(window[`r${_this.actives[3].row - 2}c${_this.actives[3].column}`]) 
+            return newPositionArray;
+        }
 
-        if (!isRotateBlocked(newPositionArray)) {
-            reassign(currentArray, newPositionArray);
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveRight();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'z1'; 
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveLeft();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'z1'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'z1'; 
+        } else {
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'z1'; 
+        }
+    } else if (shapeOrientation === 't1') {
+        function makeNewArray() {
+            let newPositionArray = [];
+            newPositionArray.push(window[`r${_this.actives[0].row - 1}c${_this.actives[0].column + 1}`]);
+            newPositionArray.push(window[_this.actives[1].id]);
+            newPositionArray.push(window[_this.actives[2].id]);
+            newPositionArray.push(window[_this.actives[3].id]);
+            return newPositionArray;
+        }
+            
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveRight();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 't2'; 
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveLeft();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 't2'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 't2'; 
+        } else {
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 't2'; 
+        } 
+    } else if (shapeOrientation === 't2') {
+        
+        function makeNewArray() {
+            let newPositionArray = [];
+            newPositionArray.push(window[_this.actives[1].id]);
+            newPositionArray.push(window[_this.actives[2].id]);
+            newPositionArray.push(window[_this.actives[0].id]);
+            newPositionArray.push(window[`r${_this.actives[3].row - 1}c${_this.actives[3].column - 1}`]); 
+            return newPositionArray;
+        }
+        
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveRight();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 't3'; 
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveLeft();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 't3'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 't3'; 
+        } else {
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 't3'; 
+        }
+    } else if (shapeOrientation === 't3') {
+        
+        function makeNewArray() {
+            let newPositionArray = [];
+            newPositionArray.push(window[_this.actives[0].id]);
+            newPositionArray.push(window[_this.actives[1].id]);
+            newPositionArray.push(window[_this.actives[2].id]);
+            newPositionArray.push(window[`r${_this.actives[3].row + 1}c${_this.actives[3].column - 1}`]); 
+            return newPositionArray;
+        }
+
+
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveRight();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 't4'; 
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveLeft();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 't4'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 't4'; 
+        } else {
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 't4'; 
+        }
+    } else if (shapeOrientation === 't4') {
+        
+        function makeNewArray() {
+            let newPositionArray = [];
+            newPositionArray.push(window[`r${_this.actives[0].row + 1}c${_this.actives[3].column + 1}`]); 
+            newPositionArray.push(window[_this.actives[1].id]);
+            newPositionArray.push(window[_this.actives[2].id]);
+            newPositionArray.push(window[_this.actives[3].id]);
+            return newPositionArray;
+        }
+   
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveRight();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 't1'; 
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveLeft();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 't1'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 't1'; 
+        } else {
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 't1'; 
+        }
+    } else if (shapeOrientation === 'i1') {
+        
+        function makeNewArray() {
+            let newPositionArray = [];
+            newPositionArray.push(window[`r${_this.actives[0].row - 1}c${_this.actives[0].column + 1}`]);
+            newPositionArray.push(window[_this.actives[1].id]);
+            newPositionArray.push(window[`r${_this.actives[2].row + 1}c${_this.actives[2].column - 1}`]);
+            newPositionArray.push(window[`r${_this.actives[3].row + 2}c${_this.actives[3].column - 2}`]);
+            return newPositionArray;
+        }
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveRight();
+            reassign(_this.actives, makeNewArray());
             shapeOrientation = 'i2'; 
-        }       
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveLeft();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'i2'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'i2'; 
+        } else {
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'i2'; 
+        } 
     } else if (shapeOrientation === 'i2') {
-        let currentArray = this.actives;
-        let newPositionArray = [];
-        newPositionArray.push(window[`r${currentArray[0].row + 1}c${currentArray[0].column - 1}`]);
-        newPositionArray.push(window[currentArray[1].id]);
-        newPositionArray.push(window[`r${currentArray[2].row - 1}c${currentArray[2].column + 1}`]);
-        newPositionArray.push(window[`r${currentArray[3].row - 2}c${currentArray[3].column + 2}`]);
-        if (!isRotateBlocked(newPositionArray)) {
-            reassign(currentArray, newPositionArray);
+        function makeNewArray() {
+            let newPositionArray = [];
+            newPositionArray.push(window[`r${_this.actives[0].row + 1}c${_this.actives[0].column - 1}`]);
+            newPositionArray.push(window[_this.actives[1].id]);
+            newPositionArray.push(window[`r${_this.actives[2].row - 1}c${_this.actives[2].column + 1}`]);
+            newPositionArray.push(window[`r${_this.actives[3].row - 2}c${_this.actives[3].column + 2}`]);
+            return newPositionArray;
+        }
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveRight();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'i1'; 
+        } else if (isRightRotateBlockedTwoSpaces(_this.actives, makeNewArray())) {
+            _this.moveLeft();
+            _this.moveLeft();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'i1'; 
+        } else if (isRightRotateBlockedOneSpace) {
+            _this.moveLeft();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'i1'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'i1'; 
+        } else {
+            reassign(_this.actives, makeNewArray());
             shapeOrientation = 'i1'; 
         }
     } else if (shapeOrientation === 's1') {
-        let currentArray = this.actives;
-        let newPositionArray = [];
-        newPositionArray.push(window[`r${currentArray[0].row + 2}c${currentArray[0].column}`]);
-        newPositionArray.push(window[`r${currentArray[1].row + 1}c${currentArray[1].column - 1}`]);
-        newPositionArray.push(window[currentArray[2].id]);
-        newPositionArray.push(window[`r${currentArray[3].row - 1}c${currentArray[3].column - 1}`]);
-        if (!isRotateBlocked(newPositionArray)) {
-            reassign(currentArray, newPositionArray);
+        function makeNewArray() {
+            let newPositionArray = [];
+            newPositionArray.push(window[`r${_this.actives[0].row + 2}c${_this.actives[0].column}`]);
+            newPositionArray.push(window[`r${_this.actives[1].row + 1}c${_this.actives[1].column - 1}`]);
+            newPositionArray.push(window[_this.actives[2].id]);
+            newPositionArray.push(window[`r${_this.actives[3].row - 1}c${_this.actives[3].column - 1}`]);
+            return newPositionArray;
+        }
+        
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveRight();
+            reassign(_this.actives, makeNewArray());
             shapeOrientation = 's2'; 
-        }    
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveLeft();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 's2'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 's2'; 
+        } else {
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 's2'; 
+        }
     } else if (shapeOrientation === 's2') {
-        let currentArray = this.actives;
-        let newPositionArray = [];
-        newPositionArray.push(window[`r${currentArray[0].row + 1}c${currentArray[0].column + 1}`]);
-        newPositionArray.push(window[`r${currentArray[1].row - 1}c${currentArray[1].column + 1}`]);
-        newPositionArray.push(window[currentArray[2].id]);
-        newPositionArray.push(window[`r${currentArray[3].row - 2}c${currentArray[3].column}`]);
-        if (!isRotateBlocked(newPositionArray)) {
-            reassign(currentArray, newPositionArray);
+        function makeNewArray() {
+            let newPositionArray = [];
+            newPositionArray.push(window[`r${_this.actives[0].row + 1}c${_this.actives[0].column + 1}`]);
+            newPositionArray.push(window[`r${_this.actives[1].row - 1}c${_this.actives[1].column + 1}`]);
+            newPositionArray.push(window[_this.actives[2].id]);
+            newPositionArray.push(window[`r${_this.actives[3].row - 2}c${_this.actives[3].column}`]);
+            return newPositionArray;
+        }
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveRight();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 's1'; 
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveLeft();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 's1'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 's1'; 
+        } else {
+            reassign(_this.actives, makeNewArray());
             shapeOrientation = 's1'; 
         }
     } else if (shapeOrientation === 'l1') {
-        // let currentArray = this.actives;
+        // 
         function makeNewArray() {
             let newPositionArray = [];
             newPositionArray.push(window[`r${_this.actives[0].row + 1}c${_this.actives[0].column + 1}`]);
@@ -538,7 +722,7 @@ class Tetrimino {
         //I GET AN ERROR CHECKING THIS PROPERTY WHEN THE PIECE IS AT THE WALL BECAUSE THERE ARE NO IDS TO MATCH COLUMNS THAT DONT EXIST AKA EXTEND PAST THE WALL
         //NEED TO ADD COLUMNS!
         // if (!isRotateBlocked(makeNewArray())) {
-        //     reassign(currentArray, makeNewArray());
+        //     reassign(_this.actives, makeNewArray());
         //     shapeOrientation = 'l2'; 
         // }
 
@@ -641,47 +825,105 @@ class Tetrimino {
             shapeOrientation = 'l1'; 
         }
     } else if (shapeOrientation === 'j1') {
-        let currentArray = this.actives;
-        let newPositionArray = [];
-        newPositionArray.push(window[`r${currentArray[0].row + 1}c${currentArray[0].column + 1}`]);
-        newPositionArray.push(window[currentArray[1].id]);
-        newPositionArray.push(window[`r${currentArray[2].row - 1}c${currentArray[2].column - 1}`]);
-        newPositionArray.push(window[`r${currentArray[3].row}c${currentArray[3].column + 2}`]);
-        if (!isRotateBlocked(newPositionArray)) {
-            reassign(currentArray, newPositionArray);
+        
+        function makeNewArray() {
+            let newPositionArray = [];
+            newPositionArray.push(window[`r${_this.actives[0].row + 1}c${_this.actives[0].column + 1}`]);
+            newPositionArray.push(window[_this.actives[1].id]);
+            newPositionArray.push(window[`r${_this.actives[2].row - 1}c${_this.actives[2].column - 1}`]);
+            newPositionArray.push(window[`r${_this.actives[3].row}c${_this.actives[3].column + 2}`]);
+            return newPositionArray;
+        }
+
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveRight();
+            reassign(_this.actives, makeNewArray());
             shapeOrientation = 'j2'; 
-        }   
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveLeft();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'j2'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'j2'; 
+        } else {
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'j2'; 
+        }
     } else if (shapeOrientation === 'j2') {
-        let currentArray = this.actives;
-        let newPositionArray = [];
-        newPositionArray.push(window[`r${currentArray[0].row + 1}c${currentArray[0].column - 1}`]);
-        newPositionArray.push(window[currentArray[1].id]);
-        newPositionArray.push(window[`r${currentArray[2].row - 1}c${currentArray[2].column + 1}`]);
-        newPositionArray.push(window[`r${currentArray[3].row - 2}c${currentArray[3].column}`]);
-        if (!isRotateBlocked(newPositionArray)) {
-            reassign(currentArray, newPositionArray);
+        function makeNewArray() {
+            let newPositionArray = [];
+            newPositionArray.push(window[`r${_this.actives[0].row + 1}c${_this.actives[0].column - 1}`]);
+            newPositionArray.push(window[_this.actives[1].id]);
+            newPositionArray.push(window[`r${_this.actives[2].row - 1}c${_this.actives[2].column + 1}`]);
+            newPositionArray.push(window[`r${_this.actives[3].row - 2}c${_this.actives[3].column}`]);
+            return newPositionArray;
+        }
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveRight();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'j3'; 
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveLeft();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'j3'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'j3'; 
+        } else {
+            reassign(_this.actives, makeNewArray());
             shapeOrientation = 'j3'; 
         }
     } else if (shapeOrientation === 'j3') {
-        let currentArray = this.actives;
-        let newPositionArray = [];
-        newPositionArray.push(window[`r${currentArray[0].row}c${currentArray[0].column - 2}`]);
-        newPositionArray.push(window[`r${currentArray[1].row + 1}c${currentArray[1].column + 1}`]);
-        newPositionArray.push(window[currentArray[2].id]);
-        newPositionArray.push(window[`r${currentArray[3].row - 1}c${currentArray[3].column - 1}`]);
-        if (!isRotateBlocked(newPositionArray)) {
-            reassign(currentArray, newPositionArray);
+        function makeNewArray() {
+            let newPositionArray = [];
+            newPositionArray.push(window[`r${_this.actives[0].row}c${_this.actives[0].column - 2}`]);
+            newPositionArray.push(window[`r${_this.actives[1].row + 1}c${_this.actives[1].column + 1}`]);
+            newPositionArray.push(window[_this.actives[2].id]);
+            newPositionArray.push(window[`r${_this.actives[3].row - 1}c${_this.actives[3].column - 1}`]);
+            return newPositionArray;
+        }
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveRight();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'j4'; 
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveLeft();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'j4'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'j4'; 
+        } else {
+            reassign(_this.actives, makeNewArray());
             shapeOrientation = 'j4'; 
         }
     } else if (shapeOrientation === 'j4') {
-        let currentArray = this.actives;
-        let newPositionArray = [];
-        newPositionArray.push(window[`r${currentArray[0].row + 2}c${currentArray[0].column}`]);
-        newPositionArray.push(window[`r${currentArray[1].row + 1}c${currentArray[1].column - 1}`]);
-        newPositionArray.push(window[currentArray[2].id]);
-        newPositionArray.push(window[`r${currentArray[3].row - 1}c${currentArray[3].column + 1}`]);
-        if (!isRotateBlocked(newPositionArray)) {
-            reassign(currentArray, newPositionArray);
+        function makeNewArray() {
+            let newPositionArray = [];
+            newPositionArray.push(window[`r${_this.actives[0].row + 2}c${_this.actives[0].column}`]);
+            newPositionArray.push(window[`r${_this.actives[1].row + 1}c${_this.actives[1].column - 1}`]);
+            newPositionArray.push(window[_this.actives[2].id]);
+            newPositionArray.push(window[`r${_this.actives[3].row - 1}c${_this.actives[3].column + 1}`]);
+            return newPositionArray;
+        }
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveRight();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'j1'; 
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveLeft();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'j1'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'j1'; 
+        } else {
+            reassign(_this.actives, makeNewArray());
             shapeOrientation = 'j1'; 
         }
     }
@@ -1174,7 +1416,7 @@ console.log('r10c6.column type: ', typeof r10c6.column);
 
 
 // STATIC I Tetrimino - WORKS
-// generateITetrimino();
+generateITetrimino();
 // console.log('orientation', shapeOrientation)
 // Mino.rotate();
 // console.log('orientation', shapeOrientation)
@@ -1222,7 +1464,7 @@ console.log('r10c6.column type: ', typeof r10c6.column);
 
 
 // FALLING L1 - Works
-generateLTetrimino();
+// generateLTetrimino();
 // setInterval(fallingL, 1000);
 
 //STATIC J - WORKS
