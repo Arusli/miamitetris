@@ -305,6 +305,7 @@ class Tetrimino {
             console.log(nextColumnMax);
             for (j=0;j<currentArray.length;j++) {
                 if ((currentColumnMax < nextColumnMax && nextArray[j].className === 'static') || (currentColumnMax < nextColumnMax && nextArray[j].column > rightedge)) {
+                    console.log('right rotate blocked');
                     return true;
                     break;
                 }
@@ -320,6 +321,7 @@ class Tetrimino {
             console.log(nextColumnMin);
             for (j=0;j<currentArray.length;j++) {
                 if ((currentColumnMin > nextColumnMin && nextArray[j].className === 'static') || (currentColumnMin > nextColumnMin && nextArray[j].column < leftedge)) {
+                    console.log('left rotate blocked');
                     return true;
                     break;
                 }
@@ -327,14 +329,32 @@ class Tetrimino {
             return false;
         }
 
-        function isRightRotateBlockedOneSpace(currentArray, nextArray) {
+    //For Some reason Could NOT get this to work
+    //     function isRightRotateBlockedOneSpace(currentArray, nextArray) {
+    //         let j;
+    //         const currentColumnMax = Math.max(...currentArray.map( e => e.column));
+    //         const nextColumnMax = Math.max(...nextArray.map( e => e.column));
+    //         console.log(currentColumnMax);
+    //         console.log(nextColumnMax);
+    //         for (j=0;j<currentArray.length;j++) {
+    //             if ((nextColumnMax > currentColumnMax && nextArray[3].className === 'static' && nextArray[2].className !== 'static') || (nextColumnMax > currentColumnMax && nextArray[2].column === rightedge)) {
+    //                 console.log('right rotate blocked one space');
+    //                 return true;
+    //                 break;
+    //             }
+    //         }
+    //         return false;
+    // }
+
+        function isITetroRightBlockedTwo(currentArray, nextArray) {
             let j;
             const currentColumnMax = Math.max(...currentArray.map( e => e.column));
             const nextColumnMax = Math.max(...nextArray.map( e => e.column));
             console.log(currentColumnMax);
             console.log(nextColumnMax);
             for (j=0;j<currentArray.length;j++) {
-                if (((nextColumnMax - currentColumnMax === 1) && nextArray[j].className === 'static') || ((nextColumnMax - currentColumnMax === 1) && nextArray[j].column > rightedge)) {
+                if (nextArray[2].className === 'static' || nextArray[2].column > rightedge) {
+                    console.log('right blocked two spaces');
                     return true;
                     break;
                 }
@@ -342,20 +362,38 @@ class Tetrimino {
             return false;
         }
 
-        function isRightRotateBlockedTwoSpaces(currentArray, nextArray) {
+        function isITetroRightBlockedOne(currentArray, nextArray) {
             let j;
             const currentColumnMax = Math.max(...currentArray.map( e => e.column));
             const nextColumnMax = Math.max(...nextArray.map( e => e.column));
             console.log(currentColumnMax);
             console.log(nextColumnMax);
             for (j=0;j<currentArray.length;j++) {
-                if (((nextColumnMax - currentColumnMax === 2) && nextArray[j].className === 'static') || ((nextColumnMax - currentColumnMax === 2) && nextArray[j].column > rightedge)) {
+                if (nextArray[3].className === 'static' || nextArray[3].column > rightedge) {
+                    console.log('right blocked one space');
                     return true;
                     break;
                 }
             }
             return false;
         }
+
+        function isITetroLeftBlocked(currentArray, nextArray) {
+            let j;
+            const currentColumnMin = Math.min(...currentArray.map( e => e.column));
+            const nextColumnMin = Math.min(...nextArray.map( e => e.column));
+            console.log(currentColumnMin);
+            console.log(nextColumnMin);
+            for (j=0;j<currentArray.length;j++) {
+                if ((nextArray[0].className === 'static') || (currentColumnMin > nextColumnMin && nextArray[0].column < leftedge)) {
+                    return true;
+                    break;
+                }
+            }
+            return false;
+        }
+
+
         // function shift(array) { //the array will be an array of id strings: newPositionIds
         //     //check all directions that an array could shift and if that shift will not cause a rotate block, shift it.
         //     let shiftUpArray = [];
@@ -611,15 +649,8 @@ class Tetrimino {
             newPositionArray.push(window[`r${_this.actives[3].row + 2}c${_this.actives[3].column - 2}`]);
             return newPositionArray;
         }
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'i2'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'i2'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+       //it cannot be left blocked or right blocked. IT CAN BE UP BLOCKED THOUGH!!!
+        if (isDownRotateBlocked(_this.actives, makeNewArray())) {
             _this.moveUp();
             reassign(_this.actives, makeNewArray());
             shapeOrientation = 'i2'; 
@@ -636,20 +667,21 @@ class Tetrimino {
             newPositionArray.push(window[`r${_this.actives[3].row - 2}c${_this.actives[3].column + 2}`]);
             return newPositionArray;
         }
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
+        if (isITetroLeftBlocked(_this.actives, makeNewArray())) {
             _this.moveRight();
             reassign(_this.actives, makeNewArray());
             shapeOrientation = 'i1'; 
-        } else if (isRightRotateBlockedTwoSpaces(_this.actives, makeNewArray())) {
+        } else if (isITetroRightBlockedTwo(_this.actives, makeNewArray())) {
             _this.moveLeft();
             _this.moveLeft();
             reassign(_this.actives, makeNewArray());
             shapeOrientation = 'i1'; 
-        } else if (isRightRotateBlockedOneSpace) {
+        } else if (isITetroRightBlockedOne(_this.actives, makeNewArray())) {
+            console.log('right blocked one')
             _this.moveLeft();
             reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'i1'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            shapeOrientation = 'i1';
+        }else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
             _this.moveUp();
             reassign(_this.actives, makeNewArray());
             shapeOrientation = 'i1'; 
@@ -1348,12 +1380,26 @@ console.log('r10c6.column type: ', typeof r10c6.column);
 // Mino.lower();
 // console.log(Mino.actives);
 // Mino.actives.forEach( e => console.log(e.tracker));
-// console.log(Mino.actives.sort((a,b) => a.tracker - b.tracker));
+// console.log(Mino.actives.sort((a,b) => a.tracker - b.tracker))
+
+
+function testStatic() {
+    divArray.forEach(e => {
+        if (e.column === 11) {
+            e.className = 'static';
+        }
+    })
+}
 
 // OPERATE FALL
-// Mino.generate();
-// setInterval(fall, 1000);
+// testStatic();
+Mino.generate();
+setInterval(fall, 1000);
 
+
+// generateLTetrimino();
+// generateITetrimino();
+// generateJTetrimino();
 
 //why does ROTATE BACK FAIL?
 
@@ -1416,7 +1462,7 @@ console.log('r10c6.column type: ', typeof r10c6.column);
 
 
 // STATIC I Tetrimino - WORKS
-generateITetrimino();
+// generateITetrimino();
 // console.log('orientation', shapeOrientation)
 // Mino.rotate();
 // console.log('orientation', shapeOrientation)
