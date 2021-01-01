@@ -25,6 +25,7 @@ let bottom = 0;
 let left = 0;
 const rightedge = 12;
 const leftedge = 3;
+const floor = 2;
 
 ////ATTEMPTING TO CREATE TETRIMINO OBJECT TO HOUSE METHODS AND A GET/SET FOR THE ARRAY OF ACTIVE ELEMENTS (AKA THE TETRIMINO)
 
@@ -148,6 +149,18 @@ class Tetrimino {
         }
     }
 
+    moveUp() {
+        const array = this.actives
+        let i;
+        for(i=0;i<array.length;i++) {
+            array[i].setAttribute('class','blank');
+        }
+        for(i=0;i<array.length;i++) {
+            let newRowNum = array[i].row + 1;
+            document.getElementById(`r${newRowNum}c${array[i].column}`).setAttribute('class','active');   //adjustClassesUp()
+        }
+    }
+
     //move left
     moveLeft() {
             const array = this.actives;
@@ -182,7 +195,7 @@ class Tetrimino {
         // console.log(path);
         let j;
         for (j=0;j<this.actives.length;j++) {
-            if (path[j].className === 'static' || path[j].row < 2) {
+            if (path[j].className === 'static' || path[j].row < floor) {
                 return true;
                 break;
             }
@@ -259,6 +272,8 @@ class Tetrimino {
 
         //NOTES: RIGHT NOW GAME CURRENTLY DOESNT KNWO IF SOMETHING IS RIGHT ROTATE BOUND SPEIFICIALLY. ONLY KNOWS THAT IT CANNOT ROTATE IN GENERAL, SOMEWHERE.
         //IS IT POSSIBLE TO (WITH AN EXCEPTION FOR I TETRO) TO SIMPLY, WHEN ROTATE IS CALLED, IF SHAPE IS RIGHT BLOCKED, SHIFT IT RIGHT BEFORE ROTATING. (YES).
+        //CORRECTION NO! RIGHT BLOCKED IS NOT HTE SAME AS ROTATE BLOCKED. RIGHT BLOCKED MEANS THERE IS NO SPACE TO THE RIGHT. RIGHT ROTATE BLOCKED MEANS...
+        //EVEN IF THERE IS NO SPACE RIGHT, IF THE ROTATION DOESNT OCCUPY TEH SPACE TO THE RIGHT, ROTATION IS FINE!
         //SHOULD A DOWNWARDLY ROTATEBLOCKED SHAPE BE ALLOWED TO UPSHIFT AND ROTATE? (MAYBE)
 
     //Rotate
@@ -266,21 +281,14 @@ class Tetrimino {
 
         const _this = this;  // for referencing the Termino object inside of the inner functions.
 
-        function isDownRotateBlocked(array) {
+        function isDownRotateBlocked(currentArray, nextArray) {
             let j;
-            for (j=0;j<array.length;j++) {
-                if (array[j].className === 'static' || array[j].row < 2) {
-                    return true;
-                    break;
-                }
-            }
-            return false;
-        };
-
-        function isRightRotateBlocked(array) {
-            let j;
-            for (j=0;j<array.length;j++) {
-                if (array[j].className === 'static' || array[j].column > rightedge) {
+            const currentRowMin = Math.min(...currentArray.map( e => e.row));
+            const nextRowMin = Math.min(...nextArray.map( e => e.row));
+            console.log(currentRowMin);
+            console.log(nextRowMin);
+            for (j=0;j<currentArray.length;j++) {
+                if ((currentRowMin > nextRowMin && nextArray[j].className === 'static') || (currentRowMin > nextRowMin && nextArray[j].row < floor)) {
                     return true;
                     break;
                 }
@@ -288,10 +296,15 @@ class Tetrimino {
             return false;
         }
 
-        function isLeftRotateBlocked(array) {
+        //i need to sort out/find the highest column number for each array.
+        function isRightRotateBlocked(currentArray, nextArray) {
             let j;
-            for (j=0;j<array.length;j++) {
-                if (array[j].className === 'static' || array[j].column < leftedge) {
+            const currentColumnMax = Math.max(...currentArray.map( e => e.column));
+            const nextColumnMax = Math.max(...nextArray.map( e => e.column));
+            console.log(currentColumnMax);
+            console.log(nextColumnMax);
+            for (j=0;j<currentArray.length;j++) {
+                if ((currentColumnMax < nextColumnMax && nextArray[j].className === 'static') || (currentColumnMax < nextColumnMax && nextArray[j].column > rightedge)) {
                     return true;
                     break;
                 }
@@ -299,14 +312,29 @@ class Tetrimino {
             return false;
         }
 
-        function shift(array) { //the array will be an array of id strings: newPositionIds
-            //check all directions that an array could shift and if that shift will not cause a rotate block, shift it.
-            let shiftUpArray = [];
-            array.forEach( e => {
-                shiftup.push(window[e].row + 1) //now we have an array testing space above
-            })
-            if (!isDownRotateBlocked(shiftUpArray)) {}
-        } 
+        function isLeftRotateBlocked(currentArray, nextArray) {
+            let j;
+            const currentColumnMin = Math.min(...currentArray.map( e => e.column));
+            const nextColumnMin = Math.min(...nextArray.map( e => e.column));
+            console.log(currentColumnMin);
+            console.log(nextColumnMin);
+            for (j=0;j<currentArray.length;j++) {
+                if ((currentColumnMin > nextColumnMin && nextArray[j].className === 'static') || (currentColumnMin > nextColumnMin && nextArray[j].column < leftedge)) {
+                    return true;
+                    break;
+                }
+            }
+            return false;
+        }
+
+        // function shift(array) { //the array will be an array of id strings: newPositionIds
+        //     //check all directions that an array could shift and if that shift will not cause a rotate block, shift it.
+        //     let shiftUpArray = [];
+        //     array.forEach( e => {
+        //         shiftup.push(window[e].row + 1) //now we have an array testing space above
+        //     })
+        //     if (!isDownRotateBlocked(shiftUpArray)) {}
+        // } 
 
 
         function isRotateBlocked(array) {
@@ -506,11 +534,6 @@ class Tetrimino {
             newPositionArray.push(window[`r${_this.actives[3].row - 2}c${_this.actives[3].column}`]);
             return newPositionArray;
         }
-        // let newPositionArray = [];
-        // newPositionArray.push(window[`r${currentArray[0].row + 1}c${currentArray[0].column + 1}`]);
-        // newPositionArray.push(window[currentArray[1].id]);
-        // newPositionArray.push(window[`r${currentArray[2].row - 1}c${currentArray[2].column - 1}`]);
-        // newPositionArray.push(window[`r${currentArray[3].row - 2}c${currentArray[3].column}`]);
 
         //I GET AN ERROR CHECKING THIS PROPERTY WHEN THE PIECE IS AT THE WALL BECAUSE THERE ARE NO IDS TO MATCH COLUMNS THAT DONT EXIST AKA EXTEND PAST THE WALL
         //NEED TO ADD COLUMNS!
@@ -519,14 +542,18 @@ class Tetrimino {
         //     shapeOrientation = 'l2'; 
         // }
 
-        if (_this.isLeftBlocked) {
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
             _this.moveRight();
-            // reassign(currentArray, makeNewArray());
-            // shapeOrientation = 'l2'; 
-        } else if (_this.isRightBlocked) {
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'l2'; 
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
             _this.moveLeft();
-            // reassign(currentArray, makeNewArray());
-            // shapeOrientation = 'l2'; 
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'l2'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'l2'; 
         } else {
             reassign(_this.actives, makeNewArray());
             shapeOrientation = 'l2'; 
@@ -534,7 +561,6 @@ class Tetrimino {
 
            
     } else if (shapeOrientation === 'l2') {
-        // let currentArray = this.actives;
         function makeNewArray() {
             let newPositionArray = [];
             newPositionArray.push(window[`r${_this.actives[0].row + 1}c${_this.actives[0].column - 1}`]);
@@ -544,26 +570,24 @@ class Tetrimino {
             return newPositionArray;
         }
 
-        // if (!isRotateBlocked(makeNewArray())) {
-        //     reassign(currentArray, makeNewArray());
-        //     shapeOrientation = 'l3';
-        // }
-
-        if (_this.isLeftBlocked) {
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
             _this.moveRight();
-            // reassign(currentArray, makeNewArray());
-            // shapeOrientation = 'l3'; 
-        } else if (_this.isRightBlocked) {
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'l3'; 
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
             _this.moveLeft();
-            // reassign(currentArray, makeNewArray());
-            // shapeOrientation = 'l3'; 
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'l3'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'l3'; 
         } else {
             reassign(_this.actives, makeNewArray());
             shapeOrientation = 'l3'; 
         }
         
     } else if (shapeOrientation === 'l3') {
-        // let currentArray = this.actives;
         function makeNewArray() {
             let newPositionArray = [];
             newPositionArray.push(window[`r${_this.actives[0].row + 2}c${_this.actives[0].column}`]);
@@ -573,25 +597,24 @@ class Tetrimino {
             return newPositionArray;
         }
 
-        // if (!isRotateBlocked(makeNewArray())) {
-        //     reassign(currentArray, makeNewArray());
-        //     shapeOrientation = 'l4';
-        // }
-
-        if (_this.isLeftBlocked) {
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
             _this.moveRight();
-            // reassign(currentArray, makeNewArray());
-            // shapeOrientation = 'l4'; 
-        } else if (_this.isRightBlocked) {
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'l4'; 
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
             _this.moveLeft();
-            // reassign(currentArray, makeNewArray());
-            // shapeOrientation = 'l4'; 
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'l4'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'l4'; 
         } else {
             reassign(_this.actives, makeNewArray());
             shapeOrientation = 'l4'; 
         }
     } else if (shapeOrientation === 'l4') {
-        // let currentArray = this.actives;
+
         function makeNewArray() {
             let newPositionArray = [];
             newPositionArray.push(window[`r${_this.actives[0].row + 1}c${_this.actives[0].column - 1}`]);
@@ -601,19 +624,18 @@ class Tetrimino {
             return newPositionArray;
         }
 
-        // if (!isRotateBlocked(makeNewArray())) {
-        //     reassign(currentArray, makeNewArray());
-        //     shapeOrientation = 'l1';
-        // }
-
-        if (_this.isLeftBlocked) {
+        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
             _this.moveRight();
-            // reassign(currentArray, makeNewArray());
-            // shapeOrientation = 'l1'; 
-        } else if (_this.isRightBlocked) {
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'l1'; 
+        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
             _this.moveLeft();
-            // reassign(currentArray, makeNewArray());
-            // shapeOrientation = 'l1'; 
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'l1'; 
+        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
+            _this.moveUp();
+            reassign(_this.actives, makeNewArray());
+            shapeOrientation = 'l1'; 
         } else {
             reassign(_this.actives, makeNewArray());
             shapeOrientation = 'l1'; 
@@ -1061,6 +1083,23 @@ function fallingJ() {
     generateJTetrimino();
     }
 }
+
+
+//FUNCTION TEST
+// function rightRotateBlockedTest(currentArray, nextArray) {
+//     let j;
+//     //i need to sort out/find the highest column number for each array.
+//     const currentColumnMax = Math.max(...currentArray.sort( (a,b) => {return a - b}))
+//     const nextColumnMax = Math.max(...nextArray.sort( (a,b) => {return a - b}))
+//     console.log(currentColumnMax);
+//     console.log(nextColumnMax);
+// }
+
+// rightRotateBlockedTest([4,12,5,4], [1,2,4,7]);
+
+
+console.log('r10c6.column type: ', typeof r10c6.column);
+
 
 //OPERATE ONCE
 // Mino.generate();
