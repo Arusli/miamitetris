@@ -516,22 +516,7 @@ class Tetrimino {
             // } 
                
     
-         if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'z2'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'z2'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveUp();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'z2'; 
-        } else {
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'z2'; 
-        }
+         handleRotation(getActives, makeNewArray, 'z2');
        
     } else if (shapeOrientation === 'z2') {
         
@@ -544,22 +529,7 @@ class Tetrimino {
             return newPositionArray;
         }
 
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'z1'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'z1'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveUp();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'z1'; 
-        } else {
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'z1'; 
-        }
+        handleRotation(getActives, makeNewArray, 'z1');
     } else if (shapeOrientation === 't1') {
         function makeNewArray() {
             let newPositionArray = [];
@@ -570,22 +540,7 @@ class Tetrimino {
             return newPositionArray;
         }
             
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 't2'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 't2'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveUp();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 't2'; 
-        } else {
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 't2'; 
-        } 
+        handleRotation(getActives, makeNewArray, 't2');
     } else if (shapeOrientation === 't2') {
         
         function makeNewArray() {
@@ -597,22 +552,7 @@ class Tetrimino {
             return newPositionArray;
         }
         
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 't3'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 't3'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveUp();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 't3'; 
-        } else {
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 't3'; 
-        }
+        handleRotation(getActives, makeNewArray, 't3');
     } else if (shapeOrientation === 't3') {
         
         function makeNewArray() {
@@ -625,22 +565,7 @@ class Tetrimino {
         }
 
 
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 't4'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 't4'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveUp();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 't4'; 
-        } else {
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 't4'; 
-        }
+        handleRotation(getActives, makeNewArray, 't4');
     } else if (shapeOrientation === 't4') {
         
         function makeNewArray() {
@@ -652,22 +577,7 @@ class Tetrimino {
             return newPositionArray;
         }
    
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 't1'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 't1'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveUp();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 't1'; 
-        } else {
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 't1'; 
-        }
+        handleRotation(getActives, makeNewArray, 't1');
     } else if (shapeOrientation === 'i1') {
         
         function makeNewArray() {
@@ -728,22 +638,7 @@ class Tetrimino {
             return newPositionArray;
         }
         
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 's2'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 's2'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveUp();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 's2'; 
-        } else {
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 's2'; 
-        }
+        handleRotation(getActives, makeNewArray, 's2');
     } else if (shapeOrientation === 's2') {
         function makeNewArray() {
             let newPositionArray = [];
@@ -753,22 +648,7 @@ class Tetrimino {
             newPositionArray.push(window[`r${_this.actives[3].row - 2}c${_this.actives[3].column}`]);
             return newPositionArray;
         }
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 's1'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 's1'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveUp();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 's1'; 
-        } else {
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 's1'; 
-        }
+        handleRotation(getActives, makeNewArray, 's1');
     } else if (shapeOrientation === 'l1') {
         // 
         function makeNewArray() {
@@ -838,22 +718,7 @@ class Tetrimino {
             return newPositionArray;
         }
 
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'j2'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'j2'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveUp();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'j2'; 
-        } else {
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'j2'; 
-        }
+        handleRotation(getActives, makeNewArray, 'j2');
     } else if (shapeOrientation === 'j2') {
         function makeNewArray() {
             let newPositionArray = [];
@@ -863,22 +728,7 @@ class Tetrimino {
             newPositionArray.push(window[`r${_this.actives[3].row - 2}c${_this.actives[3].column}`]);
             return newPositionArray;
         }
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'j3'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'j3'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveUp();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'j3'; 
-        } else {
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'j3'; 
-        }
+        handleRotation(getActives, makeNewArray, 'j3');
     } else if (shapeOrientation === 'j3') {
         function makeNewArray() {
             let newPositionArray = [];
@@ -888,22 +738,7 @@ class Tetrimino {
             newPositionArray.push(window[`r${_this.actives[3].row - 1}c${_this.actives[3].column - 1}`]);
             return newPositionArray;
         }
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'j4'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'j4'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveUp();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'j4'; 
-        } else {
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'j4'; 
-        }
+        handleRotation(getActives, makeNewArray, 'j4');
     } else if (shapeOrientation === 'j4') {
         function makeNewArray() {
             let newPositionArray = [];
@@ -913,23 +748,8 @@ class Tetrimino {
             newPositionArray.push(window[`r${_this.actives[3].row - 1}c${_this.actives[3].column + 1}`]);
             return newPositionArray;
         }
-        if (isLeftRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveRight();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'j1'; 
-        } else if (isRightRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveLeft();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'j1'; 
-        } else if (isDownRotateBlocked(_this.actives, makeNewArray())) {
-            _this.moveUp();
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'j1'; 
-        } else {
-            reassign(_this.actives, makeNewArray());
-            shapeOrientation = 'j1'; 
-        }
-    }
+        handleRotation(getActives, makeNewArray, 'j1');
+    } //end else if
 } //end rotate()  
 } //end of class
 
@@ -1364,11 +1184,11 @@ function testStatic() {
 
 // OPERATE FALL
 // testStatic();
-// Mino.generate();
-// setInterval(fall, 1000);
+Mino.generate();
+setInterval(fall, 1000);
 
 
-generateLTetrimino();
+// generateLTetrimino();
 // generateITetrimino();
 // generateJTetrimino();
 
