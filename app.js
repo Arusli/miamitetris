@@ -422,18 +422,66 @@ class Tetrimino {
         //STUCK = IF THERE IS A PIECE INBETWEN WHERE IT STARTS AND WHERE IT ROTATES TO.
         //DO I NEED A TRACKER FOR THIS?
 
-        function isStuck(activeArray, iddirection) {
+        function getStatics() {
+            let statics = document.getElementsByClassName('static');
+            let array = [];
+            let i;
+            for (i=0;i<statics.length;i++) {
+                array.push(statics[i])
+            }
+            return array;
+        }
+
+
+        //if the natural rotation is blocked, the handleRotate() tests a hypothetical left(or right) shift and rotate. 
+        //this function is part of the hypothetical left and rotate, acting as a failsafe that the shift left doesnt move through another static piece.
+        //also this function should serve to block strange visual shifts that may be logically sound, but appear awkward.
+        function isStuck(activeArray, iddirection) { 
             let testArray = [];
             activeArray.forEach(e => {
                 testArray.push(window[e[iddirection]]);
             })
             console.log(testArray);
+            
+            let sideContactPoints = 0; //logic might be a little iffy on this one
+            activeArray.forEach( e => {
+                if ((window[e.idleft].className === 'static' || window[e.idright].className === 'static')) {
+                    sideContactPoints += 1
+                }
+            })
+            console.log('side contact points:', sideContactPoints)
+            
+            let multifaceContactPoints = 0;
+            let staticArray = getStatics();
+            console.log(staticArray);
+            staticArray.forEach( e => {
+                if (
+                   (window[e.idleft].className === 'active' && window[e.idbelow].className === 'active') 
+                || (window[e.idleft].className === 'active' && window[e.idabove].className === 'active') 
+                || (window[e.idright].className === 'active' && window[e.idleft].className === 'active') 
+                || (window[e.idright].className === 'active' && window[e.idbelow].className === 'active') 
+                || (window[e.idright].className === 'active' && window[e.idabove].className === 'active') 
+                ){
+                    multifaceContactPoints += 1;
+                }
+
+            })
+
             let i;
             for (i=0;i<testArray.length;i++) {
                 if (testArray[i].className === 'static') {
-                    return true
+                    return true;
                 }
             }
+
+            if (sideContactPoints >= 1 && iddirection === 'idabove') {
+                return true;
+            }
+
+            if (multifaceContactPoints >= 1) {
+                return true;
+            }
+
             return false;
         }
 
@@ -475,7 +523,7 @@ class Tetrimino {
                     shapeOrientation = nextShape;
                     console.log('moved up')
                 } else {
-                    console.log('completely blocked');
+                    console.log('blocked: cannot rotate');
                     return;
                 }
             } else if (!isRotateBlocked(nextArray())) {
@@ -488,25 +536,25 @@ class Tetrimino {
             if (isRotateBlocked(nextArray()) === true) {
                 //test hypotheticals;
                 //rotate if possible (aka move then reassign, to a position we know will have no blockage)
-                if (testLeftHypothetical(nextArray())) {
+                if (testLeftHypothetical(activeArray(), nextArray())) {
                     _this.moveLeft();
                     reassign(activeArray(), nextArray());
                     shapeOrientation = nextShape;
-                } else if (testDoubleLeftHypothetical(nextArray())) {
+                } else if (testDoubleLeftHypothetical(activeArray(), nextArray())) {
                     _this.moveLeft();
                     _this.moveLeft();
                     reassign(activeArray(), nextArray());
                     shapeOrientation = nextShape;
-                } else if (testRightHypothetical(nextArray())) {
+                } else if (testRightHypothetical(activeArray(), nextArray())) {
                     _this.moveRight();
                     reassign(activeArray(), nextArray());
                     shapeOrientation = nextShape;
-                } else if (testUpHypothetical(nextArray())) {
+                } else if (testUpHypothetical(activeArray(), nextArray())) {
                     _this.moveUp();
                     reassign(activeArray(), nextArray());
                     shapeOrientation = nextShape;
                 } else {
-                    console.log('completely blocked');
+                    console.log('SHAPE I TETRO IS BLOCKED');
                     return;
                 }
             } else if (!isRotateBlocked(nextArray())) {
@@ -537,13 +585,20 @@ class Tetrimino {
             }
         }
 
-        function testDoubleLeftHypothetical(nextArray) {
+        function testDoubleLeftHypothetical(activeArray, nextArray) {
             let testArray = [];
             nextArray.forEach(e => {
                 testArray.push(window[window[e.idleft].idleft]);
             })
             console.log(testArray);
+            // if (isRotateBlocked(testArray)) {
+            //     return false;
+            // } else {
+            //     return true;
+            // }
             if (isRotateBlocked(testArray)) {
+                return false;
+            } else if (isStuck(activeArray, 'idleft')) {
                 return false;
             } else {
                 return true;
@@ -723,7 +778,7 @@ class Tetrimino {
             return newPositionArray;
         }
 
-        handleITetroRotation(getActives, makeNewArray, 'i2')
+        handleITetroRotation(getActives, makeNewArray, 'i2');
     } else if (shapeOrientation === 'i2') {
         function makeNewArray() {
             let newPositionArray = [];
@@ -734,7 +789,7 @@ class Tetrimino {
             return newPositionArray;
         }
        
-        handleITetroRotation(getActives, makeNewArray, 'i1')
+        handleITetroRotation(getActives, makeNewArray, 'i1');
     } else if (shapeOrientation === 's1') {
         function makeNewArray() {
             let newPositionArray = [];
@@ -1299,11 +1354,11 @@ function testStatic() {
 // }
 
 // generateTTetrimino();
-generateLTetrimino();
-Mino.rotate();
+// generateLTetrimino();
+// Mino.rotate();
 testStatic();
 // testLeftTest(lTetrimino);
-// generateITetrimino();
+generateITetrimino();
 // generateJTetrimino();
 
 //why does ROTATE BACK FAIL?
