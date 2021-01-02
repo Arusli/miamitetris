@@ -13,6 +13,7 @@
 //create an event listener that moves and adjusts 
 
 const board = document.getElementById('board');
+const score = document.getElementById('score')
 
 let rowArray = [];
 let divArray = [];
@@ -26,7 +27,7 @@ let left = 0;
 const rightedge = 13;
 const leftedge = 4;
 const floor = 2;
-
+let points = 0;
 
 
 function createRow() {
@@ -113,10 +114,15 @@ function hideOuterColumns() {
     oustideColumns.forEach(e => e.style.visibility = 'hidden');
 }
 
+function updateScore() {
+    score.innerHTML = `Score: ${points}`
+}
+
 createGrid();
 hideBottomRow();
 hideTopTwoRows();
 hideOuterColumns();
+updateScore();
 //row 16 is the visible top, row 2 is the visible bottom.
 console.log(rowArray);
 let deletedrow = 0;
@@ -148,6 +154,7 @@ function downShift() {
 }
 
 function clearRow(index) {
+    removeHighlight();
     deletedrow = rowArray[index][0].row;
     rowArray[index].forEach( e => {
         e.className = 'blank';
@@ -155,18 +162,32 @@ function clearRow(index) {
 }
 
 function checkRowState() {
-
     function isFilled(elem, index, arr) { //callback function for .every
-        return elem.className === 'static'
+        return elem.className === 'static';
     }
 
     let i;
     for (i=0;i<maxRows;i++) {
         if (rowArray[i].every(isFilled)) {
             clearRow(i);
+            points += 1;
+            updateScore();
             i -= 1; //accounts for multiple rows clearing 'at once.'
             downShift();
         }
+    }
+}
+
+function removeHighlight() {
+    let j;
+    let array = [];
+    divArray.forEach( e => {
+        if (e.style.backgroundColor = 'lime') {
+            array.push(e)
+        }
+    })
+    for (j=0;j<array.length;j++) {
+        array[j].style.backgroundColor = '';
     }
 }
 
@@ -198,20 +219,38 @@ class Tetrimino {
         
         console.log(shapeOrientation);
     }
+
+    highlightRow() {
+        function isOccupied(elem, index, arr) { //callback function for .every
+            return elem.className !== 'blank';
+        }
+        let k;
+        for (k=0;k<maxRows;k++) {
+            if (rowArray[k].every(isOccupied) && this.isBlocked) {
+                console.log('this.isBlocked', this.isBlocked);
+                rowArray[k].forEach(e => {
+                    e.style.backgroundColor = 'lime'
+                })
+            }
+        }
+    }
     
      //lowerPieces()
     lower() {
-        const array = this.actives
+
+        const array = this.actives //must set to an array so that it can remember the positions of the active array even after class is set to blank.
         let i;
         for(i=0;i<array.length;i++) {
-            // document.getElementById(`r${newRowNum}c${array[i].column}`).tracker = array[i].tracker;    //adjustPropertiesDown()
             array[i].setAttribute('class','blank');
-            // delete array[i].tracke
         }
+
         for(i=0;i<array.length;i++) {
             let newRowNum = array[i].row - 1;
             document.getElementById(`r${newRowNum}c${array[i].column}`).setAttribute('class','active');   //adjustClassesDown()
-        }
+        }       
+
+        this.highlightRow();
+
     }
 
     moveUp() {
@@ -593,7 +632,6 @@ class Tetrimino {
             //we need up, right, left, and I suppose down in some VERY rare cases where you are rotating underneath another shape...
             //1. imagine moving the array left. then spawning a hypothetical next rotation there. then testing if that is blocked.
             //2. we could take nextArray (the hypothetical) and select the idlefts of those, and test that array!
-
         }
 
         function testLeftHypothetical(activeArray, nextArray) {
@@ -617,11 +655,6 @@ class Tetrimino {
                 testArray.push(window[window[e.idleft].idleft]);
             })
             console.log(testArray);
-            // if (isRotateBlocked(testArray)) {
-            //     return false;
-            // } else {
-            //     return true;
-            // }
             if (isRotateBlocked(testArray)) {
                 return false;
             } else if (isStuck(activeArray, 'idleft')) {
@@ -1109,9 +1142,12 @@ function generateJTetrimino() {
 
 //Write a function that moves all active class divs down one square on an interval.
 function fall() {
+    
+    
 
     if (!Mino.isBlocked) {
         Mino.lower();
+ 
 
     } else {
         Mino.makeStatic(); //freeze block in place
@@ -1123,71 +1159,71 @@ function fall() {
 
 //TEST SHAPES
 
-function fallingZ() {
-    if (!Mino.isBlocked) {
-        Mino.rotate();
-        Mino.lower();
-    } else {
-    Mino.makeStatic(); //freeze block in place
-    generateZ2Tetrimino();
-    }
-}
+// function fallingZ() {
+//     if (!Mino.isBlocked) {
+//         Mino.rotate();
+//         Mino.lower();
+//     } else {
+//     Mino.makeStatic(); //freeze block in place
+//     generateZ2Tetrimino();
+//     }
+// }
 
-function fallingT() {
-    if (!Mino.isBlocked) {
-        Mino.rotate();
-        Mino.lower();
-    } else {
-    console.log('blocked?', Mino.isBlocked);
-    Mino.makeStatic(); //freeze block in place
-    generateTTetrimino();
-    }
-}
+// function fallingT() {
+//     if (!Mino.isBlocked) {
+//         Mino.rotate();
+//         Mino.lower();
+//     } else {
+//     console.log('blocked?', Mino.isBlocked);
+//     Mino.makeStatic(); //freeze block in place
+//     generateTTetrimino();
+//     }
+// }
 
-function fallingI() {
-    if (!Mino.isBlocked) {
-        Mino.rotate();
-        Mino.lower();
-    } else {
-    console.log('blocked?', Mino.isBlocked);
-    Mino.makeStatic(); //freeze block in place
-    generateITetrimino();
-    }
-}
+// function fallingI() {
+//     if (!Mino.isBlocked) {
+//         Mino.rotate();
+//         Mino.lower();
+//     } else {
+//     console.log('blocked?', Mino.isBlocked);
+//     Mino.makeStatic(); //freeze block in place
+//     generateITetrimino();
+//     }
+// }
 
-function fallingS() {
-    if (!Mino.isBlocked) {
-        Mino.rotate();
-        Mino.lower();
-    } else {
-    console.log('blocked?', Mino.isBlocked);
-    Mino.makeStatic(); //freeze block in place
-    generateSTetrimino();
-    }
-}
+// function fallingS() {
+//     if (!Mino.isBlocked) {
+//         Mino.rotate();
+//         Mino.lower();
+//     } else {
+//     console.log('blocked?', Mino.isBlocked);
+//     Mino.makeStatic(); //freeze block in place
+//     generateSTetrimino();
+//     }
+// }
 
-function fallingL() {
-    if (!Mino.isBlocked) {
-        Mino.rotate();
-        Mino.lower();
-    } else {
-    console.log('blocked?', Mino.isBlocked);
-    Mino.makeStatic(); //freeze block in place
-    generateLTetrimino();
-    }
-}
+// function fallingL() {
+//     if (!Mino.isBlocked) {
+//         Mino.rotate();
+//         Mino.lower();
+//     } else {
+//     console.log('blocked?', Mino.isBlocked);
+//     Mino.makeStatic(); //freeze block in place
+//     generateLTetrimino();
+//     }
+// }
 
 
-function fallingJ() {
-    if (!Mino.isBlocked) {
-        Mino.rotate();
-        Mino.lower();
-    } else {
-    console.log('blocked?', Mino.isBlocked);
-    Mino.makeStatic(); //freeze block in place
-    generateJTetrimino();
-    }
-}
+// function fallingJ() {
+//     if (!Mino.isBlocked) {
+//         Mino.rotate();
+//         Mino.lower();
+//     } else {
+//     console.log('blocked?', Mino.isBlocked);
+//     Mino.makeStatic(); //freeze block in place
+//     generateJTetrimino();
+//     }
+// }
 
 
 console.log('r10c6.column type: ', typeof r10c6.column);

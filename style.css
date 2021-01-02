@@ -13,6 +13,10 @@ body {
     align-items: center;
 }
 
+#score {
+    font-size: 25px;
+}
+
 /* should be 10 units across, 40px units */
 #board {
     position: relative;
@@ -38,6 +42,10 @@ body {
     width: 40px;
     background-color: white;
     border: 1px solid black;
+}
+
+.highlight {
+    background-color: lime;
 }
 
 .active {
