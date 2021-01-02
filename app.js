@@ -14,7 +14,7 @@
 
 const board = document.getElementById('board');
 
-
+let rowArray = [];
 let divArray = [];
 let rowcount = 1; //initial row value
 let columncount = 1; //initial column value
@@ -64,7 +64,16 @@ function createRow() {
 function createGrid() {
     let k; //using k, since we used i on inside loop (createRow)
     for (k=0;k<maxRows;k++) {
+        let array = []
         createRow(); //fills in the entire row, adjusting all necessary variables within this inner function.
+
+        divArray.forEach( e => { //adds array to the Row Array.
+            if ( e.row === rowcount && e.column >= leftedge && e.column <= rightedge ) {
+                array.push(e);
+            }
+        });
+        rowArray.push(array);
+
         left = 0; //Now that the row is created, we reset and adjust variables for next row:
         bottom += tile;
         rowcount += 1;
@@ -96,7 +105,7 @@ function hideTopTwoRows() {
     topTwoRows.forEach(e => e.style.visibility = 'hidden');
 }
 
-function hideColumns() {
+function hideOuterColumns() {
     const oustideColumns = [];
     let i;
     for (i=0;i<divArray.length;i++) {
@@ -110,9 +119,56 @@ function hideColumns() {
 createGrid();
 hideBottomRow();
 hideTopTwoRows();
-hideColumns();
+hideOuterColumns();
 //row 16 is the visible top, row 2 is the visible bottom.
+console.log(rowArray);
+let deletedrow = 0;
 
+function getStatics() {
+    let statics = document.getElementsByClassName('static');
+    let array = [];
+    let i;
+    for (i=0;i<statics.length;i++) {
+        array.push(statics[i])
+    }
+    return array;
+}
+
+function staticReassign(aboveSquare) { //takes an element. as long as elements go from bottom up should nto overwrite itself.
+    aboveSquare.className = 'blank';
+    window[aboveSquare.idbelow].className = 'static';
+}
+
+function downShift() {
+    console.log(deletedrow);
+    getStatics().forEach( e => {
+        if (e.row > deletedrow) {
+            staticReassign(e);
+        }
+    })
+    //need to find all statics above the deleted row
+    //then move them down
+}
+
+function clearRow(index) {
+    deletedrow = rowArray[index][0].row;
+    rowArray[index].forEach( e => {
+        e.className = 'blank';
+    })
+}
+
+function checkRowState() {
+    function isFilled(elem, index, arr) {
+        return elem.className === 'static'
+    }
+    let i;
+    for (i=0;i<maxRows;i++) {
+        if (rowArray[i].every(isFilled)) {
+            clearRow(i);
+            downShift();
+        }
+    }
+}
 
 
 //CREATE TETRIMINO
@@ -194,8 +250,8 @@ class Tetrimino {
                 let newColumnNum = array[i].column + 1;
                 document.getElementById(`r${array[i].row}c${newColumnNum}`).setAttribute('class','active');  //adjustClasses
             }
-            console.log(array);
-            console.log(this.actives);
+            // console.log(array);
+            // console.log(this.actives);
         }
 
     //pathBlocked()
@@ -422,15 +478,15 @@ class Tetrimino {
         //STUCK = IF THERE IS A PIECE INBETWEN WHERE IT STARTS AND WHERE IT ROTATES TO.
         //DO I NEED A TRACKER FOR THIS?
 
-        function getStatics() {
-            let statics = document.getElementsByClassName('static');
-            let array = [];
-            let i;
-            for (i=0;i<statics.length;i++) {
-                array.push(statics[i])
-            }
-            return array;
-        }
+        // function getStatics() {
+        //     let statics = document.getElementsByClassName('static');
+        //     let array = [];
+        //     let i;
+        //     for (i=0;i<statics.length;i++) {
+        //         array.push(statics[i])
+        //     }
+        //     return array;
+        // }
 
 
         //if the natural rotation is blocked, the handleRotate() tests a hypothetical left(or right) shift and rotate. 
@@ -1218,23 +1274,17 @@ function generateJTetrimino() {
 
 //Write a function that moves all active class divs down one square on an interval.
 function fall() {
-    // let tetrimino = Mino.actives
-    // let tetrimino = getArrayOfActiveSquares();
-    // console.log(tetrimino);
-    // console.log(tetrimino[0].row, tetrimino[0].column, tetrimino[0].id, tetrimino[0].className);
-    
-    //checks that function pathClear (vs pathBlocked) evalutes to true
+
     if (!Mino.isBlocked) {
         Mino.lower();
         // Mino.rotate();
         // Mino.rotateZ();
         // lowerPieces();
 
-        // console.log(tetrimino[0].row, tetrimino[0].column, tetrimino[0].id, tetrimino[0].className);
     } else {
         Mino.makeStatic(); //freeze block in place
+        checkRowState(); //SHOULD delete filled rows
         Mino.generate();
-        // generateTetrimino(); //starts new tetrimino at top
     }   
 }
 
@@ -1333,17 +1383,18 @@ console.log('r10c6.column type: ', typeof r10c6.column);
 
 function testStatic() {
     divArray.forEach(e => {
-        if ((e.column === 6 && e.row < 9) || (e.column === 8 && e.row < 9)) {
+        if (e.column >= leftedge && e.row >= floor && e.row < 4 && e.column < 12) {
             e.className = 'static';
         }
     })
 }
 
 // OPERATE FALL
-// testStatic();
+testStatic();
 Mino.generate();
 setInterval(fall, 1000);
 
+// console.log(getStatics());
 
 // function testLeftTest(nextArray) {
 //     let testArray = []
