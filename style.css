@@ -2,6 +2,8 @@ body {
     margin: 0;
     padding: 0;
     background-color: cyan;
+    background-image: url('images/palmtrees.jpg');
+    opacity: 0.9;
 }
 
 #container {
@@ -15,9 +17,12 @@ body {
 }
 
 #score {
+    text-align: center;
     color: #ff6ec7;
     font-size: 30px;
     font-weight: bold;
+    background-color: cyan;
+    width: 8rem;
 }
 
 /* should be 10 units across, 40px units */
@@ -38,15 +43,15 @@ body {
 } */
 
 .blank {
-    border-radius: 5px;
+    border-radius: 0px;
     padding: 0px;
     margin: 0px;
     box-sizing: border-box;
     position: absolute;
     height: 40px;
     width: 40px;
-    background-color: none;
-    border: 1px solid grey;
+    background-color: cyan;
+    border: 1px solid black;
 }
 
 .active {
@@ -70,5 +75,5 @@ body {
     height: 40px;
     width: 40px;
     background-color: grey;
-    border: 1px solid white;
+    /* border: 1px solid white; */
 }
