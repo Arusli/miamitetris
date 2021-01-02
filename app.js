@@ -140,7 +140,7 @@ function staticReassign(aboveSquare) { //takes an element. as long as elements g
 }
 
 function downShift() {
-    console.log(deletedrow);
+    console.log('deleted row: ', deletedrow);
     getStatics().forEach( e => {
         if (e.row > deletedrow) {
             staticReassign(e);
@@ -158,13 +158,17 @@ function clearRow(index) {
 }
 
 function checkRowState() {
-    function isFilled(elem, index, arr) {
+
+    function isFilled(elem, index, arr) { //callback function for .every
         return elem.className === 'static'
     }
+
     let i;
     for (i=0;i<maxRows;i++) {
-        if (rowArray[i].every(isFilled)) {
+        if (rowArray[i].every(isFilled)) { //bug is here: when you clear the row, the top row drops down into that row and is missed by the next loop i.
+            //may need to save down shift for after row clearing is done. OR! do an i - 1.
             clearRow(i);
+            i -= 1;
             downShift();
         }
     }
