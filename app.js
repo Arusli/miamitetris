@@ -202,6 +202,18 @@ function removeHighlight() {
     }
 }
 
+function isGameOver() {
+    let i;
+    for (i=0;i<rowArray[14].length;i++) {
+        if (rowArray[14][i].className === 'static') {
+            console.log('GAME OVER');
+            return true;
+            break;
+        }
+    }
+    return false;
+}
+
 
 //CREATE TETRIMINO
 class Tetrimino {
@@ -228,7 +240,7 @@ class Tetrimino {
         // assignTracker(arrayOfTetriminos[num]); //creates tracker property for each square at time of generation. THIS USES OUTSIDE FUNCTION.
         tetrimino.forEach(e => e.className = 'active');
         
-        console.log(shapeOrientation);
+        // console.log(shapeOrientation);
     }
 
     highlightRow() {
@@ -1163,6 +1175,7 @@ function fall() {
     } else {
         Mino.makeStatic(); //freeze block in place
         checkRowState(); //delete filled rows, downshifts static pieces
+        isGameOver();
         Mino.generate();
     }   
 }
