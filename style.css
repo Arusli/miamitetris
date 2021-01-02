@@ -1,6 +1,7 @@
 body {
     margin: 0;
     padding: 0;
+    background-color: cyan;
 }
 
 #container {
@@ -14,17 +15,20 @@ body {
 }
 
 #score {
-    font-size: 25px;
+    color: #ff6ec7;
+    font-size: 30px;
+    font-weight: bold;
 }
 
 /* should be 10 units across, 40px units */
 #board {
+    overflow: hidden;
     position: relative;
     margin: 0;
     padding: 0;
-    height: 680px; /* 720 */
+    height: 680px; 
     width: 640px;
-    background-color:white;
+    background-color: cyan;
     /* border: 1px solid black; */
 }
 /* 
@@ -34,21 +38,19 @@ body {
 } */
 
 .blank {
+    border-radius: 5px;
     padding: 0px;
     margin: 0px;
     box-sizing: border-box;
     position: absolute;
     height: 40px;
     width: 40px;
-    background-color: white;
-    border: 1px solid black;
-}
-
-.highlight {
-    background-color: lime;
+    background-color: none;
+    border: 1px solid grey;
 }
 
 .active {
+    border-radius: 10px;
     padding: 0px;
     margin: 0px;
     box-sizing: border-box;
@@ -56,10 +58,11 @@ body {
     height: 40px;
     width: 40px;
     background-color: purple;
-    border: 1px solid black;
+    /* border: 1px solid white; */
 }
 
 .static {
+    border-radius: 10px;
     padding: 0px;
     margin: 0px;
     box-sizing: border-box;
@@ -67,5 +70,5 @@ body {
     height: 40px;
     width: 40px;
     background-color: grey;
-    border: 1px solid black;
+    border: 1px solid white;
 }

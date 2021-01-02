@@ -84,23 +84,26 @@ function hideBottomRow() {
     const bottomRow = [];
     let i;
     for (i=0;i<divArray.length;i++) {
-        if (divArray[i].row === 1) {
+        if (divArray[i].row < floor) {
             bottomRow.push(divArray[i]);
         }
     }
-    bottomRow.forEach(e => e.style.visibility = 'hidden');
+    bottomRow.forEach(e => {
+        e.style.visibility = 'hidden';
+    })
 }
 
 
 function hideTopTwoRows() {
-    const topTwoRows = [];
+    const topRows = [];
+
     let i;
     for (i=0;i<divArray.length;i++) {
         if (divArray[i].row > 16) {
-            topTwoRows.push(divArray[i]);
+            topRows.push(divArray[i]);
         }
     }
-    topTwoRows.forEach(e => e.style.visibility = 'hidden');
+    topRows.forEach(e => e.style.visibility = 'hidden');
 }
 
 function hideOuterColumns() {
@@ -112,13 +115,21 @@ function hideOuterColumns() {
         }
     }
     oustideColumns.forEach(e => e.style.visibility = 'hidden');
+   
 }
 
 function updateScore() {
     score.innerHTML = `Score: ${points}`
 }
 
+
 createGrid();
+
+//ASSIGNS EACH ELEMENT TO A VARIABLE THAT IS THE SAME AS THE ELEMENT ID
+divArray.forEach( e => {
+    window[`e.id`] = e;
+})
+
 hideBottomRow();
 hideTopTwoRows();
 hideOuterColumns();
@@ -229,7 +240,7 @@ class Tetrimino {
             if (rowArray[k].every(isOccupied) && this.isBlocked) {
                 console.log('this.isBlocked', this.isBlocked);
                 rowArray[k].forEach(e => {
-                    e.style.backgroundColor = 'lime'
+                    e.style.backgroundColor = '#ff6ec7'
                 })
             }
         }
@@ -1020,10 +1031,10 @@ document.addEventListener('keydown', rotateEventHandler);
 // document.getElementById('r15c8').className = 'active';
 
 
-//ASSIGNS EACH ELEMENT TO A VARIABLE THAT IS THE SAME AS THE ELEMENT ID
-divArray.forEach( e => {
-    window[`e.id`] = e;
-})
+// //ASSIGNS EACH ELEMENT TO A VARIABLE THAT IS THE SAME AS THE ELEMENT ID
+// divArray.forEach( e => {
+//     window[`e.id`] = e;
+// })
 
 // let r14c4 = document.getElementById('r14c4');
 // let r14c5 = document.getElementById('r14c5');
