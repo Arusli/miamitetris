@@ -1045,14 +1045,14 @@ document.addEventListener('keydown', rotateEventHandler);
 //nearly all games start the shape in one default position, not randomized
 //sometimes the shape spawns fully on screen and cannot rotate if it will cause shape to move off screen, othertimes
 //othertimes the shape comes from off screen and is not caged by the top. I prefer this, I think.
-const lTetrimino = [r14c4, r14c5, r14c6, r15c6];
-const jTetrimino = [r14c4, r14c5, r14c6, r15c4];
-const sqTetrimino = [r14c5, r14c6, r15c5, r15c6]; //square shape
-const iTetrimino = [r14c4, r14c5, r14c6, r14c7];
-const tTetrimino = [r14c4, r14c5, r14c6, r15c5];
-const z1Tetrimino = [r14c5, r14c6, r15c4, r15c5];
-const z2Tetrimino = [r14c8, r15c8, r15c9, r16c9]; //testing only
-const sTetrimino = [r14c4, r14c5, r15c5, r15c6];
+const lTetrimino = [r16c7, r16c8, r16c9, r17c9]; //+2 +3
+const jTetrimino = [r16c7, r16c8, r16c9, r17c7];
+const sqTetrimino = [r16c8, r16c9, r17c8, r17c9]; //square shape
+const iTetrimino = [r16c7, r16c8, r16c9, r16c10];
+const tTetrimino = [r16c7, r16c8, r16c9, r17c8];
+const z1Tetrimino = [r16c8, r16c9, r17c7, r17c8];
+const z2Tetrimino = [r16c8, r17c8, r17c9, r16c9]; //testing only
+const sTetrimino = [r16c7, r16c8, r17c8, r17c9];
 const arrayOfTetriminos = [lTetrimino, jTetrimino, sqTetrimino, iTetrimino, tTetrimino, z1Tetrimino, sTetrimino];
 const arrayOfShapeOrientations = ['l1', 'j1', 'sq1', 'i1', 't1', 'z1', 's1'];
 let shapeOrientation;
