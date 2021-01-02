@@ -1394,7 +1394,7 @@ function testStatic() {
 }
 
 // OPERATE FALL
-testStatic();
+// testStatic();
 Mino.generate();
 setInterval(fall, 1000);
 
