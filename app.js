@@ -1248,7 +1248,7 @@ function testStatic() {
 // OPERATE FALL
 // testStatic();
 Mino.generate();
-setInterval(fall, 1000);
+setInterval(fall, 400);
 
 // console.log(getStatics());
 
