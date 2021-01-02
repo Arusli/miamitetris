@@ -1341,8 +1341,8 @@ function testStatic() {
 
 // OPERATE FALL
 // testStatic();
-// Mino.generate();
-// setInterval(fall, 1000);
+Mino.generate();
+setInterval(fall, 1000);
 
 
 // function testLeftTest(nextArray) {
@@ -1356,9 +1356,9 @@ function testStatic() {
 // generateTTetrimino();
 // generateLTetrimino();
 // Mino.rotate();
-testStatic();
+// testStatic();
 // testLeftTest(lTetrimino);
-generateITetrimino();
+// generateITetrimino();
 // generateJTetrimino();
 
 //why does ROTATE BACK FAIL?
