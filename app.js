@@ -19,12 +19,12 @@ let divArray = [];
 let rowcount = 1; //initial row value
 let columncount = 1; //initial column value
 let maxRows = 18; //safe to adjust
-let maxColumns = 14;
+let maxColumns = 16;
 const tile = 40; //determines grid unit size
 let bottom = 0;
 let left = 0;
-const rightedge = 12;
-const leftedge = 3;
+const rightedge = 13;
+const leftedge = 4;
 const floor = 2;
 
 ////ATTEMPTING TO CREATE TETRIMINO OBJECT TO HOUSE METHODS AND A GET/SET FOR THE ARRAY OF ACTIVE ELEMENTS (AKA THE TETRIMINO)
@@ -96,9 +96,21 @@ function hideTopTwoRows() {
     topTwoRows.forEach(e => e.style.visibility = 'hidden');
 }
 
+function hideColumns() {
+    const oustideColumns = [];
+    let i;
+    for (i=0;i<divArray.length;i++) {
+        if (divArray[i].column < leftedge || divArray[i].column > rightedge) {
+            oustideColumns.push(divArray[i]);
+        }
+    }
+    oustideColumns.forEach(e => e.style.visibility = 'hidden');
+}
+
 createGrid();
 hideBottomRow();
 hideTopTwoRows();
+hideColumns();
 //row 16 is the visible top, row 2 is the visible bottom.
 
 
@@ -1317,8 +1329,8 @@ function testStatic() {
 
 // OPERATE FALL
 // testStatic();
-// Mino.generate();
-// setInterval(fall, 1000);
+Mino.generate();
+setInterval(fall, 1000);
 
 
 // function testLeftTest(nextArray) {
@@ -1334,7 +1346,7 @@ function testStatic() {
 // Mino.rotate();
 // testStatic();
 // testLeftTest(lTetrimino);
-generateITetrimino();
+// generateITetrimino();
 // generateJTetrimino();
 
 //why does ROTATE BACK FAIL?
