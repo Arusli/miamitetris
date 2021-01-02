@@ -27,8 +27,6 @@ const rightedge = 13;
 const leftedge = 4;
 const floor = 2;
 
-////ATTEMPTING TO CREATE TETRIMINO OBJECT TO HOUSE METHODS AND A GET/SET FOR THE ARRAY OF ACTIVE ELEMENTS (AKA THE TETRIMINO)
-
 
 
 function createRow() {
@@ -89,7 +87,6 @@ function hideBottomRow() {
             bottomRow.push(divArray[i]);
         }
     }
-    // console.log(bottomRow);
     bottomRow.forEach(e => e.style.visibility = 'hidden');
 }
 
@@ -139,6 +136,8 @@ function staticReassign(aboveSquare) { //takes an element. as long as elements g
     window[aboveSquare.idbelow].className = 'static';
 }
 
+//need to find all statics above the deleted row
+//then move them down
 function downShift() {
     console.log('deleted row: ', deletedrow);
     getStatics().forEach( e => {
@@ -146,8 +145,6 @@ function downShift() {
             staticReassign(e);
         }
     })
-    //need to find all statics above the deleted row
-    //then move them down
 }
 
 function clearRow(index) {
@@ -165,10 +162,9 @@ function checkRowState() {
 
     let i;
     for (i=0;i<maxRows;i++) {
-        if (rowArray[i].every(isFilled)) { //bug is here: when you clear the row, the top row drops down into that row and is missed by the next loop i.
-            //may need to save down shift for after row clearing is done. OR! do an i - 1.
+        if (rowArray[i].every(isFilled)) {
             clearRow(i);
-            i -= 1;
+            i -= 1; //accounts for multiple rows clearing 'at once.'
             downShift();
         }
     }
@@ -254,8 +250,6 @@ class Tetrimino {
                 let newColumnNum = array[i].column + 1;
                 document.getElementById(`r${array[i].row}c${newColumnNum}`).setAttribute('class','active');  //adjustClasses
             }
-            // console.log(array);
-            // console.log(this.actives);
         }
 
     //pathBlocked()
@@ -272,7 +266,6 @@ class Tetrimino {
         return false;
     }
 
-    //rightBlocked - NEED TO ASSIGN idright PROPERTY! (and idleft property too)
 
     get isRightBlocked() {
         const path = this.actives.map((e) => document.getElementById(`${e.idright}`))
@@ -301,39 +294,12 @@ class Tetrimino {
         return false;
     }
 
-    // get isDownRotateBlocked() {
-    //     let blocked = false;
-    //     array.forEach( e => {
-    //         if (window[e].className === 'static' || window[e].row < 2) {
-    //             blocked = true;
-    //         }
-    //     })
-    //     return blocked;
-    // }
-
-    // get isRightRotateBlocked() {
-
-    // }
-
-    // get isLeftRotateBlocked() {
-        
-    // }
 
     //makeStatic()
     makeStatic() {
         this.actives.forEach( element => element.setAttribute('class', 'static'))
     }
 
-   
-    //assign Tracker - THIS ONE IS HARD BECAUSE IT USES SO MANY OUTSIDE VARIABLES
-    
-  
-
-    //move down
-
-    //isRightBound
-
-    //isLeftBound
 
     //isTopBound (game over)
 
@@ -1029,41 +995,6 @@ divArray.forEach( e => {
 // let r14c4 = document.getElementById('r14c4');
 // let r14c5 = document.getElementById('r14c5');
 // let r14c6 = document.getElementById('r14c6');
-// let r14c7 = document.getElementById('r14c7');
-// let r15c4 = document.getElementById('r15c4');
-// let r15c5 = document.getElementById('r15c5');
-// let r15c6 = document.getElementById('r15c6');
-// let r15c7 = document.getElementById('r15c7');
-// let r16c4 = document.getElementById('r16c4');
-// let r16c5 = document.getElementById('r16c5');
-// let r16c6 = document.getElementById('r16c6');
-// let r16c7 = document.getElementById('r16c7');
-// let r17c4 = document.getElementById('r17c4');
-// let r17c5 = document.getElementById('r17c5');
-// let r17c6 = document.getElementById('r17c6');
-// let r17c7 = document.getElementById('r17c7');
-// let r18c4 = document.getElementById('r18c4');
-// let r18c5 = document.getElementById('r18c5');
-// let r18c6 = document.getElementById('r18c6');
-// let r18c7 = document.getElementById('r18c7');
-
-
-
-// //TEST BLOCKAGE
-// let r13c4 = document.getElementById('r13c4');
-// let r13c5 = document.getElementById('r13c5');
-// let r13c6 = document.getElementById('r13c6');
-// let r13c7 = document.getElementById('r13c7');
-// r13c4.className = 'static';
-// r13c5.className = 'static';
-// r13c6.className = 'static';
-// r13c7.className = 'static';
-
-
-//TEST TETRIMINO
-// let r1c1 = document.getElementById('r1c1');
-// let r1c2 = document.getElementById('r2c1');
-// const testTetrimino = [r2c1, r2c2];  //adjustable
 
 //SHAPES
 //next need to set these initial shapes
@@ -1082,8 +1013,6 @@ const arrayOfTetriminos = [lTetrimino, jTetrimino, sqTetrimino, iTetrimino, tTet
 const arrayOfShapeOrientations = ['l1', 'j1', 'sq1', 'i1', 't1', 'z1', 's1'];
 let shapeOrientation;
 
-//TEST TO CHECK IDBELOW PROPERTY
-// console.log(r14c4.idbelow, r14c4.idright, r14c4.idleft);
 
 //need to assign each square in the tetrimino. there are four in each shape, 
 // if we arrange the tetrimino arrays formulaicly (right to left, top to bottom) maybe we can assign universal property name for each of the four squares in every tetrimino.
@@ -1111,20 +1040,6 @@ let shapeOrientation;
 //    }
 // }
 
-//TEST assignTracker
-// assignTracker(lTetrimino);
-// console.log(lTetrimino[0].tracker)
-//
-
-
-
-
-//ROTATE
-//individual functions to rotate each l,s,i,t,z
-//there are up to 4 states per shape: l1234, sq1, i12, t1234, z1234
-//needs a global var that holds the tetrimino shape/state, which then determins rotation type.
-// let tetriminoShape = 'l'
-// let shapeOrientation = 'l1'; //should be assigned by generateTetrimino each loop
 
 //NOTES
 //la lb t z s = rotate around stationary core
@@ -1135,33 +1050,6 @@ let shapeOrientation;
 // function rotateZ() {
 //     //there are 4 states: l1, la2, la3, la4
 
-//     let activeTetrimino = getArrayOfActiveSquares(); //I SHOULD MAKE A TETRIMINO OBJECT THAT CONTAINS FUNCTIONS AND GETS/SETS THE ARRAYOFACTIVESQUARES!
-//     let newTetrimino = [];
-
-//     if (shapeOrientation === 'z1') {
-//         //select elements with class active. they should already have inherited the square tracker property. - done
-//         //move element with tracker 1 to new element. aka identify new element and style/assign new element.
-//             //identify new element.
-//             //1 goes right 1 space, up 1 space. 2 goes up 2 spaces. 3 goes down 1 space, right 1 space.
-//             //fill new tetrimino with coordinates of id's of new spaces, then select elements by those new ids, and style/assign.
-//         activeTetrimino.forEach( e => {
-//             //should use 0 instead of core for core tracker because then i can order the array numerically.
-//             newTetrimino.push(activeTetrimino[0].id); //core
-//             newTetrimino.push(`r${activeTetrimino[1].row + 1}c${activeTetrimino[1].column + 1}`) //tracker 1
-//             //tracker 2
-//             //tracker 3
-
-//             //then use window[newTetrimino[0]] to adjust properties and classes.
-//         })
-//         //restyle and reassign new element. 
-//         //unstyle unassign old element.
-//         //repeat for each element (trackers 2, 3, and 4)
-//     }
-
-//     if (shapeOrientation === 'z2') {
-
-//     }
-// }
 
 //FUNCTION FOR GRABBING ARRAY OF ACTIVE SQUARES
 // the reason i am making an identical array is so that there is an array with value types, not reference
@@ -1179,17 +1067,6 @@ let shapeOrientation;
 //     return array;
 // }
 
-
-
-// function generateTetrimino() {
-//     const num = Math.floor(Math.random() * Math.floor(7)); //generates random number from zero to max, excluding max
-//     const tetrimino = arrayOfTetriminos[num]; 
-//     shapeOrientation = arrayOfShapeOrientations[num];
-//     assignTracker(arrayOfTetriminos[num]); //creates tracker property for each square at time of generation
-//     tetrimino.forEach(e => e.className = 'active');
-    
-//     console.log(shapeOrientation);
-// }
 
 function generateZ1Tetrimino() {
     z1Tetrimino.forEach( e => {e.className = 'active'});
@@ -1228,52 +1105,6 @@ function generateJTetrimino() {
     shapeOrientation = 'j1';
 }
 
-// function pathBlocked() {
-//     const path = Mino.actives.map((e) => document.getElementById(`${e.idbelow}`))
-//     let j;
-//     for (j=0;j<Mino.actives.length;j++) {
-//         if (path[j].className === 'static' || path[j].row < 2) {
-//             return true;
-//             break;
-//         }
-//     }
-//     return false;
-// }
-
-// function makeStatic() {
-//     Mino.actives.forEach( element => element.setAttribute('class', 'static'))
-// }
-
-
-// function lowerPieces() {
-//     let array = getArrayOfActiveSquares()
-//     let i;
-//     for(i=0;i<array.length;i++) {
-//         let newRowNum = array[i].row - 1;
-//         document.getElementById(`r${newRowNum}c${array[i].column}`).setAttribute('class','active');   //adjustClassesDown()
-//         document.getElementById(`r${newRowNum}c${array[i].column}`).tracker = array[i].tracker;    //adjustPropertiesDown()
-//         array[i].setAttribute('class','blank');
-//         delete array[i].tracker;
-//     }
-// }
-
-// function moveRight() {
-//     //adjustPropertiesRight()
-//     //adjustClassesRight()
-// }
-
-// function moveLeft() {
-//     //adjustPropertiesLeft()
-//     //adjustClassesLeft()
-// }
-
-//PATH TESTING
-// generateTestTetrimino(testTetrimino);
-// console.log('is array?', Array.isArray(testTetrimino));
-// console.log(testTetrimino[0].row, testTetrimino[0].idbelow);
-// console.log('blocked?', pathBlocked(testTetrimino)); 
-
-
 
 
 //Write a function that moves all active class divs down one square on an interval.
@@ -1281,18 +1112,16 @@ function fall() {
 
     if (!Mino.isBlocked) {
         Mino.lower();
-        // Mino.rotate();
-        // Mino.rotateZ();
-        // lowerPieces();
 
     } else {
         Mino.makeStatic(); //freeze block in place
-        checkRowState(); //SHOULD delete filled rows
+        checkRowState(); //delete filled rows, downshifts static pieces
         Mino.generate();
     }   
 }
 
 
+//TEST SHAPES
 
 function fallingZ() {
     if (!Mino.isBlocked) {
@@ -1359,19 +1188,6 @@ function fallingJ() {
     generateJTetrimino();
     }
 }
-
-
-//FUNCTION TEST
-// function rightRotateBlockedTest(currentArray, nextArray) {
-//     let j;
-//     //i need to sort out/find the highest column number for each array.
-//     const currentColumnMax = Math.max(...currentArray.sort( (a,b) => {return a - b}))
-//     const nextColumnMax = Math.max(...nextArray.sort( (a,b) => {return a - b}))
-//     console.log(currentColumnMax);
-//     console.log(nextColumnMax);
-// }
-
-// rightRotateBlockedTest([4,12,5,4], [1,2,4,7]);
 
 
 console.log('r10c6.column type: ', typeof r10c6.column);

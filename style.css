@@ -18,7 +18,7 @@ body {
     position: relative;
     margin: 0;
     padding: 0;
-    height: 640px;
+    height: 680px; /* 720 */
     width: 640px;
     background-color:white;
     /* border: 1px solid black; */
