@@ -161,13 +161,12 @@ h1 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 4rem;
+    font-size: 2.5rem;
     background-color: none;
-    color: purple;
+    color: blue;
     height: 100px;
-    width: 200px;
-    opacity: 0.9;
-    animation: glitter .4s infinite;
+    width: 400px;
+    animation: glide 1.5s;
 }
 
 @keyframes glitter {
@@ -185,6 +184,22 @@ h1 {
 
     100% {
         color: purple;
+    }
+}
+
+@keyframes glide {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: .2;
+        transform: translate(-50%, -100%);
     }
 }
 

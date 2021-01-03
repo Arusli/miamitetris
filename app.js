@@ -16,6 +16,7 @@ const board = document.getElementById('board');
 const score = document.getElementById('score');
 const newGameButton = document.getElementById('new-game');
 const prompt = document.getElementById('restart');
+const bonusScreen = document.getElementById('bonus');
 
 let rowArray = [];
 let divArray = [];
@@ -222,8 +223,41 @@ function checkRowState() {
     }
 
     calculateBonus();
-    points += bonus; //adds bonus
-    updateScore();
+
+    if (pointsAmount === 1) {
+        bonusScreen.innerHTML = '<div>+1</div>';
+        bonusScreen.style.display = 'flex';
+        setTimeout( ()=> {
+            bonusScreen.style.display = 'none';
+        }, 1300)
+    }
+    if (bonus === 2) {
+        points += bonus; //adds bonus
+        updateScore();
+        bonusScreen.innerHTML = '<div>+4!</div>';
+        bonusScreen.style.display = 'flex';
+        setTimeout( ()=> {
+            bonusScreen.style.display = 'none';
+        }, 1300)
+    }
+    if (bonus === 5) {
+        points += bonus; //adds bonus
+        updateScore();
+        bonusScreen.innerHTML = '<div>+8!</div>';
+        bonusScreen.style.display = 'flex';
+        setTimeout( ()=> {
+            bonusScreen.style.display = 'none';
+        }, 1300)
+    }
+    if (bonus === 10) {
+        points += bonus; //adds bonus
+        updateScore();
+        bonusScreen.innerHTML = '<div>TETRIS!</div><div>+14!</div>';
+        bonusScreen.style.display = 'flex';
+        setTimeout( ()=> {
+            bonusScreen.style.display = 'none';
+        }, 1300)
+    }
 }
 
 function removeHighlight() {
