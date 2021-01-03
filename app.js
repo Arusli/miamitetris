@@ -30,6 +30,19 @@ const rightedge = 13;
 const leftedge = 4;
 const floor = 2;
 let points = 0;
+let speedTracker = 0;
+let speed = 400;
+let timer;
+
+function run() { 
+    timer = setTimeout(fall, speed);
+}
+
+function updateSpeed() {
+    if (speed > 160 && speedTracker%5 === 0) {
+        speed = 500 - ((speedTracker/5) * 20);
+    }
+}
 
 function createRow() {
     let i;
@@ -121,6 +134,8 @@ function hideOuterColumns() {
 
 function updateScore() {
     score.innerHTML = `Score: ${points}`;
+    updateSpeed();
+    console.log(speedTracker, speed);
 }
 
 
@@ -174,8 +189,23 @@ function clearRow(index) {
 }
 
 function checkRowState() {
+    let bonus = 0;
+    let pointsAmount = 0
+
     function isFilled(elem, index, arr) { //callback function for .every
         return elem.className === 'static';
+    }
+
+    function calculateBonus() {
+        if (pointsAmount === 2) {
+            bonus = 2;
+        }
+        if (pointsAmount === 3) {
+            bonus = 4;
+        }
+        if (pointsAmount === 4) {
+            bonus = 10;
+        }
     }
 
     let i;
@@ -183,11 +213,17 @@ function checkRowState() {
         if (rowArray[i].every(isFilled)) {
             clearRow(i);
             points += 1;
+            speedTracker += 1;
+            pointsAmount += 1; //for calculating score bonuses
             updateScore();
             i -= 1; //accounts for multiple rows clearing 'at once.'
             downShift();
         }
     }
+
+    calculateBonus();
+    points += bonus; //adds bonus
+    updateScore();
 }
 
 function removeHighlight() {
@@ -1146,42 +1182,42 @@ let shapeOrientation;
 // }
 
 
-function generateZ1Tetrimino() {
-    z1Tetrimino.forEach( e => {e.className = 'active'});
-    // assignTracker(z1Tetrimino);
-    shapeOrientation = 'z1';
-}
+// function generateZ1Tetrimino() {
+//     z1Tetrimino.forEach( e => {e.className = 'active'});
+//     // assignTracker(z1Tetrimino);
+//     shapeOrientation = 'z1';
+// }
 
-function generateZ2Tetrimino() {
-    z2Tetrimino.forEach( e => {e.className = 'active'});
-    // assignTracker(z2Tetrimino);
-    shapeOrientation = 'z2';
-}
+// function generateZ2Tetrimino() {
+//     z2Tetrimino.forEach( e => {e.className = 'active'});
+//     // assignTracker(z2Tetrimino);
+//     shapeOrientation = 'z2';
+// }
 
-function generateTTetrimino() {
-    tTetrimino.forEach( e => {e.className = 'active'});
-    shapeOrientation = 't1';
-}
+// function generateTTetrimino() {
+//     tTetrimino.forEach( e => {e.className = 'active'});
+//     shapeOrientation = 't1';
+// }
 
-function generateITetrimino() {
-    iTetrimino.forEach( e => {e.className = 'active'});
-    shapeOrientation = 'i1';
-}
+// function generateITetrimino() {
+//     iTetrimino.forEach( e => {e.className = 'active'});
+//     shapeOrientation = 'i1';
+// }
 
-function generateSTetrimino() {
-    sTetrimino.forEach( e => {e.className = 'active'});
-    shapeOrientation = 's1';
-}
+// function generateSTetrimino() {
+//     sTetrimino.forEach( e => {e.className = 'active'});
+//     shapeOrientation = 's1';
+// }
 
-function generateLTetrimino() {
-    lTetrimino.forEach( e => {e.className = 'active'});
-    shapeOrientation = 'l1';
-}
+// function generateLTetrimino() {
+//     lTetrimino.forEach( e => {e.className = 'active'});
+//     shapeOrientation = 'l1';
+// }
 
-function generateJTetrimino() {
-    jTetrimino.forEach( e => {e.className = 'active'});
-    shapeOrientation = 'j1';
-}
+// function generateJTetrimino() {
+//     jTetrimino.forEach( e => {e.className = 'active'});
+//     shapeOrientation = 'j1';
+// }
 
 
 
@@ -1200,14 +1236,20 @@ function restart() {
     })
     prompt.style.display = 'none';
     points = 0;
+    speedTracker = 0;
     updateScore();
     Mino.generate();
+    run();
 }
+
+
+
 
 //Write a function that moves all active class divs down one square on an interval.
 function fall() {
     if (!Mino.isBlocked) {
         Mino.lower();
+        run()
     } else {
         Mino.makeStatic(); //freeze block in place
         checkRowState(); //delete filled rows, downshifts static pieces
@@ -1215,6 +1257,7 @@ function fall() {
             promptRestart();
         } else {
             Mino.generate();
+            run();
         }
     }   
 }
@@ -1307,8 +1350,13 @@ function testStatic() {
 
 // OPERATE FALL
 // testStatic();
+// Mino.generate();
+// setInterval(fall, 350);
+
+
+//increasing speed
 Mino.generate();
-setInterval(fall, 350);
+run();
 
 // console.log(getStatics());
 
