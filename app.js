@@ -13,13 +13,15 @@
 //create an event listener that moves and adjusts 
 
 const board = document.getElementById('board');
-const score = document.getElementById('score')
+const score = document.getElementById('score');
+const newGameButton = document.getElementById('new-game');
+const prompt = document.getElementById('restart');
 
 let rowArray = [];
 let divArray = [];
 let rowcount = 1; //initial row value
 let columncount = 1; //initial column value
-let maxRows = 18; //safe to adjust
+let maxRows = 19; //safe to adjust
 let maxColumns = 16;
 const tile = 30; //determines grid unit size
 let bottom = 0;
@@ -1043,11 +1045,13 @@ function slamEventHandler(e) {
     }
 }
 
+
 document.addEventListener('keydown', leftEventHandler);
 document.addEventListener('keydown', rightEventHandler);
 document.addEventListener('keydown', downEventHandler);
 document.addEventListener('keydown', rotateEventHandler);
 document.addEventListener('keyup', slamEventHandler);
+newGameButton.addEventListener('click', restart);
 
 
 
@@ -1180,10 +1184,19 @@ function generateJTetrimino() {
 }
 
 
+
+
+//RESTART
+
+function promptRestart() {
+    prompt.style.display = 'flex';
+}
+
 function restart() {
     divArray.forEach( e => {
         e.className = 'blank';
     })
+    prompt.style.display = 'none';
     Mino.generate();
 }
 
@@ -1195,8 +1208,7 @@ function fall() {
         Mino.makeStatic(); //freeze block in place
         checkRowState(); //delete filled rows, downshifts static pieces
         if (isGameOver()){
-            alert(`Game Over. Your Score: ${points}`);
-            restart();
+            promptRestart();
         } else {
             Mino.generate();
         }
@@ -1271,9 +1283,6 @@ function fall() {
 //     generateJTetrimino();
 //     }
 // }
-
-
-console.log('r10c6.column type: ', typeof r10c6.column);
 
 
 //OPERATE ONCE

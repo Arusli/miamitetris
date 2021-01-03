@@ -10,12 +10,13 @@ body {
 }
 
 button {
+    cursor: pointer;
     font-size: 15px;
     border-radius: 5px;
     font-family: 'Limelight', cursive;
     background-color: cyan;
     color: black;
-    width: 100px;
+    width: 140px;
     height: 40px;
     border: none;
     transition: all .5s;
@@ -26,7 +27,15 @@ button:hover {
     background-color: #ff6ec7;
     color: white;
     transition: all .5s;
+    height: 50px;
+    width: 160px;
 }
+
+button:active {
+    color: lime;
+    font-weight: bold;
+}
+
 
 h1 {
     font-size: 4rem;
@@ -124,4 +133,19 @@ h1 {
     font-size: 1.2rem;
     margin: 10px;
     color: white;
+}
+
+#restart {
+    display: none;
+    position: fixed;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: black;
+    color: white;
+    height: 150px;
+    width: 400px;
 }
