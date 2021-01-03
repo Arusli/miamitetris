@@ -1190,6 +1190,8 @@ function generateJTetrimino() {
 
 function promptRestart() {
     prompt.style.display = 'flex';
+    let h3 = document.getElementById('endscore');
+    h3.innerHTML = `Your score is ${points}.`
 }
 
 function restart() {
@@ -1197,6 +1199,8 @@ function restart() {
         e.className = 'blank';
     })
     prompt.style.display = 'none';
+    points = 0;
+    updateScore();
     Mino.generate();
 }
 
