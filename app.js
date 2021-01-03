@@ -201,7 +201,7 @@ function checkRowState() {
             bonus = 2;
         }
         if (pointsAmount === 3) {
-            bonus = 4;
+            bonus = 5;
         }
         if (pointsAmount === 4) {
             bonus = 10;

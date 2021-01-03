@@ -26,7 +26,6 @@ button:hover {
     font-size: 20px;
     background-color: #ff6ec7;
     color: white;
-    transition: all .5s;
     height: 50px;
     width: 160px;
 }
@@ -114,6 +113,7 @@ h1 {
     height: 30px;
     width: 30px;
     background-color: purple;
+    /* animation: pulsepurple .1s infinite alternate; */
     /* border: 1px solid white; */
 }
 
@@ -126,6 +126,8 @@ h1 {
     height: 30px;
     width: 30px;
     background-color: black;
+    animation: pulse 1s infinite alternate;
+    transition: .1s;
     /* border: 1px solid white; */
 }
 
@@ -149,3 +151,51 @@ h1 {
     height: 150px;
     width: 400px;
 }
+
+#bonus {
+    display: none;
+    position: fixed;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    background-color: none;
+    color: purple;
+    height: 100px;
+    width: 200px;
+    opacity: 0.9;
+    animation: glitter .4s infinite;
+}
+
+@keyframes glitter {
+    25% {
+        color: cyan;
+    }
+
+    50% {
+        color: purple;
+    }
+
+    75% {
+        color: cyan;
+    }
+
+    100% {
+        color: purple;
+    }
+}
+
+@keyframes pulse {
+    100% {
+        background-color: #333030;
+    }
+}
+
+/* @keyframes pulsepurple {
+    100% {
+        background-color: rgb(139, 14, 139);
+    }
+} */
