@@ -3,15 +3,16 @@
 //document.getElementById('parent').appendChild(childelement)
 
 
-//GRID STYLE (WHAT IM DOING) VS OBJECT STYLE
-//Grid Style: Reassigns divs in the grid to create the illusion of one falling tetrimino.
-//Object Style: Generates a true tetrimino out of 4 divs and repositions those same divs (style.bottom, style.left) with aboslute positioning.
+//Grid Style: 
+// - Reassigns divs in the grid to create the illusion of one falling tetrimino.
+// - create a function on an interval that fills a certain starting set of blocks, 
+// - reassigning their properties (color. position, status). and moves these every interval.
 
-//create a function on an interval that fills a certain starting set of blocks, 
-//...reassigning their properties (color. position, status). and moves these every interval.
+//CONSIDER: creating event listeners that listen for certain game states and adjusts pieces accordingly...
+//...rather than the if/then procedural way I'm currently operating the game.
 
-//create an event listener that moves and adjusts 
 
+//GLOBAL VARS
 const board = document.getElementById('board');
 const score = document.getElementById('score');
 const newGameButton = document.getElementById('new-game');
@@ -39,6 +40,8 @@ let timer;
 let deletedrow = 0;
 let shapeOrientation;
 
+
+//EVENT LISTENERS
 document.addEventListener('keydown', leftEventHandler);
 document.addEventListener('keydown', rightEventHandler);
 document.addEventListener('keydown', downEventHandler);
@@ -49,7 +52,6 @@ newGameButton.addEventListener('click', restart);
 
 
 //INITIALIZE BOARD
-
 createGrid();
 assignNamesToAllDivs();
 hideBottomRow();
@@ -68,255 +70,13 @@ const sqTetrimino = [r16c8, r16c9, r17c8, r17c9]; //square shape
 const iTetrimino = [r16c7, r16c8, r16c9, r16c10];
 const tTetrimino = [r16c7, r16c8, r16c9, r17c8];
 const z1Tetrimino = [r16c8, r16c9, r17c7, r17c8];
-// const z2Tetrimino = [r16c8, r17c8, r17c9, r16c9]; //testing only
 const sTetrimino = [r16c7, r16c8, r17c8, r17c9];
 const arrayOfTetriminos = [lTetrimino, jTetrimino, sqTetrimino, iTetrimino, tTetrimino, z1Tetrimino, sTetrimino];
 const arrayOfShapeOrientations = ['l1', 'j1', 'sq1', 'i1', 't1', 'z1', 's1'];
+// const z2Tetrimino = [r16c8, r17c8, r17c9, r16c9]; //testing only
 
 
-//START
-
-
-
-
-
-
-function run() { 
-    timer = setTimeout(fall, speed);
-}
-
-function updateSpeed() {
-    if (speed > 160 && speedTracker%5 === 0) {
-        speed = 500 - ((speedTracker/5) * 20);
-    } else {
-        return;
-    }
-}
-
-function createRow() {
-    let i;
-    for (i=0; i<maxColumns; i++) {
-        //lets us keep increasing the array index for each iteration of createRow()
-        let indexAdjuster = (rowcount - 1) * maxColumns; //
-        let index = i + indexAdjuster;
-
-        divArray.push(document.createElement('DIV'))
-        divArray[index].setAttribute('class','blank')
-        board.appendChild(divArray[index]); //adds div to board div
-        divArray[index].style.bottom = `${bottom}px`; //positioning
-        divArray[index].style.left = `${left}px`; //positioning
-        left += tile;
-        divArray[index].column = columncount; 
-        columncount +=1;
-        divArray[index].row = rowcount; 
-        divArray[index].idabove = `r${divArray[index].row + 1}c${divArray[index].column}`
-        divArray[index].idbelow = `r${divArray[index].row - 1}c${divArray[index].column}`
-        divArray[index].idright = `r${divArray[index].row}c${divArray[index].column + 1}`
-        divArray[index].idleft = `r${divArray[index].row}c${divArray[index].column - 1}`
-        divArray[index].setAttribute('id', `r${divArray[index].row}c${divArray[index].column}`) //sets id with row1column2 format for simpler manipulation
-        // console.log(divArray[index].id)
-        // console.log(divArray[index].row, divArray[index].column);
-        // console.log(Object.getOwnPropertyNames(divArray[index]));        
-        // console.log('index:' + index);
-    }
-}
-
-
-//NOTE: we need to add 2 or 3 hidden rows at the top to allow the new shapes to generate 'off-screen'
-function createGrid() {
-    let k; //using k, since we used i on inside loop (createRow)
-    for (k=0;k<maxRows;k++) {
-        let array = []
-        createRow(); //fills in the entire row, adjusting all necessary variables within this inner function.
-
-        divArray.forEach( e => { //adds array to the Row Array.
-            if ( e.row === rowcount && e.column >= leftedge && e.column <= rightedge ) {
-                array.push(e);
-            }
-        });
-        ArrayOfVisibleRows.push(array); //populates ArrayOfVisibleRows
-
-        left = 0; //Now that the row is created, we reset and adjust variables for next row:
-        bottom += tile;
-        rowcount += 1;
-        columncount = 1;
-    }
-}
-
-function hideBottomRow() {
-    const bottomRow = [];
-    let i;
-    for (i=0;i<divArray.length;i++) {
-        if (divArray[i].row < floor) {
-            bottomRow.push(divArray[i]);
-        }
-    }
-    bottomRow.forEach(e => {
-        e.style.visibility = 'hidden';
-    })
-}
-
-
-function hideTopTwoRows() {
-    const topRows = [];
-
-    let i;
-    for (i=0;i<divArray.length;i++) {
-        if (divArray[i].row > 17) {
-            topRows.push(divArray[i]);
-        }
-    }
-    topRows.forEach(e => e.style.visibility = 'hidden');
-}
-
-function hideOuterColumns() {
-    const oustideColumns = [];
-    let i;
-    for (i=0;i<divArray.length;i++) {
-        if (divArray[i].column < leftedge || divArray[i].column > rightedge) {
-            oustideColumns.push(divArray[i]);
-        }
-    }
-    oustideColumns.forEach(e => e.style.visibility = 'hidden');
-   
-}
-
-function updateScore() {
-    score.innerHTML = `Score: ${points}`;
-    console.log(speedTracker, speed);
-}
-
-
-//ASSIGNS EACH ELEMENT TO A VARIABLE THAT IS THE SAME AS THE ELEMENT ID
-function assignNamesToAllDivs() {
-    divArray.forEach( e => {
-        window[`e.id`] = e;
-    })
-}
-
-
-
-function getStatics() {
-    let statics = document.getElementsByClassName('static');
-    let array = [];
-    let i;
-    for (i=0;i<statics.length;i++) {
-        array.push(statics[i])
-    }
-    return array;
-}
-
-function staticReassign(aboveSquare) { //takes an element. as long as elements go from bottom up should nto overwrite itself.
-    aboveSquare.className = 'blank';
-    window[aboveSquare.idbelow].className = 'static';
-}
-
-//need to find all statics above the deleted row
-//then move them down
-function downShiftStatics() {
-    console.log('deleted row: ', deletedrow);
-    getStatics().forEach( e => {
-        if (e.row > deletedrow) {
-            staticReassign(e);
-        }
-    })
-}
-
-function clearRow(index) {
-    removeHighlight();
-    deletedrow = ArrayOfVisibleRows[index][0].row;
-    ArrayOfVisibleRows[index].forEach( e => {
-        e.className = 'blank';
-    })
-}
-
-function checkRowState() {
-    let rowsCleared = 0;
-
-    function isFilled(elem, index, arr) { //callback function for .every
-        return elem.className === 'static';
-    }
-
-    let i;
-    for (i=0;i<maxRows;i++) {
-        if (ArrayOfVisibleRows[i].every(isFilled)) {
-            clearRow(i);
-            downShiftStatics();
-            speedTracker += 1;
-            rowsCleared += 1; //for calculating score bonuses
-            i -= 1; //accounts for multiple rows clearing 'at once.'
-           
-        }
-    }
-
-    if (rowsCleared === 1) {
-        points += 1;
-        updateScore();
-        updateSpeed();
-        bonusScreen.innerHTML = '<div>+1</div>';
-        bonusScreen.style.display = 'flex';
-        setTimeout( ()=> {
-            bonusScreen.style.display = 'none';
-        }, 1300)
-    }
-    if (rowsCleared === 2) {
-        points += 4 ;//includes bonus
-        updateScore();
-        updateSpeed();
-        bonusScreen.innerHTML = '<div>+4!</div>';
-        bonusScreen.style.display = 'flex';
-        setTimeout( ()=> {
-            bonusScreen.style.display = 'none';
-        }, 1300)
-    }
-    if (rowsCleared === 3) {
-        points += 8 ;//includes bonus
-        updateScore();
-        bonusScreen.innerHTML = '<div>+8!</div>';
-        bonusScreen.style.display = 'flex';
-        setTimeout( ()=> {
-            bonusScreen.style.display = 'none';
-        }, 1300)
-    }
-    if (rowsCleared === 4) {
-        points += 14 ;//includes bonus
-        updateScore();
-        updateSpeed();
-        bonusScreen.innerHTML = '<div>TETRIS!</div><div>+14!</div>';
-        bonusScreen.style.display = 'flex';
-        setTimeout( ()=> {
-            bonusScreen.style.display = 'none';
-        }, 1300)
-    }
-}
-
-function removeHighlight() {
-    let j;
-    let array = [];
-    divArray.forEach( e => {
-        if (e.style.backgroundColor = 'lime') {
-            array.push(e)
-        }
-    })
-    for (j=0;j<array.length;j++) {
-        array[j].style.backgroundColor = '';
-    }
-}
-
-function isGameOver() {
-    let i;
-    for (i=0;i<ArrayOfVisibleRows[14].length;i++) {
-        if (ArrayOfVisibleRows[16][i].className === 'static') {
-            console.log('GAME OVER');
-            return true;
-            break;
-        }
-    }
-    return false;
-}
-
-
-//CREATE TETRIMINO
+//CREATE TETRIMINO ClASS (VERY LARGE CLASS/OBJECT. CAN WE DO SOMETHING ABOUT THIS?)
 class Tetrimino {
     constructor(){
         this.name = 'terminino object'
@@ -857,7 +617,8 @@ class Tetrimino {
             return newPositionArray;
         }
 
-        //I GET AN ERROR CHECKING THIS PROPERTY WHEN THE PIECE IS AT THE WALL BECAUSE THERE ARE NO IDS TO MATCH COLUMNS THAT DONT EXIST AKA EXTEND PAST THE WALL
+        //I GET AN ERROR CHECKING THIS PROPERTY WHEN THE PIECE IS AT THE WALL BECAUSE THERE ARE NO IDS 
+        //TO MATCH COLUMNS THAT DONT EXIST AKA EXTEND PAST THE WALL
         //NEED TO ADD COLUMNS!
 
         handleRotationV2(getActives, makeNewArray, 'l2');
@@ -944,17 +705,294 @@ class Tetrimino {
     } //end else if
 } //end rotate()  
 } //end of class
+////////
 
 
 
-
+//START
 let Mino = new Tetrimino();
+Mino.generate();
+run();
+
+
+
+
+
+
+//GLOBAL FUNCTIONS
+
+function run() { 
+    timer = setTimeout(fall, speed);
+}
+
+function fall() {
+    if (!Mino.isDownBlocked) {
+        Mino.lower();
+        run()
+    } else {
+        Mino.makeStatic(); //freeze block in place
+        checkRowState(); //delete filled rows, downshifts static pieces
+        if (isGameOver()){
+            promptRestart();
+        } else {
+            Mino.generate();
+            run();
+        }
+    }   
+}
+
+function promptRestart() {
+    prompt.style.display = 'flex';
+    let h3 = document.getElementById('endscore');
+    h3.innerHTML = `Your score is ${points}.`
+}
+
+function restart() {
+    divArray.forEach( e => {
+        e.className = 'blank';
+    })
+    prompt.style.display = 'none';
+    points = 0;
+    speedTracker = 0;
+    speed = 500;
+    updateScore();
+    updateSpeed();
+    Mino.generate();
+    run();
+}
+
+
+function updateSpeed() {
+    if (speed > 160 && speedTracker%5 === 0) {
+        speed = 500 - ((speedTracker/5) * 20);
+    } else {
+        return;
+    }
+}
+
+function createRow() {
+    let i;
+    for (i=0; i<maxColumns; i++) {
+        //lets us keep increasing the array index for each iteration of createRow()
+        let indexAdjuster = (rowcount - 1) * maxColumns; //
+        let index = i + indexAdjuster;
+
+        divArray.push(document.createElement('DIV'))
+        divArray[index].setAttribute('class','blank')
+        board.appendChild(divArray[index]); //adds div to board div
+        divArray[index].style.bottom = `${bottom}px`; //positioning
+        divArray[index].style.left = `${left}px`; //positioning
+        left += tile;
+        divArray[index].column = columncount; 
+        columncount +=1;
+        divArray[index].row = rowcount; 
+        divArray[index].idabove = `r${divArray[index].row + 1}c${divArray[index].column}`
+        divArray[index].idbelow = `r${divArray[index].row - 1}c${divArray[index].column}`
+        divArray[index].idright = `r${divArray[index].row}c${divArray[index].column + 1}`
+        divArray[index].idleft = `r${divArray[index].row}c${divArray[index].column - 1}`
+        divArray[index].setAttribute('id', `r${divArray[index].row}c${divArray[index].column}`) //sets id with row1column2 format for simpler manipulation
+    }
+}
+
+
+//NOTE: we need to add 2 or 3 hidden rows at the top to allow the new shapes to generate 'off-screen'
+function createGrid() {
+    let k; //using k, since we used i on inside loop (createRow)
+    for (k=0;k<maxRows;k++) {
+        let array = []
+        createRow(); //fills in the entire row, adjusting all necessary variables within this inner function.
+
+        divArray.forEach( e => { //adds array to the Row Array.
+            if ( e.row === rowcount && e.column >= leftedge && e.column <= rightedge ) {
+                array.push(e);
+            }
+        });
+        ArrayOfVisibleRows.push(array); //populates ArrayOfVisibleRows
+
+        left = 0; //Now that the row is created, we reset and adjust variables for next row:
+        bottom += tile;
+        rowcount += 1;
+        columncount = 1;
+    }
+}
+
+function hideBottomRow() {
+    const bottomRow = [];
+    let i;
+    for (i=0;i<divArray.length;i++) {
+        if (divArray[i].row < floor) {
+            bottomRow.push(divArray[i]);
+        }
+    }
+    bottomRow.forEach(e => {
+        e.style.visibility = 'hidden';
+    })
+}
+
+
+function hideTopTwoRows() {
+    const topRows = [];
+
+    let i;
+    for (i=0;i<divArray.length;i++) {
+        if (divArray[i].row > 17) {
+            topRows.push(divArray[i]);
+        }
+    }
+    topRows.forEach(e => e.style.visibility = 'hidden');
+}
+
+function hideOuterColumns() {
+    const oustideColumns = [];
+    let i;
+    for (i=0;i<divArray.length;i++) {
+        if (divArray[i].column < leftedge || divArray[i].column > rightedge) {
+            oustideColumns.push(divArray[i]);
+        }
+    }
+    oustideColumns.forEach(e => e.style.visibility = 'hidden');
+   
+}
+
+function updateScore() {
+    score.innerHTML = `Score: ${points}`;
+    console.log(speedTracker, speed);
+}
+
+
+//ASSIGNS EACH ELEMENT TO A VARIABLE THAT IS THE SAME AS THE ELEMENT ID
+function assignNamesToAllDivs() {
+    divArray.forEach( e => {
+        window[`e.id`] = e;
+    })
+}
+
+
+function getStatics() {
+    let statics = document.getElementsByClassName('static');
+    let array = [];
+    let i;
+    for (i=0;i<statics.length;i++) {
+        array.push(statics[i])
+    }
+    return array;
+}
+
+function staticReassign(aboveSquare) { //takes an element. as long as elements go from bottom up should nto overwrite itself.
+    aboveSquare.className = 'blank';
+    window[aboveSquare.idbelow].className = 'static';
+}
+
+//Finds all statics above the deleted row, then move them down
+function downShiftStatics() {
+    console.log('deleted row: ', deletedrow);
+    getStatics().forEach( e => {
+        if (e.row > deletedrow) {
+            staticReassign(e);
+        }
+    })
+}
+
+function clearRow(index) {
+    removeHighlight();
+    deletedrow = ArrayOfVisibleRows[index][0].row;
+    ArrayOfVisibleRows[index].forEach( e => {
+        e.className = 'blank';
+    })
+}
+
+function checkRowState() {
+    let rowsCleared = 0;
+
+    function isFilled(elem, index, arr) { //callback function for .every
+        return elem.className === 'static';
+    }
+
+    let i;
+    for (i=0;i<maxRows;i++) {
+        if (ArrayOfVisibleRows[i].every(isFilled)) {
+            clearRow(i);
+            downShiftStatics();
+            speedTracker += 1;
+            rowsCleared += 1; //for calculating score bonuses
+            i -= 1; //accounts for multiple rows clearing 'at once.'
+           
+        }
+    }
+
+    if (rowsCleared === 1) {
+        points += 1;
+        updateScore();
+        updateSpeed();
+        bonusScreen.innerHTML = '<div>+1</div>';
+        bonusScreen.style.display = 'flex';
+        setTimeout( ()=> {
+            bonusScreen.style.display = 'none';
+        }, 1300)
+    }
+    if (rowsCleared === 2) {
+        points += 4 ;//includes bonus
+        updateScore();
+        updateSpeed();
+        bonusScreen.innerHTML = '<div>+4!</div>';
+        bonusScreen.style.display = 'flex';
+        setTimeout( ()=> {
+            bonusScreen.style.display = 'none';
+        }, 1300)
+    }
+    if (rowsCleared === 3) {
+        points += 8 ;//includes bonus
+        updateScore();
+        bonusScreen.innerHTML = '<div>+8!</div>';
+        bonusScreen.style.display = 'flex';
+        setTimeout( ()=> {
+            bonusScreen.style.display = 'none';
+        }, 1300)
+    }
+    if (rowsCleared === 4) {
+        points += 14 ;//includes bonus
+        updateScore();
+        updateSpeed();
+        bonusScreen.innerHTML = '<div>TETRIS!</div><div>+14!</div>';
+        bonusScreen.style.display = 'flex';
+        setTimeout( ()=> {
+            bonusScreen.style.display = 'none';
+        }, 1300)
+    }
+}
+
+function removeHighlight() {
+    let j;
+    let array = [];
+    divArray.forEach( e => {
+        if (e.style.backgroundColor = 'lime') {
+            array.push(e)
+        }
+    })
+    for (j=0;j<array.length;j++) {
+        array[j].style.backgroundColor = '';
+    }
+}
+
+function isGameOver() {
+    let i;
+    for (i=0;i<ArrayOfVisibleRows[14].length;i++) {
+        if (ArrayOfVisibleRows[16][i].className === 'static') {
+            console.log('GAME OVER');
+            return true;
+            break;
+        }
+    }
+    return false;
+}
+
+
+
 
 
 
 
 //EVENT HANDLERS
-
 function leftEventHandler(e) {
     if (e.keyCode == 37 && !Mino.isLeftBlocked) {
         Mino.moveLeft();
@@ -989,48 +1027,25 @@ function slamEventHandler(e) {
 
 
 
-//RESTART
-function promptRestart() {
-    prompt.style.display = 'flex';
-    let h3 = document.getElementById('endscore');
-    h3.innerHTML = `Your score is ${points}.`
-}
-
-function restart() {
-    divArray.forEach( e => {
-        e.className = 'blank';
-    })
-    prompt.style.display = 'none';
-    points = 0;
-    speedTracker = 0;
-    speed = 500;
-    updateScore();
-    updateSpeed();
-    Mino.generate();
-    run();
-}
-
-
-//Write a function that moves all active class divs down one square on an interval.
-function fall() {
-    if (!Mino.isDownBlocked) {
-        Mino.lower();
-        run()
-    } else {
-        Mino.makeStatic(); //freeze block in place
-        checkRowState(); //delete filled rows, downshifts static pieces
-        if (isGameOver()){
-            promptRestart();
-        } else {
-            Mino.generate();
-            run();
-        }
-    }   
-}
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TESTING SECTIONS
 
 //OPERATE ONCE
 // Mino.generate();
@@ -1055,8 +1070,6 @@ function testStatic() {
 
 
 //increasing speed
-Mino.generate();
-run();
 
 
 
