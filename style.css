@@ -52,8 +52,8 @@ h1 {
     position: relative;
     margin: 0;
     padding: 0;
-    height: calc(17 * 35px); 
-    width: calc(16 * 35px);
+    height: calc(17 * 30px); 
+    width: calc(16 * 30px);
     background-color: cyan;
     background: -webkit-linear-gradient(yellow, white);
     -webkit-text-fill-color: transparent;
@@ -71,8 +71,8 @@ h1 {
     margin: 0px;
     box-sizing: border-box;
     position: absolute;
-    height: 35px;
-    width: 35px;
+    height: 30px;
+    width: 30px;
     background-color: none;
     border: 1px solid brown;
 }
@@ -83,8 +83,8 @@ h1 {
     margin: 0px;
     box-sizing: border-box;
     position: absolute;
-    height: 35px;
-    width: 35px;
+    height: 30px;
+    width: 30px;
     background-color: purple;
     /* border: 1px solid white; */
 }
@@ -95,8 +95,14 @@ h1 {
     margin: 0px;
     box-sizing: border-box;
     position: absolute;
-    height: 35px;
-    width: 35px;
+    height: 30px;
+    width: 30px;
     background-color: black;
     /* border: 1px solid white; */
+}
+
+#rules {
+    font-size: 1.2rem;
+    margin: 10px;
+    color: white;
 }

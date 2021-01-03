@@ -21,7 +21,7 @@ let rowcount = 1; //initial row value
 let columncount = 1; //initial column value
 let maxRows = 18; //safe to adjust
 let maxColumns = 16;
-const tile = 35; //determines grid unit size
+const tile = 30; //determines grid unit size
 let bottom = 0;
 let left = 0;
 const rightedge = 13;
@@ -360,6 +360,18 @@ class Tetrimino {
     //makeStatic()
     makeStatic() {
         this.actives.forEach( element => element.setAttribute('class', 'static'))
+    }
+
+    
+    slam() {
+        let i;
+        for (i=0; i<15; i++) {
+            if (!this.isBlocked) {
+                this.lower();
+            } else {
+                break;
+            }
+        }
     }
 
 
@@ -1026,10 +1038,17 @@ function rotateEventHandler(e) {
     }
 }
 
+function slamEventHandler(e) {
+    if (e.keyCode == 32) {
+        Mino.slam();
+    }
+}
+
 document.addEventListener('keydown', leftEventHandler);
 document.addEventListener('keydown', rightEventHandler);
 document.addEventListener('keydown', downEventHandler);
 document.addEventListener('keydown', rotateEventHandler);
+document.addEventListener('keyup', slamEventHandler);
 
 
 
