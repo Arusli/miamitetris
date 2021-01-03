@@ -32,7 +32,7 @@ const leftedge = 4;
 const floor = 2;
 let points = 0;
 let speedTracker = 0;
-let speed = 400;
+let speed = 500;
 let timer;
 
 function run() { 
@@ -42,6 +42,8 @@ function run() {
 function updateSpeed() {
     if (speed > 160 && speedTracker%5 === 0) {
         speed = 500 - ((speedTracker/5) * 20);
+    } else {
+        return;
     }
 }
 
@@ -135,7 +137,6 @@ function hideOuterColumns() {
 
 function updateScore() {
     score.innerHTML = `Score: ${points}`;
-    updateSpeed();
     console.log(speedTracker, speed);
 }
 
@@ -151,6 +152,7 @@ hideBottomRow();
 hideTopTwoRows();
 hideOuterColumns();
 updateScore();
+updateSpeed();
 //row 16 is the visible top, row 2 is the visible bottom.
 console.log(rowArray);
 let deletedrow = 0;
@@ -190,58 +192,57 @@ function clearRow(index) {
 }
 
 function checkRowState() {
-    let bonus = 0;
-    let pointsAmount = 0
+    let rowsCleared = 0;
 
     function isFilled(elem, index, arr) { //callback function for .every
         return elem.className === 'static';
     }
 
-    function calculateBonus() {
-        if (pointsAmount === 2) {
-            bonus = 2;
-        }
-        if (pointsAmount === 3) {
-            bonus = 5;
-        }
-        if (pointsAmount === 4) {
-            bonus = 10;
-        }
-    }
+    // function calculateBonus() {
+    //     if (pointsAmount === 2) {
+    //         bonus = 2;
+    //     }
+    //     if (pointsAmount === 3) {
+    //         bonus = 5;
+    //     }
+    //     if (pointsAmount === 4) {
+    //         bonus = 10;
+    //     }
+    // }
 
     let i;
     for (i=0;i<maxRows;i++) {
         if (rowArray[i].every(isFilled)) {
             clearRow(i);
-            points += 1;
             speedTracker += 1;
-            pointsAmount += 1; //for calculating score bonuses
-            updateScore();
+            rowsCleared += 1; //for calculating score bonuses
             i -= 1; //accounts for multiple rows clearing 'at once.'
             downShift();
         }
     }
 
-    calculateBonus();
-
-    if (pointsAmount === 1) {
+    if (rowsCleared === 1) {
+        points += 1;
+        updateScore();
+        updateSpeed();
         bonusScreen.innerHTML = '<div>+1</div>';
         bonusScreen.style.display = 'flex';
         setTimeout( ()=> {
             bonusScreen.style.display = 'none';
         }, 1300)
     }
-    if (bonus === 2) {
-        points += bonus; //adds bonus
+    if (rowsCleared === 2) {
+        points += 4 ;//includes bonus
         updateScore();
+        updateSpeed();
         bonusScreen.innerHTML = '<div>+4!</div>';
         bonusScreen.style.display = 'flex';
         setTimeout( ()=> {
             bonusScreen.style.display = 'none';
         }, 1300)
     }
-    if (bonus === 5) {
-        points += bonus; //adds bonus
+    if (rowsCleared === 3) {
+        points += 8 ;//includes bonus
         updateScore();
         bonusScreen.innerHTML = '<div>+8!</div>';
         bonusScreen.style.display = 'flex';
@@ -249,9 +250,10 @@ function checkRowState() {
             bonusScreen.style.display = 'none';
         }, 1300)
     }
-    if (bonus === 10) {
-        points += bonus; //adds bonus
+    if (rowsCleared === 4) {
+        points += 14 ;//includes bonus
         updateScore();
+        updateSpeed();
         bonusScreen.innerHTML = '<div>TETRIS!</div><div>+14!</div>';
         bonusScreen.style.display = 'flex';
         setTimeout( ()=> {
@@ -1271,7 +1273,9 @@ function restart() {
     prompt.style.display = 'none';
     points = 0;
     speedTracker = 0;
+    speed = 500;
     updateScore();
+    updateSpeed();
     Mino.generate();
     run();
 }
