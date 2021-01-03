@@ -98,7 +98,7 @@ function hideTopTwoRows() {
 
     let i;
     for (i=0;i<divArray.length;i++) {
-        if (divArray[i].row > 16) {
+        if (divArray[i].row > 17) {
             topRows.push(divArray[i]);
         }
     }
@@ -204,7 +204,7 @@ function removeHighlight() {
 function isGameOver() {
     let i;
     for (i=0;i<rowArray[14].length;i++) {
-        if (rowArray[15][i].className === 'static') {
+        if (rowArray[16][i].className === 'static') {
             console.log('GAME OVER');
             return true;
             break;
@@ -1181,7 +1181,10 @@ function generateJTetrimino() {
 
 
 function restart() {
-
+    divArray.forEach( e => {
+        e.className = 'blank';
+    })
+    Mino.generate();
 }
 
 //Write a function that moves all active class divs down one square on an interval.
@@ -1193,6 +1196,7 @@ function fall() {
         checkRowState(); //delete filled rows, downshifts static pieces
         if (isGameOver()){
             alert(`Game Over. Your Score: ${points}`);
+            restart();
         } else {
             Mino.generate();
         }
