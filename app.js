@@ -29,7 +29,6 @@ const leftedge = 4;
 const floor = 2;
 let points = 0;
 
-
 function createRow() {
     let i;
     for (i=0; i<maxColumns; i++) {
@@ -119,7 +118,7 @@ function hideOuterColumns() {
 }
 
 function updateScore() {
-    score.innerHTML = `Score: ${points}`
+    score.innerHTML = `Score: ${points}`;
 }
 
 
@@ -205,7 +204,7 @@ function removeHighlight() {
 function isGameOver() {
     let i;
     for (i=0;i<rowArray[14].length;i++) {
-        if (rowArray[14][i].className === 'static') {
+        if (rowArray[15][i].className === 'static') {
             console.log('GAME OVER');
             return true;
             break;
@@ -1181,21 +1180,22 @@ function generateJTetrimino() {
 }
 
 
+function restart() {
+
+}
 
 //Write a function that moves all active class divs down one square on an interval.
 function fall() {
-    
-    
-
     if (!Mino.isBlocked) {
         Mino.lower();
- 
-
     } else {
         Mino.makeStatic(); //freeze block in place
         checkRowState(); //delete filled rows, downshifts static pieces
-        isGameOver();
-        Mino.generate();
+        if (isGameOver()){
+            alert(`Game Over. Your Score: ${points}`);
+        } else {
+            Mino.generate();
+        }
     }   
 }
 
@@ -1291,7 +1291,7 @@ function testStatic() {
 // OPERATE FALL
 // testStatic();
 Mino.generate();
-setInterval(fall, 400);
+setInterval(fall, 350);
 
 // console.log(getStatics());
 
