@@ -12,12 +12,10 @@
 import Grid from '/grid.js';
 const grid = new Grid;
 
-//GLOBAL VARS
+//Grid Vars
 // const board = document.getElementById('board');
-
 // let ArrayOfVisibleRows = [];
 // let grid.divArray = [];
-
 // let rowcount = 1; //initial row value
 // let columncount = 1; //initial column value
 // let maxRows = 19; //safe to adjust
@@ -29,6 +27,7 @@ const grid = new Grid;
 // let bottom = 0;
 // let left = 0;
 
+//GLOBAL VARS
 const score = document.getElementById('score');
 const newGameButton = document.getElementById('new-game');
 const prompt = document.getElementById('restart');
@@ -39,7 +38,7 @@ let speedTracker = 0;
 let speed = 500;
 let timer;
 let deletedrow = 0;
-let shapeOrientation;
+
 
 
 //EVENT LISTENERS
@@ -59,7 +58,6 @@ grid.hideBottomRow();
 grid.hideTopTwoRows();
 grid.hideOuterColumns();
 
-
 updateScore();
 updateSpeed();
 //row 16 is the visible top, row 2 is the visible bottom.
@@ -67,15 +65,15 @@ console.log(grid.ArrayOfVisibleRows);
 
 
 //INTIALIZE SHAPES
-const lTetrimino = [r16c7, r16c8, r16c9, r17c9]; 
-const jTetrimino = [r16c7, r16c8, r16c9, r17c7];
-const sqTetrimino = [r16c8, r16c9, r17c8, r17c9]; //square shape
-const iTetrimino = [r16c7, r16c8, r16c9, r16c10];
-const tTetrimino = [r16c7, r16c8, r16c9, r17c8];
-const z1Tetrimino = [r16c8, r16c9, r17c7, r17c8];
-const sTetrimino = [r16c7, r16c8, r17c8, r17c9];
-const arrayOfTetriminos = [lTetrimino, jTetrimino, sqTetrimino, iTetrimino, tTetrimino, z1Tetrimino, sTetrimino];
-const arrayOfShapeOrientations = ['l1', 'j1', 'sq1', 'i1', 't1', 'z1', 's1'];
+// const lTetrimino = [r16c7, r16c8, r16c9, r17c9]; 
+// const jTetrimino = [r16c7, r16c8, r16c9, r17c7];
+// const sqTetrimino = [r16c8, r16c9, r17c8, r17c9]; //square shape
+// const iTetrimino = [r16c7, r16c8, r16c9, r16c10];
+// const tTetrimino = [r16c7, r16c8, r16c9, r17c8];
+// const z1Tetrimino = [r16c8, r16c9, r17c7, r17c8];
+// const sTetrimino = [r16c7, r16c8, r17c8, r17c9];
+// const arrayOfTetriminos = [lTetrimino, jTetrimino, sqTetrimino, iTetrimino, tTetrimino, z1Tetrimino, sTetrimino];
+// const arrayOfShapeOrientations = ['l1', 'j1', 'sq1', 'i1', 't1', 'z1', 's1'];
 // const z2Tetrimino = [r16c8, r17c8, r17c9, r16c9]; //testing only
 
 
@@ -83,6 +81,16 @@ const arrayOfShapeOrientations = ['l1', 'j1', 'sq1', 'i1', 't1', 'z1', 's1'];
 class Tetrimino {
     constructor(){
         this.name = 'terminino object'
+        this.lTetrimino = [r16c7, r16c8, r16c9, r17c9]; 
+        this.jTetrimino = [r16c7, r16c8, r16c9, r17c7];
+        this.sqTetrimino = [r16c8, r16c9, r17c8, r17c9]; //square shape
+        this.iTetrimino = [r16c7, r16c8, r16c9, r16c10];
+        this.tTetrimino = [r16c7, r16c8, r16c9, r17c8];
+        this.z1Tetrimino = [r16c8, r16c9, r17c7, r17c8];
+        this.sTetrimino = [r16c7, r16c8, r17c8, r17c9];
+        this.arrayOfTetriminos = [this.lTetrimino, this.jTetrimino, this.sqTetrimino, this.iTetrimino, this.tTetrimino, this.z1Tetrimino, this.sTetrimino];
+        this.arrayOfShapeOrientations = ['l1', 'j1', 'sq1', 'i1', 't1', 'z1', 's1'];
+        this.shapeOrientation;
     }
 
      //getArrayOfActiveSquares()
@@ -99,9 +107,8 @@ class Tetrimino {
      //generateTetriminos()
     generate() {
         const num = Math.floor(Math.random() * Math.floor(7)); //generates random number from zero to max, excluding max
-        const tetrimino = arrayOfTetriminos[num]; 
-        shapeOrientation = arrayOfShapeOrientations[num];
-        // assignTracker(arrayOfTetriminos[num]); //creates tracker property for each square at time of generation. THIS USES OUTSIDE FUNCTION.
+        const tetrimino = this.arrayOfTetriminos[num]; 
+        this.shapeOrientation = this.arrayOfShapeOrientations[num];
         tetrimino.forEach(e => e.className = 'active');
         
         // console.log(shapeOrientation);
@@ -335,17 +342,17 @@ class Tetrimino {
                     console.log('moved left')
                     reassign(activeArray(), nextArray());
                     console.log('reassigned')
-                    shapeOrientation = nextShape;
+                    _this.shapeOrientation = nextShape;
                 
                 } else if (testRightHypothetical(activeArray(), nextArray())) {
                     _this.moveRight();
                     reassign(activeArray(), nextArray());
-                    shapeOrientation = nextShape;
+                    _this.shapeOrientation = nextShape;
                     console.log('moved right')
                 } else if (testUpHypothetical(activeArray(), nextArray())) {
                     _this.moveUp();
                     reassign(activeArray(), nextArray());
-                    shapeOrientation = nextShape;
+                    _this.shapeOrientation = nextShape;
                     console.log('moved up')
                 } else {
                     console.log('blocked: cannot rotate');
@@ -353,7 +360,7 @@ class Tetrimino {
                 }
             } else if (!isRotateBlocked(nextArray())) {
                 reassign(activeArray(), nextArray());
-                shapeOrientation = nextShape;
+                _this.shapeOrientation = nextShape;
             }
         }
 
@@ -364,27 +371,27 @@ class Tetrimino {
                 if (testLeftHypothetical(activeArray(), nextArray())) {
                     _this.moveLeft();
                     reassign(activeArray(), nextArray());
-                    shapeOrientation = nextShape;
+                    _this.shapeOrientation = nextShape;
                 } else if (testDoubleLeftHypothetical(activeArray(), nextArray())) {
                     _this.moveLeft();
                     _this.moveLeft();
                     reassign(activeArray(), nextArray());
-                    shapeOrientation = nextShape;
+                    _this.shapeOrientation = nextShape;
                 } else if (testRightHypothetical(activeArray(), nextArray())) {
                     _this.moveRight();
                     reassign(activeArray(), nextArray());
-                    shapeOrientation = nextShape;
+                    _this.shapeOrientation = nextShape;
                 } else if (testUpHypothetical(activeArray(), nextArray())) {
                     _this.moveUp();
                     reassign(activeArray(), nextArray());
-                    shapeOrientation = nextShape;
+                    _this.shapeOrientation = nextShape;
                 } else {
                     console.log('SHAPE I TETRO IS BLOCKED');
                     return;
                 }
             } else if (!isRotateBlocked(nextArray())) {
                 reassign(activeArray(), nextArray());
-                shapeOrientation = nextShape;
+                _this.shapeOrientation = nextShape;
             }
         }
 
@@ -475,25 +482,25 @@ class Tetrimino {
         //    if (isLeftRotateBlocked(activeArray(), nextArray())) {
         //         _this.moveRight();
         //         reassign(activeArray(), nextArray());
-        //         shapeOrientation = nextShape; 
+        //         _this.shapeOrientation = nextShape; 
         //     } else if (isRightRotateBlocked(activeArray(), nextArray())) {
         //         _this.moveLeft();
         //         reassign(activeArray(), nextArray());
-        //         shapeOrientation = nextShape; 
+        //         _this.shapeOrientation = nextShape; 
         //     } else if (isDownRotateBlocked(activeArray(), nextArray())) {
         //         _this.moveUp();
         //         reassign(activeArray(), nextArray());
-        //         shapeOrientation = nextShape; 
+        //         _this.shapeOrientation = nextShape; 
         //     } else {
         //         reassign(activeArray(), nextArray());
-        //         shapeOrientation = nextShape; 
+        //         _this.shapeOrientation = nextShape; 
         //     } 
         // }
  
 
         //BIG IF
 
-        if (shapeOrientation === 'z1') {
+        if (_this.shapeOrientation === 'z1') {
             function makeNewArray() {
                 let newPositionArray = []; //these are ids not objects. MAKE THEM OBJECTS BELOW SO THEY CAN EASILY FIT INTO HANDLEROTATION()
                 newPositionArray.push(window[`r${_this.actives[0].row + 1}c${_this.actives[0].column + 1}`]) 
@@ -505,7 +512,7 @@ class Tetrimino {
     
          handleRotationV2(getActives, makeNewArray, 'z2');
        
-    } else if (shapeOrientation === 'z2') {
+    } else if (_this.shapeOrientation === 'z2') {
         
         function makeNewArray() {
             let newPositionArray = [];
@@ -517,7 +524,7 @@ class Tetrimino {
         }
 
         handleRotationV2(getActives, makeNewArray, 'z1');
-    } else if (shapeOrientation === 't1') {
+    } else if (_this.shapeOrientation === 't1') {
         function makeNewArray() {
             let newPositionArray = [];
             newPositionArray.push(window[`r${_this.actives[0].row - 1}c${_this.actives[0].column + 1}`]);
@@ -528,7 +535,7 @@ class Tetrimino {
         }
             
         handleRotationV2(getActives, makeNewArray, 't2');
-    } else if (shapeOrientation === 't2') {
+    } else if (_this.shapeOrientation === 't2') {
         
         function makeNewArray() {
             let newPositionArray = [];
@@ -540,7 +547,7 @@ class Tetrimino {
         }
         
         handleRotationV2(getActives, makeNewArray, 't3');
-    } else if (shapeOrientation === 't3') {
+    } else if (_this.shapeOrientation === 't3') {
         
         function makeNewArray() {
             let newPositionArray = [];
@@ -553,7 +560,7 @@ class Tetrimino {
 
 
         handleRotationV2(getActives, makeNewArray, 't4');
-    } else if (shapeOrientation === 't4') {
+    } else if (_this.shapeOrientation === 't4') {
         
         function makeNewArray() {
             let newPositionArray = [];
@@ -565,7 +572,7 @@ class Tetrimino {
         }
    
         handleRotationV2(getActives, makeNewArray, 't1');
-    } else if (shapeOrientation === 'i1') {
+    } else if (_this.shapeOrientation === 'i1') {
         
         function makeNewArray() {
             let newPositionArray = [];
@@ -577,7 +584,7 @@ class Tetrimino {
         }
 
         handleITetroRotation(getActives, makeNewArray, 'i2');
-    } else if (shapeOrientation === 'i2') {
+    } else if (_this.shapeOrientation === 'i2') {
         function makeNewArray() {
             let newPositionArray = [];
             newPositionArray.push(window[`r${_this.actives[0].row + 1}c${_this.actives[0].column - 1}`]);
@@ -588,7 +595,7 @@ class Tetrimino {
         }
        
         handleITetroRotation(getActives, makeNewArray, 'i1');
-    } else if (shapeOrientation === 's1') {
+    } else if (_this.shapeOrientation === 's1') {
         function makeNewArray() {
             let newPositionArray = [];
             newPositionArray.push(window[`r${_this.actives[0].row + 2}c${_this.actives[0].column}`]);
@@ -599,7 +606,7 @@ class Tetrimino {
         }
         
         handleRotationV2(getActives, makeNewArray, 's2');
-    } else if (shapeOrientation === 's2') {
+    } else if (_this.shapeOrientation === 's2') {
         function makeNewArray() {
             let newPositionArray = [];
             newPositionArray.push(window[`r${_this.actives[0].row + 1}c${_this.actives[0].column + 1}`]);
@@ -609,7 +616,7 @@ class Tetrimino {
             return newPositionArray;
         }
         handleRotationV2(getActives, makeNewArray, 's1');
-    } else if (shapeOrientation === 'l1') {
+    } else if (_this.shapeOrientation === 'l1') {
        
         function makeNewArray() {
             let newPositionArray = [];
@@ -626,7 +633,7 @@ class Tetrimino {
 
         handleRotationV2(getActives, makeNewArray, 'l2');
            
-    } else if (shapeOrientation === 'l2') {
+    } else if (_this.shapeOrientation === 'l2') {
         function makeNewArray() {
             let newPositionArray = [];
             newPositionArray.push(window[`r${_this.actives[0].row + 1}c${_this.actives[0].column - 1}`]);
@@ -638,7 +645,7 @@ class Tetrimino {
 
         handleRotationV2(getActives, makeNewArray, 'l3');
         
-    } else if (shapeOrientation === 'l3') {
+    } else if (_this.shapeOrientation === 'l3') {
         function makeNewArray() {
             let newPositionArray = [];
             newPositionArray.push(window[`r${_this.actives[0].row + 2}c${_this.actives[0].column}`]);
@@ -650,7 +657,7 @@ class Tetrimino {
 
          handleRotationV2(getActives, makeNewArray, 'l4');
 
-    } else if (shapeOrientation === 'l4') {
+    } else if (_this.shapeOrientation === 'l4') {
 
         function makeNewArray() {
             let newPositionArray = [];
@@ -663,7 +670,7 @@ class Tetrimino {
 
         handleRotationV2(getActives, makeNewArray, 'l1');
 
-    } else if (shapeOrientation === 'j1') {
+    } else if (_this.shapeOrientation === 'j1') {
         
         function makeNewArray() {
             let newPositionArray = [];
@@ -675,7 +682,7 @@ class Tetrimino {
         }
 
         handleRotationV2(getActives, makeNewArray, 'j2');
-    } else if (shapeOrientation === 'j2') {
+    } else if (_this.shapeOrientation === 'j2') {
         function makeNewArray() {
             let newPositionArray = [];
             newPositionArray.push(window[`r${_this.actives[0].row + 1}c${_this.actives[0].column - 1}`]);
@@ -685,7 +692,7 @@ class Tetrimino {
             return newPositionArray;
         }
         handleRotationV2(getActives, makeNewArray, 'j3');
-    } else if (shapeOrientation === 'j3') {
+    } else if (_this.shapeOrientation === 'j3') {
         function makeNewArray() {
             let newPositionArray = [];
             newPositionArray.push(window[`r${_this.actives[0].row}c${_this.actives[0].column - 2}`]);
@@ -695,7 +702,7 @@ class Tetrimino {
             return newPositionArray;
         }
         handleRotationV2(getActives, makeNewArray, 'j4');
-    } else if (shapeOrientation === 'j4') {
+    } else if (_this.shapeOrientation === 'j4') {
         function makeNewArray() {
             let newPositionArray = [];
             newPositionArray.push(window[`r${_this.actives[0].row + 2}c${_this.actives[0].column}`]);
@@ -1057,13 +1064,6 @@ function slamEventHandler(e) {
 
 //TESTING SECTIONS
 
-//OPERATE ONCE
-// Mino.generate();
-// Mino.lower();
-// console.log(Mino.actives);
-// Mino.actives.forEach( e => console.log(e.tracker));
-// console.log(Mino.actives.sort((a,b) => a.tracker - b.tracker))
-
 
 function testStatic() {
     grid.divArray.forEach(e => {
@@ -1072,6 +1072,16 @@ function testStatic() {
         }
     })
 }
+
+
+//OPERATE ONCE
+// Mino.generate();
+// Mino.lower();
+// console.log(Mino.actives);
+// Mino.actives.forEach( e => console.log(e.tracker));
+// console.log(Mino.actives.sort((a,b) => a.tracker - b.tracker))
+
+
 
 // OPERATE FALL
 // testStatic();
