@@ -8,30 +8,31 @@
 // - create a function on an interval that fills a certain starting set of blocks, 
 // - reassigning their properties (color. position, status). and moves these every interval.
 
-//CONSIDER: creating event listeners that listen for certain game states and adjusts pieces accordingly...
-//...rather than the if/then procedural way I'm currently operating the game.
 
+import Grid from '/grid.js';
+const grid = new Grid;
 
 //GLOBAL VARS
-const board = document.getElementById('board');
+// const board = document.getElementById('board');
+
+// let ArrayOfVisibleRows = [];
+// let grid.divArray = [];
+
+// let rowcount = 1; //initial row value
+// let columncount = 1; //initial column value
+// let maxRows = 19; //safe to adjust
+// let maxColumns = 16;
+// const tile = 30; //determines grid unit size
+// const rightedge = 13;
+// const leftedge = 4;
+// const floor = 2;
+// let bottom = 0;
+// let left = 0;
+
 const score = document.getElementById('score');
 const newGameButton = document.getElementById('new-game');
 const prompt = document.getElementById('restart');
 const bonusScreen = document.getElementById('bonus');
-
-let ArrayOfVisibleRows = [];
-let divArray = [];
-
-let rowcount = 1; //initial row value
-let columncount = 1; //initial column value
-let maxRows = 19; //safe to adjust
-let maxColumns = 16;
-const tile = 30; //determines grid unit size
-const rightedge = 13;
-const leftedge = 4;
-const floor = 2;
-let bottom = 0;
-let left = 0;
 
 let points = 0;
 let speedTracker = 0;
@@ -52,15 +53,17 @@ newGameButton.addEventListener('click', restart);
 
 
 //INITIALIZE BOARD
-createGrid();
-assignNamesToAllDivs();
-hideBottomRow();
-hideTopTwoRows();
-hideOuterColumns();
+grid.createGrid();
+grid.assignNamesToAllDivs();
+grid.hideBottomRow();
+grid.hideTopTwoRows();
+grid.hideOuterColumns();
+
+
 updateScore();
 updateSpeed();
 //row 16 is the visible top, row 2 is the visible bottom.
-console.log(ArrayOfVisibleRows);
+console.log(grid.ArrayOfVisibleRows);
 
 
 //INTIALIZE SHAPES
@@ -109,10 +112,10 @@ class Tetrimino {
             return elem.className !== 'blank';
         }
         let k;
-        for (k=0;k<maxRows;k++) {
-            if (ArrayOfVisibleRows[k].every(isOccupied) && this.isDownBlocked) {
+        for (k=0;k<grid.maxRows;k++) {
+            if (grid.ArrayOfVisibleRows[k].every(isOccupied) && this.isDownBlocked) {
                 console.log('this.isDownBlocked', this.isDownBlocked);
-                ArrayOfVisibleRows[k].forEach(e => {
+                grid.ArrayOfVisibleRows[k].forEach(e => {
                     e.style.backgroundColor = '#ff6ec7'
                 })
             }
@@ -179,7 +182,7 @@ class Tetrimino {
         // console.log(path);
         let j;
         for (j=0;j<this.actives.length;j++) {
-            if (path[j].className === 'static' || path[j].row < floor) {
+            if (path[j].className === 'static' || path[j].row < grid.floor) {
                 return true;
                 break;
             }
@@ -192,7 +195,7 @@ class Tetrimino {
         const path = this.actives.map((e) => document.getElementById(`${e.idright}`))
         let j;
         for (j=0;j<this.actives.length;j++) {
-            if (path[j].className === 'static' || path[j].column > rightedge) {
+            if (path[j].className === 'static' || path[j].column > grid.rightedge) {
                 return true;
                 break;
             }
@@ -206,7 +209,7 @@ class Tetrimino {
         // console.log(path);
         let j;
         for (j=0;j<this.actives.length;j++) {
-            if (path[j].className === 'static' || path[j].column < leftedge) {
+            if (path[j].className === 'static' || path[j].column < grid.leftedge) {
                 return true;
                 break;
             }
@@ -315,7 +318,7 @@ class Tetrimino {
         function isRotateBlocked(array) { //takes an array of elements which represent the hypothetical rotated position
            let j;
            for (j=0;j<array.length;j++) {
-               if (array[j].className === 'static' || array[j].column < leftedge || array[j].column > rightedge || array[j].row < floor) {
+               if (array[j].className === 'static' || array[j].column < grid.leftedge || array[j].column > grid.rightedge || array[j].row < grid.floor) {
                    return true;
                }
            }
@@ -748,7 +751,7 @@ function promptRestart() {
 }
 
 function restart() {
-    divArray.forEach( e => {
+    grid.divArray.forEach( e => {
         e.className = 'blank';
     })
     prompt.style.display = 'none';
@@ -770,102 +773,11 @@ function updateSpeed() {
     }
 }
 
-function createRow() {
-    let i;
-    for (i=0; i<maxColumns; i++) {
-        //lets us keep increasing the array index for each iteration of createRow()
-        let indexAdjuster = (rowcount - 1) * maxColumns; //
-        let index = i + indexAdjuster;
-
-        divArray.push(document.createElement('DIV'))
-        divArray[index].setAttribute('class','blank')
-        board.appendChild(divArray[index]); //adds div to board div
-        divArray[index].style.bottom = `${bottom}px`; //positioning
-        divArray[index].style.left = `${left}px`; //positioning
-        left += tile;
-        divArray[index].column = columncount; 
-        columncount +=1;
-        divArray[index].row = rowcount; 
-        divArray[index].idabove = `r${divArray[index].row + 1}c${divArray[index].column}`
-        divArray[index].idbelow = `r${divArray[index].row - 1}c${divArray[index].column}`
-        divArray[index].idright = `r${divArray[index].row}c${divArray[index].column + 1}`
-        divArray[index].idleft = `r${divArray[index].row}c${divArray[index].column - 1}`
-        divArray[index].setAttribute('id', `r${divArray[index].row}c${divArray[index].column}`) //sets id with row1column2 format for simpler manipulation
-    }
-}
-
-
-//NOTE: we need to add 2 or 3 hidden rows at the top to allow the new shapes to generate 'off-screen'
-function createGrid() {
-    let k; //using k, since we used i on inside loop (createRow)
-    for (k=0;k<maxRows;k++) {
-        let array = []
-        createRow(); //fills in the entire row, adjusting all necessary variables within this inner function.
-
-        divArray.forEach( e => { //adds array to the Row Array.
-            if ( e.row === rowcount && e.column >= leftedge && e.column <= rightedge ) {
-                array.push(e);
-            }
-        });
-        ArrayOfVisibleRows.push(array); //populates ArrayOfVisibleRows
-
-        left = 0; //Now that the row is created, we reset and adjust variables for next row:
-        bottom += tile;
-        rowcount += 1;
-        columncount = 1;
-    }
-}
-
-function hideBottomRow() {
-    const bottomRow = [];
-    let i;
-    for (i=0;i<divArray.length;i++) {
-        if (divArray[i].row < floor) {
-            bottomRow.push(divArray[i]);
-        }
-    }
-    bottomRow.forEach(e => {
-        e.style.visibility = 'hidden';
-    })
-}
-
-
-function hideTopTwoRows() {
-    const topRows = [];
-
-    let i;
-    for (i=0;i<divArray.length;i++) {
-        if (divArray[i].row > 17) {
-            topRows.push(divArray[i]);
-        }
-    }
-    topRows.forEach(e => e.style.visibility = 'hidden');
-}
-
-function hideOuterColumns() {
-    const oustideColumns = [];
-    let i;
-    for (i=0;i<divArray.length;i++) {
-        if (divArray[i].column < leftedge || divArray[i].column > rightedge) {
-            oustideColumns.push(divArray[i]);
-        }
-    }
-    oustideColumns.forEach(e => e.style.visibility = 'hidden');
-   
-}
-
 function updateScore() {
     score.innerHTML = `Score: ${points}`;
     console.log(speedTracker, speed);
 }
 
-
-//ASSIGNS EACH ELEMENT TO A VARIABLE THAT IS THE SAME AS THE ELEMENT ID
-function assignNamesToAllDivs() {
-    divArray.forEach( e => {
-        window[`e.id`] = e;
-    })
-}
 
 
 function getStatics() {
@@ -878,10 +790,12 @@ function getStatics() {
     return array;
 }
 
+
 function staticReassign(aboveSquare) { //takes an element. as long as elements go from bottom up should nto overwrite itself.
     aboveSquare.className = 'blank';
     window[aboveSquare.idbelow].className = 'static';
 }
+
 
 //Finds all statics above the deleted row, then move them down
 function downShiftStatics() {
@@ -893,13 +807,16 @@ function downShiftStatics() {
     })
 }
 
+
 function clearRow(index) {
     removeHighlight();
-    deletedrow = ArrayOfVisibleRows[index][0].row;
-    ArrayOfVisibleRows[index].forEach( e => {
+    deletedrow = grid.ArrayOfVisibleRows[index][0].row;
+    grid.ArrayOfVisibleRows[index].forEach( e => {
         e.className = 'blank';
     })
 }
+
+
 
 function checkRowState() {
     let rowsCleared = 0;
@@ -909,8 +826,8 @@ function checkRowState() {
     }
 
     let i;
-    for (i=0;i<maxRows;i++) {
-        if (ArrayOfVisibleRows[i].every(isFilled)) {
+    for (i=0;i<grid.maxRows;i++) {
+        if (grid.ArrayOfVisibleRows[i].every(isFilled)) {
             clearRow(i);
             downShiftStatics();
             speedTracker += 1;
@@ -964,7 +881,7 @@ function checkRowState() {
 function removeHighlight() {
     let j;
     let array = [];
-    divArray.forEach( e => {
+    grid.divArray.forEach( e => {
         if (e.style.backgroundColor = 'lime') {
             array.push(e)
         }
@@ -976,8 +893,8 @@ function removeHighlight() {
 
 function isGameOver() {
     let i;
-    for (i=0;i<ArrayOfVisibleRows[14].length;i++) {
-        if (ArrayOfVisibleRows[16][i].className === 'static') {
+    for (i=0;i<grid.ArrayOfVisibleRows[14].length;i++) {
+        if (grid.ArrayOfVisibleRows[16][i].className === 'static') {
             console.log('GAME OVER');
             return true;
             break;
@@ -985,6 +902,99 @@ function isGameOver() {
     }
     return false;
 }
+
+// function createRow() {
+//     let i;
+//     for (i=0; i<maxColumns; i++) {
+//         //lets us keep increasing the array index for each iteration of createRow()
+//         let indexAdjuster = (rowcount - 1) * maxColumns; //
+//         let index = i + indexAdjuster;
+
+//         divArray.push(document.createElement('DIV'))
+//         divArray[index].setAttribute('class','blank')
+//         board.appendChild(divArray[index]); //adds div to board div
+//         divArray[index].style.bottom = `${bottom}px`; //positioning
+//         divArray[index].style.left = `${left}px`; //positioning
+//         left += tile;
+//         divArray[index].column = columncount; 
+//         columncount +=1;
+//         divArray[index].row = rowcount; 
+//         divArray[index].idabove = `r${divArray[index].row + 1}c${divArray[index].column}`
+//         divArray[index].idbelow = `r${divArray[index].row - 1}c${divArray[index].column}`
+//         divArray[index].idright = `r${divArray[index].row}c${divArray[index].column + 1}`
+//         divArray[index].idleft = `r${divArray[index].row}c${divArray[index].column - 1}`
+//         divArray[index].setAttribute('id', `r${divArray[index].row}c${divArray[index].column}`) //sets id with row1column2 format for simpler manipulation
+//     }
+// }
+
+
+// //NOTE: we need to add 2 or 3 hidden rows at the top to allow the new shapes to generate 'off-screen'
+// function createGrid() {
+//     let k; //using k, since we used i on inside loop (createRow)
+//     for (k=0;k<maxRows;k++) {
+//         let array = []
+//         createRow(); //fills in the entire row, adjusting all necessary variables within this inner function.
+
+//         divArray.forEach( e => { //adds array to the Row Array.
+//             if ( e.row === rowcount && e.column >= grid.leftedge && e.column <= grid.rightedge ) {
+//                 array.push(e);
+//             }
+//         });
+//         ArrayOfVisibleRows.push(array); //populates ArrayOfVisibleRows
+
+//         left = 0; //Now that the row is created, we reset and adjust variables for next row:
+//         bottom += tile;
+//         rowcount += 1;
+//         columncount = 1;
+//     }
+// }
+
+// function hideBottomRow() {
+//     const bottomRow = [];
+//     let i;
+//     for (i=0;i<divArray.length;i++) {
+//         if (divArray[i].row < grid.floor) {
+//             bottomRow.push(divArray[i]);
+//         }
+//     }
+//     bottomRow.forEach(e => {
+//         e.style.visibility = 'hidden';
+//     })
+// }
+
+
+// function hideTopTwoRows() {
+//     const topRows = [];
+
+//     let i;
+//     for (i=0;i<divArray.length;i++) {
+//         if (divArray[i].row > 17) {
+//             topRows.push(divArray[i]);
+//         }
+//     }
+//     topRows.forEach(e => e.style.visibility = 'hidden');
+// }
+
+// function hideOuterColumns() {
+//     const oustideColumns = [];
+//     let i;
+//     for (i=0;i<divArray.length;i++) {
+//         if (divArray[i].column < grid.leftedge || divArray[i].column > grid.rightedge) {
+//             oustideColumns.push(divArray[i]);
+//         }
+//     }
+//     oustideColumns.forEach(e => e.style.visibility = 'hidden');
+   
+// }
+
+// //ASSIGNS EACH ELEMENT TO A VARIABLE THAT IS THE SAME AS THE ELEMENT ID
+// function assignNamesToAllDivs() {
+//     divArray.forEach( e => {
+//         window[`e.id`] = e;
+//     })
+// }
+
+////
 
 
 
@@ -1056,8 +1066,8 @@ function slamEventHandler(e) {
 
 
 function testStatic() {
-    divArray.forEach(e => {
-        if (e.column >= leftedge && e.row >= floor && e.row < 4 && e.column < 12) {
+    grid.divArray.forEach(e => {
+        if (e.column >= grid.leftedge && e.row >= grid.floor && e.row < 4 && e.column < 12) {
             e.className = 'static';
         }
     })
@@ -1366,7 +1376,7 @@ function testStatic() {
         //     console.log(currentRowMin);
         //     console.log(nextRowMin);
         //     for (j=0;j<currentArray.length;j++) {
-        //         if ((currentRowMin > nextRowMin && nextArray[j].className === 'static') || (currentRowMin > nextRowMin && nextArray[j].row < floor)) {
+        //         if ((currentRowMin > nextRowMin && nextArray[j].className === 'static') || (currentRowMin > nextRowMin && nextArray[j].row < grid.floor)) {
         //             return true;
         //             break;
         //         }
@@ -1382,7 +1392,7 @@ function testStatic() {
         //     console.log(currentColumnMax);
         //     console.log(nextColumnMax);
         //     for (j=0;j<currentArray.length;j++) {
-        //         if ((currentColumnMax < nextColumnMax && nextArray[j].className === 'static') || (currentColumnMax < nextColumnMax && nextArray[j].column > rightedge)) {
+        //         if ((currentColumnMax < nextColumnMax && nextArray[j].className === 'static') || (currentColumnMax < nextColumnMax && nextArray[j].column > grid.rightedge)) {
         //             console.log('right rotate blocked');
         //             return true;
         //             break;
@@ -1423,7 +1433,7 @@ function testStatic() {
     //         console.log(currentColumnMax);
     //         console.log(nextColumnMax);
     //         for (j=0;j<currentArray.length;j++) {
-    //             if ((nextColumnMax > currentColumnMax && nextArray[3].className === 'static' && nextArray[2].className !== 'static') || (nextColumnMax > currentColumnMax && nextArray[2].column === rightedge)) {
+    //             if ((nextColumnMax > currentColumnMax && nextArray[3].className === 'static' && nextArray[2].className !== 'static') || (nextColumnMax > currentColumnMax && nextArray[2].column === grid.rightedge)) {
     //                 console.log('right rotate blocked one space');
     //                 return true;
     //                 break;
@@ -1439,7 +1449,7 @@ function testStatic() {
         //     console.log(currentColumnMax);
         //     console.log(nextColumnMax);
         //     for (j=0;j<currentArray.length;j++) {
-        //         if (nextArray[2].className === 'static' || nextArray[2].column > rightedge) {
+        //         if (nextArray[2].className === 'static' || nextArray[2].column > grid.rightedge) {
         //             console.log('right blocked two spaces');
         //             return true;
         //             break;
@@ -1455,7 +1465,7 @@ function testStatic() {
         //     console.log(currentColumnMax);
         //     console.log(nextColumnMax);
         //     for (j=0;j<currentArray.length;j++) {
-        //         if (nextArray[3].className === 'static' || nextArray[3].column > rightedge) {
+        //         if (nextArray[3].className === 'static' || nextArray[3].column > grid.rightedge) {
         //             console.log('right blocked one space');
         //             return true;
         //             break;
