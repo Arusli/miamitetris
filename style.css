@@ -166,10 +166,10 @@ h1 {
     color: blue;
     height: 100px;
     width: 400px;
-    animation: glide 1.5s;
+    animation: float 1.5s;
 }
 
-@keyframes glide {
+@keyframes float {
     0% {
         opacity: 1;
         transform: translate(-50%, -50%);

@@ -39,7 +39,7 @@ let points = 0;
 let speedTracker = 0;
 let speed = 500;
 let timer;
-let deletedrow = 0;
+
 
 
 
@@ -155,41 +155,41 @@ function updateScore() {
 
 
 
-function getStatics() {
-    let statics = document.getElementsByClassName('static');
-    let array = [];
-    let i;
-    for (i=0;i<statics.length;i++) {
-        array.push(statics[i])
-    }
-    return array;
-}
+// function getStatics() {
+//     let statics = document.getElementsByClassName('static');
+//     let array = [];
+//     let i;
+//     for (i=0;i<statics.length;i++) {
+//         array.push(statics[i])
+//     }
+//     return array;
+// }
 
 
-function staticReassign(aboveSquare) { //takes an element. as long as elements go from bottom up should nto overwrite itself.
-    aboveSquare.className = 'blank';
-    grid[aboveSquare.idbelow].className = 'static';
-}
+// function staticReassign(aboveSquare) { //takes an element. as long as elements go from bottom up should nto overwrite itself.
+//     aboveSquare.className = 'blank';
+//     grid[aboveSquare.idbelow].className = 'static';
+// }
 
 
-//Finds all statics above the deleted row, then move them down
-function downShiftStatics() {
-    console.log('deleted row: ', deletedrow);
-    getStatics().forEach( e => {
-        if (e.row > deletedrow) {
-            staticReassign(e);
-        }
-    })
-}
+// //Finds all statics above the deleted row, then move them down
+// function downShiftStatics() {
+//     console.log('deleted row: ', deletedrow);
+//     getStatics().forEach( e => {
+//         if (e.row > deletedrow) {
+//             staticReassign(e);
+//         }
+//     })
+// }
 
 
-function clearRow(index) {
-    removeHighlight();
-    deletedrow = grid.ArrayOfVisibleRows[index][0].row;
-    grid.ArrayOfVisibleRows[index].forEach( e => {
-        e.className = 'blank';
-    })
-}
+// function clearRow(index) {
+//     removeHighlight();
+//     deletedrow = grid.ArrayOfVisibleRows[index][0].row;
+//     grid.ArrayOfVisibleRows[index].forEach( e => {
+//         e.className = 'blank';
+//     })
+// }
 
 
 
@@ -203,8 +203,8 @@ function checkRowState() {
     let i;
     for (i=0;i<grid.maxRows;i++) {
         if (grid.ArrayOfVisibleRows[i].every(isFilled)) {
-            clearRow(i);
-            downShiftStatics();
+            Mino.clearRow(i);
+            Mino.downShiftStatics();
             speedTracker += 1;
             rowsCleared += 1; //for calculating score bonuses
             i -= 1; //accounts for multiple rows clearing 'at once.'
@@ -253,18 +253,18 @@ function checkRowState() {
     }
 }
 
-function removeHighlight() {
-    let j;
-    let array = [];
-    grid.divArray.forEach( e => {
-        if (e.style.backgroundColor = 'lime') {
-            array.push(e)
-        }
-    })
-    for (j=0;j<array.length;j++) {
-        array[j].style.backgroundColor = '';
-    }
-}
+// function removeHighlight() {
+//     let j;
+//     let array = [];
+//     grid.divArray.forEach( e => {
+//         if (e.style.backgroundColor = 'lime') {
+//             array.push(e)
+//         }
+//     })
+//     for (j=0;j<array.length;j++) {
+//         array[j].style.backgroundColor = '';
+//     }
+// }
 
 function isGameOver() {
     let i;
@@ -433,13 +433,13 @@ function slamEventHandler(e) {
 //TESTING SECTIONS
 
 
-function testStatic() {
-    grid.divArray.forEach(e => {
-        if (e.column >= grid.leftedge && e.row >= grid.floor && e.row < 4 && e.column < 12) {
-            e.className = 'static';
-        }
-    })
-}
+// function testStatic() {
+//     grid.divArray.forEach(e => {
+//         if (e.column >= grid.leftedge && e.row >= grid.floor && e.row < 4 && e.column < 12) {
+//             e.className = 'static';
+//         }
+//     })
+// }
 
 
 //OPERATE ONCE

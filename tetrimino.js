@@ -12,6 +12,7 @@ export default class Tetrimino {
         this.arrayOfTetriminos = [this.lTetrimino, this.jTetrimino, this.sqTetrimino, this.iTetrimino, this.tTetrimino, this.z1Tetrimino, this.sTetrimino];
         this.arrayOfShapeOrientations = ['l1', 'j1', 'sq1', 'i1', 't1', 'z1', 's1'];
         this.shapeOrientation;
+        this.deletedrow = 0;
     }
 
      //getArrayOfActiveSquares()
@@ -163,6 +164,116 @@ export default class Tetrimino {
         }
     }
 
+    getStatics() {
+        let statics = document.getElementsByClassName('static');
+        let array = [];
+        let i;
+        for (i=0;i<statics.length;i++) {
+            array.push(statics[i])
+        }
+        return array;
+    }
+    
+    
+    staticReassign(aboveSquare) { //takes an element. as long as elements go from bottom up should nto overwrite itself.
+        aboveSquare.className = 'blank';
+        this.grid[aboveSquare.idbelow].className = 'static';
+    }
+    
+    
+    //Finds all statics above the deleted row, then move them down
+    downShiftStatics() {
+        console.log('deleted row: ', this.deletedrow);
+        this.getStatics().forEach( e => {
+            if (e.row > this.deletedrow) {
+                this.staticReassign(e);
+            }
+        })
+    }
+
+    clearRow(index) {
+        this.removeHighlight();
+        this.deletedrow = this.grid.ArrayOfVisibleRows[index][0].row;
+        this.grid.ArrayOfVisibleRows[index].forEach( e => {
+            e.className = 'blank';
+        })
+    }
+    
+    
+    
+    checkRowState() {
+        let rowsCleared = 0;
+    
+        function isFilled(elem, index, arr) { //callback function for .every
+            return elem.className === 'static';
+        }
+    
+        let i;
+        for (i=0;i<this.grid.maxRows;i++) {
+            if (this.grid.ArrayOfVisibleRows[i].every(isFilled)) {
+                this.clearRow(i);
+                this.downShiftStatics();
+                speedTracker += 1;
+                rowsCleared += 1; //for calculating score bonuses
+                i -= 1; //accounts for multiple rows clearing 'at once.'
+               
+            }
+        }
+    
+        if (rowsCleared === 1) {
+            points += 1;
+            updateScore();
+            updateSpeed();
+            bonusScreen.innerHTML = '<div>+1</div>';
+            bonusScreen.style.display = 'flex';
+            setTimeout( ()=> {
+                bonusScreen.style.display = 'none';
+            }, 1300)
+        }
+        if (rowsCleared === 2) {
+            points += 4 ;//includes bonus
+            updateScore();
+            updateSpeed();
+            bonusScreen.innerHTML = '<div>+4!</div>';
+            bonusScreen.style.display = 'flex';
+            setTimeout( ()=> {
+                bonusScreen.style.display = 'none';
+            }, 1300)
+        }
+        if (rowsCleared === 3) {
+            points += 8 ;//includes bonus
+            updateScore();
+            bonusScreen.innerHTML = '<div>+8!</div>';
+            bonusScreen.style.display = 'flex';
+            setTimeout( ()=> {
+                bonusScreen.style.display = 'none';
+            }, 1300)
+        }
+        if (rowsCleared === 4) {
+            points += 14 ;//includes bonus
+            updateScore();
+            updateSpeed();
+            bonusScreen.innerHTML = '<div>TETRIS!</div><div>+14!</div>';
+            bonusScreen.style.display = 'flex';
+            setTimeout( ()=> {
+                bonusScreen.style.display = 'none';
+            }, 1300)
+        }
+    }
+    
+    removeHighlight() {
+        let j;
+        let array = [];
+        this.grid.divArray.forEach( e => {
+            if (e.style.backgroundColor = 'lime') {
+                array.push(e)
+            }
+        })
+        for (j=0;j<array.length;j++) {
+            array[j].style.backgroundColor = '';
+        }
+    }
+
 
     //isTopBound
 
@@ -209,7 +320,7 @@ export default class Tetrimino {
             console.log('side contact points:', sideContactPoints)
             
             let multifaceContactPoints = 0;
-            let staticArray = getStatics();
+            let staticArray = _this.getStatics();
             console.log(staticArray);
             staticArray.forEach( e => {
                 if (
@@ -636,4 +747,3 @@ export default class Tetrimino {
     } //end else if
 } //end rotate()  
 } //end of class
-////////
