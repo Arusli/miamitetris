@@ -169,24 +169,6 @@ h1 {
     animation: glide 1.5s;
 }
 
-@keyframes glitter {
-    25% {
-        color: cyan;
-    }
-
-    50% {
-        color: purple;
-    }
-
-    75% {
-        color: cyan;
-    }
-
-    100% {
-        color: purple;
-    }
-}
-
 @keyframes glide {
     0% {
         opacity: 1;
@@ -205,12 +187,6 @@ h1 {
 
 @keyframes pulse {
     100% {
-        background-color: #333030;
+        background-color: #423f3f;
     }
 }
-
-/* @keyframes pulsepurple {
-    100% {
-        background-color: rgb(139, 14, 139);
-    }
-} */

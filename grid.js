@@ -112,7 +112,7 @@ export default class Grid {
     //ASSIGNS EACH ELEMENT TO A VARIABLE THAT IS THE SAME AS THE ELEMENT ID
    assignNamesToAllDivs() {
         this.divArray.forEach( e => {
-            window[`e.id`] = e;
+            this[e.id] = e;
         })
     }
 
