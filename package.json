@@ -4,7 +4,7 @@
   "main": "webpack.config.js",
   "scripts": {
     "build": "webpack -w",
-    "start": "node index.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
