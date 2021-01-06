@@ -1,7 +1,7 @@
 {
   "name": "tetris",
   "version": "1.0.0",
-  "main": "src/index.js",
+  "main": "webpack.config.js",
   "scripts": {
     "build": "webpack -w"
   },
