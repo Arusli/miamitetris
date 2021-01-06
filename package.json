@@ -1,8 +1,7 @@
 {
   "name": "tetris",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "main": "src/index.js",
   "scripts": {
     "build": "webpack -w"
   },
@@ -19,5 +18,7 @@
   "devDependencies": {
     "webpack": "^5.11.1",
     "webpack-cli": "^4.3.1"
-  }
+  },
+  "keywords": [],
+  "description": ""
 }
