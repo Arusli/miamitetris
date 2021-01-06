@@ -20,5 +20,8 @@
     "webpack-cli": "^4.3.1"
   },
   "keywords": [],
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
