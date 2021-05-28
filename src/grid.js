@@ -65,7 +65,7 @@ export default class Grid {
             this.ArrayOfVisibleRows.push(array); //populates ArrayOfVisibleRows
     
             this.left = 0; //Now that the row is created, we reset and adjust variables for next row:
-          this.  bottom += this.tile;
+            this.bottom += this.tile;
             this.rowcount += 1;
             this.columncount = 1;
         }

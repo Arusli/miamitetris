@@ -4,6 +4,9 @@ body {
     padding: 0;
     background-color: cyan;
     background-image: url('palmtrees.jpg');
+    /* for use without server */
+    background-image: url('../images/palmtrees.jpg'); 
+    /* for use without server */
     opacity: 0.9;
     background-repeat: no-repeat;
     background-size: cover;
