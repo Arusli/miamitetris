@@ -16,13 +16,6 @@ export default class Grid {
         this.floor = 2;
         this.bottom = 0;
         this.left = 0;
-        
-        // let points = 0;
-        // let speedTracker = 0;
-        // let speed = 500;
-        // let timer;
-        // let deletedrow = 0;
-        // let shapeOrientation;
     }
 
     createRow() {
@@ -117,11 +110,3 @@ export default class Grid {
     }
 
 }
-
-
-// //INITIALIZE BOARD
-// createGrid();
-// assignNamesToAllDivs();
-// hideBottomRow();
-// hideTopTwoRows();
-// hideOuterColumns();

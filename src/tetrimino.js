@@ -32,8 +32,6 @@ export default class Tetrimino {
         const tetrimino = this.arrayOfTetriminos[num]; 
         this.shapeOrientation = this.arrayOfShapeOrientations[num];
         tetrimino.forEach(e => e.className = 'active');
-        
-        // console.log(shapeOrientation);
     }
 
     highlightRow() {
@@ -105,7 +103,6 @@ export default class Tetrimino {
             }
         }
 
-    //pathBlocked()
     get isDownBlocked() {
         const path = this.actives.map((e) => document.getElementById(`${e.idbelow}`))
         // console.log(path);
