@@ -51,7 +51,6 @@ export default class Tetrimino {
     
 
     lower() {
-
         const array = this.actives //must set to an array so that it can remember the positions of the active array even after class is set to blank.
         let i;
         for(i=0;i<array.length;i++) {
@@ -64,7 +63,6 @@ export default class Tetrimino {
         }       
 
         this.highlightRow();
-
     }
 
     moveUp() {
