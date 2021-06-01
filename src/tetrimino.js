@@ -15,7 +15,6 @@ export default class Tetrimino {
         this.deletedrow = 0;
     }
 
-     //getArrayOfActiveSquares()
     get actives() {
         let array = [];
         const arrayLikeObject = document.getElementsByClassName('active');
@@ -26,7 +25,6 @@ export default class Tetrimino {
         return array;
     }
 
-     //generateTetriminos()
     generate() {
         const num = Math.floor(Math.random() * Math.floor(7)); //generates random number from zero to max, excluding max
         const tetrimino = this.arrayOfTetriminos[num]; 
@@ -49,7 +47,6 @@ export default class Tetrimino {
         }
     }
     
-
     lower() {
         const array = this.actives //must set to an array so that it can remember the positions of the active array even after class is set to blank.
         let i;
@@ -114,7 +111,6 @@ export default class Tetrimino {
         return false;
     }
 
-
     get isRightBlocked() {
         const path = this.actives.map((e) => document.getElementById(`${e.idright}`))
         let j;
@@ -140,14 +136,11 @@ export default class Tetrimino {
         }
         return false;
     }
-
-
   
     makeStatic() {
         this.actives.forEach( element => element.setAttribute('class', 'static'))
     }
-
-    
+  
     slam() {
         let i;
         for (i=0; i<15; i++) {
@@ -168,14 +161,12 @@ export default class Tetrimino {
         }
         return array;
     }
-    
-    
+        
     staticReassign(aboveSquare) { //takes an element. as long as elements go from bottom up should nto overwrite itself.
         aboveSquare.className = 'blank';
         this.grid[aboveSquare.idbelow].className = 'static';
     }
-    
-    
+      
     //Finds all statics above the deleted row, then move them down
     downShiftStatics() {
         console.log('deleted row: ', this.deletedrow);
@@ -193,9 +184,7 @@ export default class Tetrimino {
             e.className = 'blank';
         })
     }
-    
-    
-    
+       
     checkRowState() {
         let rowsCleared = 0;
     

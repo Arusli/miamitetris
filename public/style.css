@@ -3,7 +3,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: cyan;
-    background-image: url('palmtrees.jpg');
+    /* background-image: url('palmtrees.jpg'); */
     /* for use without server */
     background-image: url('../images/palmtrees.jpg'); 
     /* for use without server */
@@ -37,7 +37,6 @@ button:active {
     color: lime;
     font-weight: bold;
 }
-
 
 h1 {
     font-size: 4rem;

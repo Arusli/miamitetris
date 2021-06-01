@@ -1,7 +1,3 @@
-//Useful methods
-//document.createElement
-//document.getElementById('parent').appendChild(childelement)
-
 //Grid Style: 
 // - Reassigns divs in the grid to create the illusion of one falling tetrimino.
 // - create a function on an interval that fills a certain starting set of blocks, 
@@ -50,13 +46,11 @@ console.log('WEBPACK W TEST');
 //CREATE TETRIMINO ClASS (VERY LARGE CLASS/OBJECT. CAN WE DO SOMETHING ABOUT THIS?)
 
 //START
-
 let Mino = new Tetrimino(grid);
 Mino.generate();
 run();
 
 //GLOBAL FUNCTIONS
-
 function run() { 
     timer = setTimeout(fall, speed);
 }
@@ -64,7 +58,7 @@ function run() {
 function fall() {
     if (!Mino.isDownBlocked) {
         Mino.lower();
-        run()
+        run();
     } else {
         Mino.makeStatic(); //freeze block in place
         checkRowState(); //delete filled rows, downshifts static pieces
@@ -220,8 +214,9 @@ function slamEventHandler(e) {
 
 
 
-
-
+//Useful methods
+//document.createElement
+//document.getElementById('parent').appendChild(childelement)
 
 
 //TESTING SECTIONS
