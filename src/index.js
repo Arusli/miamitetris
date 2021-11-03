@@ -207,7 +207,6 @@ function isGameOver() {
 function leftEventHandler(e) {
     if (e.keyCode == 37 && !Mino.isLeftBlocked) {
         Mino.moveLeft();
-        console.log('left')
     }
 }
 
@@ -241,14 +240,14 @@ function slamEventHandler(e) {
 function pauseEventHandler(e) {
     if (e.keyCode === 80 && !paused) {
         paused = true;
-        console.log('paused:', paused);
+        // console.log('paused:', paused);
     }
 }
 
 function unpauseEventHandler(e) {
     if (e.keyCode === 85 && paused) {
         paused = false;
-        console.log('paused:', paused);
+        // console.log('paused:', paused);
     }
 }
 
@@ -569,4 +568,4 @@ function unpauseEventHandler(e) {
 //     Mino.makeStatic(); //freeze block in place
 //     generateJTetrimino();
 //     }
-// }
+// 

@@ -3,9 +3,9 @@ body {
     margin: 0;
     padding: 0;
     background-color: cyan;
-    /* background-image: url('palmtrees.jpg'); */
-    /* for use without server */
-    background-image: url('../images/palmtrees.jpg'); 
+    background-image: url('palmtrees.jpg');
+    /* for use with server */
+    /* background-image: url('../images/palmtrees.jpg');  */
     /* for use without server */
     opacity: 0.9;
     background-repeat: no-repeat;
