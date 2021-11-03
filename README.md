@@ -11,6 +11,7 @@ TO RUN APP WITHOUT SERVER:
 2. Need to set css background image path to url('../images/palmtrees.jpg')
 
 
-
+TO PUSH TO HEROKU:
+MUST REMOVE: "build": "webpack -w" FROM PACKAGE.JSON SCRIPTS.
 
 

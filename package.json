@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "webpack.config.js",
   "scripts": {
-    "start": "node app.js",
-    "build": "webpack -w"
+    "start": "node app.js"
   },
   "engines": {
     "node": "12.18.3",
