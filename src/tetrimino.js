@@ -18,8 +18,7 @@ export default class Tetrimino {
     get actives() {
         let array = [];
         const arrayLikeObject = document.getElementsByClassName('active');
-        let i;
-        for (i=0;i<arrayLikeObject.length;i++) {
+        for (let i=0;i<arrayLikeObject.length;i++) {
             array.push(arrayLikeObject[i]);
         }
         return array;
@@ -33,15 +32,14 @@ export default class Tetrimino {
     }
 
     highlightRow() {
-        function isOccupied(elem, index, arr) { //callback function for .every
+        function isOccupied(elem) { //callback function for .every
             return elem.className !== 'blank';
         }
-        let k;
-        for (k=0;k<this.grid.maxRows;k++) {
+        for (let k=0;k<this.grid.maxRows;k++) {
             if (this.grid.ArrayOfVisibleRows[k].every(isOccupied) && this.isDownBlocked) {
                 console.log('this.isDownBlocked', this.isDownBlocked);
                 this.grid.ArrayOfVisibleRows[k].forEach(e => {
-                    e.style.backgroundColor = '#ff6ec7'
+                    e.style.backgroundColor = '#ff6ec7';
                 })
             }
         }
@@ -49,12 +47,11 @@ export default class Tetrimino {
     
     lower() {
         const array = this.actives //must set to an array so that it can remember the positions of the active array even after class is set to blank.
-        let i;
-        for(i=0;i<array.length;i++) {
+        for(let i=0;i<array.length;i++) {
             array[i].setAttribute('class','blank');
         }
 
-        for(i=0;i<array.length;i++) {
+        for(let i=0;i<array.length;i++) {
             let newRowNum = array[i].row - 1;
             document.getElementById(`r${newRowNum}c${array[i].column}`).setAttribute('class','active');   //adjustClassesDown()
         }       
@@ -65,7 +62,7 @@ export default class Tetrimino {
     moveUp() {
         const array = this.actives
         let i;
-        for(i=0;i<array.length;i++) {
+        for(let i=0;i<array.length;i++) {
             array[i].setAttribute('class','blank');
         }
         for(i=0;i<array.length;i++) {
@@ -105,7 +102,6 @@ export default class Tetrimino {
         for (j=0;j<this.actives.length;j++) {
             if (path[j].className === 'static' || path[j].row < this.grid.floor) {
                 return true;
-                break;
             }
         }
         return false;
@@ -117,7 +113,6 @@ export default class Tetrimino {
         for (j=0;j<this.actives.length;j++) {
             if (path[j].className === 'static' || path[j].column > this.grid.rightedge) {
                 return true;
-                break;
             }
         }
         return false;
@@ -131,7 +126,6 @@ export default class Tetrimino {
         for (j=0;j<this.actives.length;j++) {
             if (path[j].className === 'static' || path[j].column < this.grid.leftedge) {
                 return true;
-                break;
             }
         }
         return false;
@@ -188,7 +182,7 @@ export default class Tetrimino {
     checkRowState() {
         let rowsCleared = 0;
     
-        function isFilled(elem, index, arr) { //callback function for .every
+        function isFilled(elem) { //callback function for .every
             return elem.className === 'static';
         }
     
@@ -246,15 +240,21 @@ export default class Tetrimino {
     }
     
     removeHighlight() {
-        let j;
         let array = [];
+        // For some reason this was working, even though it has = instead of ===
+        // and lime was not even the background color. Still unsure how this was working.
+        // this.grid.divArray.forEach( e => {
+        //     if (e.style.backgroundColor = 'lime') {
+        //         array.push(e)
+        //     }
+        // });
         this.grid.divArray.forEach( e => {
-            if (e.style.backgroundColor = 'lime') {
+            if (e.style.backgroundColor != '') {
                 array.push(e)
             }
-        })
-        for (j=0;j<array.length;j++) {
-            array[j].style.backgroundColor = '';
+        });
+        for (let i=0;i<array.length;i++) {
+            array[i].style.backgroundColor = '';
         }
     }
 
@@ -515,9 +515,12 @@ export default class Tetrimino {
  
 
         //BIG IF
+        let makeNewArray = () => {
+            return;
+        };
 
         if (_this.shapeOrientation === 'z1') {
-            function makeNewArray() {
+            makeNewArray = () => {
                 let newPositionArray = []; //these are ids not objects. MAKE THEM OBJECTS BELOW SO THEY CAN EASILY FIT INTO HANDLEROTATION()
                 newPositionArray.push(_this.grid[`r${_this.actives[0].row + 1}c${_this.actives[0].column + 1}`]) 
                 newPositionArray.push(_this.grid[`r${_this.actives[1].row + 2}c${_this.actives[1].column}`]) 
@@ -530,7 +533,7 @@ export default class Tetrimino {
        
     } else if (_this.shapeOrientation === 'z2') {
         
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[_this.actives[1].id]);
             newPositionArray.push(_this.grid[`r${_this.actives[0].row + 1}c${_this.actives[1].column - 1}`]) 
@@ -541,7 +544,7 @@ export default class Tetrimino {
 
         handleRotationV2(getActives, makeNewArray, 'z1');
     } else if (_this.shapeOrientation === 't1') {
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[`r${_this.actives[0].row - 1}c${_this.actives[0].column + 1}`]);
             newPositionArray.push(_this.grid[_this.actives[1].id]);
@@ -553,7 +556,7 @@ export default class Tetrimino {
         handleRotationV2(getActives, makeNewArray, 't2');
     } else if (_this.shapeOrientation === 't2') {
         
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[_this.actives[1].id]);
             newPositionArray.push(_this.grid[_this.actives[2].id]);
@@ -565,7 +568,7 @@ export default class Tetrimino {
         handleRotationV2(getActives, makeNewArray, 't3');
     } else if (_this.shapeOrientation === 't3') {
         
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[_this.actives[0].id]);
             newPositionArray.push(_this.grid[_this.actives[1].id]);
@@ -578,7 +581,7 @@ export default class Tetrimino {
         handleRotationV2(getActives, makeNewArray, 't4');
     } else if (_this.shapeOrientation === 't4') {
         
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[`r${_this.actives[0].row + 1}c${_this.actives[3].column + 1}`]); 
             newPositionArray.push(_this.grid[_this.actives[1].id]);
@@ -590,7 +593,7 @@ export default class Tetrimino {
         handleRotationV2(getActives, makeNewArray, 't1');
     } else if (_this.shapeOrientation === 'i1') {
         
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[`r${_this.actives[0].row - 1}c${_this.actives[0].column + 1}`]);
             newPositionArray.push(_this.grid[_this.actives[1].id]);
@@ -601,7 +604,7 @@ export default class Tetrimino {
 
         handleITetroRotation(getActives, makeNewArray, 'i2');
     } else if (_this.shapeOrientation === 'i2') {
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[`r${_this.actives[0].row + 1}c${_this.actives[0].column - 1}`]);
             newPositionArray.push(_this.grid[_this.actives[1].id]);
@@ -612,7 +615,7 @@ export default class Tetrimino {
        
         handleITetroRotation(getActives, makeNewArray, 'i1');
     } else if (_this.shapeOrientation === 's1') {
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[`r${_this.actives[0].row + 2}c${_this.actives[0].column}`]);
             newPositionArray.push(_this.grid[`r${_this.actives[1].row + 1}c${_this.actives[1].column - 1}`]);
@@ -623,7 +626,7 @@ export default class Tetrimino {
         
         handleRotationV2(getActives, makeNewArray, 's2');
     } else if (_this.shapeOrientation === 's2') {
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[`r${_this.actives[0].row + 1}c${_this.actives[0].column + 1}`]);
             newPositionArray.push(_this.grid[`r${_this.actives[1].row - 1}c${_this.actives[1].column + 1}`]);
@@ -634,7 +637,7 @@ export default class Tetrimino {
         handleRotationV2(getActives, makeNewArray, 's1');
     } else if (_this.shapeOrientation === 'l1') {
        
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[`r${_this.actives[0].row + 1}c${_this.actives[0].column + 1}`]);
             newPositionArray.push(_this.grid[_this.actives[1].id]);
@@ -650,7 +653,7 @@ export default class Tetrimino {
         handleRotationV2(getActives, makeNewArray, 'l2');
            
     } else if (_this.shapeOrientation === 'l2') {
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[`r${_this.actives[0].row + 1}c${_this.actives[0].column - 1}`]);
             newPositionArray.push(_this.grid[`r${_this.actives[1].row}c${_this.actives[1].column - 2}`]);
@@ -662,7 +665,7 @@ export default class Tetrimino {
         handleRotationV2(getActives, makeNewArray, 'l3');
         
     } else if (_this.shapeOrientation === 'l3') {
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[`r${_this.actives[0].row + 2}c${_this.actives[0].column}`]);
             newPositionArray.push(_this.grid[`r${_this.actives[1].row + 1}c${_this.actives[1].column + 1}`]);
@@ -675,7 +678,7 @@ export default class Tetrimino {
 
     } else if (_this.shapeOrientation === 'l4') {
 
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[`r${_this.actives[0].row + 1}c${_this.actives[0].column - 1}`]);
             newPositionArray.push(_this.grid[_this.actives[1].id]);
@@ -688,7 +691,7 @@ export default class Tetrimino {
 
     } else if (_this.shapeOrientation === 'j1') {
         
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[`r${_this.actives[0].row + 1}c${_this.actives[0].column + 1}`]);
             newPositionArray.push(_this.grid[_this.actives[1].id]);
@@ -699,7 +702,7 @@ export default class Tetrimino {
 
         handleRotationV2(getActives, makeNewArray, 'j2');
     } else if (_this.shapeOrientation === 'j2') {
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[`r${_this.actives[0].row + 1}c${_this.actives[0].column - 1}`]);
             newPositionArray.push(_this.grid[_this.actives[1].id]);
@@ -709,7 +712,7 @@ export default class Tetrimino {
         }
         handleRotationV2(getActives, makeNewArray, 'j3');
     } else if (_this.shapeOrientation === 'j3') {
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[`r${_this.actives[0].row}c${_this.actives[0].column - 2}`]);
             newPositionArray.push(_this.grid[`r${_this.actives[1].row + 1}c${_this.actives[1].column + 1}`]);
@@ -719,7 +722,7 @@ export default class Tetrimino {
         }
         handleRotationV2(getActives, makeNewArray, 'j4');
     } else if (_this.shapeOrientation === 'j4') {
-        function makeNewArray() {
+        makeNewArray = () => {
             let newPositionArray = [];
             newPositionArray.push(_this.grid[`r${_this.actives[0].row + 2}c${_this.actives[0].column}`]);
             newPositionArray.push(_this.grid[`r${_this.actives[1].row + 1}c${_this.actives[1].column - 1}`]);

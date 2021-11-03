@@ -18,7 +18,7 @@ const bonusScreen = document.getElementById('bonus');
 let points = 0;
 let speedTracker = 0;
 let speed = 500;
-let timer;
+// let timer;
 
 //EVENT LISTENERS
 document.addEventListener('keydown', leftEventHandler);
@@ -52,7 +52,9 @@ run();
 
 //GLOBAL FUNCTIONS
 function run() { 
-    timer = setTimeout(fall, speed);
+    // timer = setTimeout(fall, speed);
+    // according to eslint setting timer is not necessary
+    setTimeout(fall, speed);
 }
 
 function fall() {
@@ -109,7 +111,7 @@ function updateScore() {
 function checkRowState() {
     let rowsCleared = 0;
 
-    function isFilled(elem, index, arr) { //callback function for .every
+    function isFilled(elem) { //callback function for .every
         return elem.className === 'static';
     }
 
@@ -172,7 +174,6 @@ function isGameOver() {
         if (grid.ArrayOfVisibleRows[16][i].className === 'static') {
             console.log('GAME OVER');
             return true;
-            break;
         }
     }
     return false;
