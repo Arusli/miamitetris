@@ -61,11 +61,10 @@ export default class Tetrimino {
 
     moveUp() {
         const array = this.actives
-        let i;
         for(let i=0;i<array.length;i++) {
             array[i].setAttribute('class','blank');
         }
-        for(i=0;i<array.length;i++) {
+        for(let i=0;i<array.length;i++) {
             let newRowNum = array[i].row + 1;
             document.getElementById(`r${newRowNum}c${array[i].column}`).setAttribute('class','active');   //adjustClassesUp()
         }
@@ -73,11 +72,10 @@ export default class Tetrimino {
 
     moveLeft() {
             const array = this.actives;
-            let i;
-            for(i=0;i<array.length;i++) {
+            for(let i=0;i<array.length;i++) {
                 array[i].setAttribute('class','blank');
             }
-            for(i=0;i<array.length;i++) {
+            for(let i=0;i<array.length;i++) {
                 let newColumnNum = array[i].column - 1;
                 document.getElementById(`r${array[i].row}c${newColumnNum}`).setAttribute('class','active');   //adjustClasses
             }  
@@ -85,11 +83,10 @@ export default class Tetrimino {
 
     moveRight() {
             const array = this.actives;
-            let i;
-            for(i=0;i<array.length;i++) {
+            for(let i=0;i<array.length;i++) {
                 array[i].setAttribute('class','blank');
             }
-            for(i=0;i<array.length;i++) {
+            for(let i=0;i<array.length;i++) {
                 let newColumnNum = array[i].column + 1;
                 document.getElementById(`r${array[i].row}c${newColumnNum}`).setAttribute('class','active');  //adjustClasses
             }
@@ -98,8 +95,7 @@ export default class Tetrimino {
     get isDownBlocked() {
         const path = this.actives.map((e) => document.getElementById(`${e.idbelow}`))
         // console.log(path);
-        let j;
-        for (j=0;j<this.actives.length;j++) {
+        for (let j=0;j<this.actives.length;j++) {
             if (path[j].className === 'static' || path[j].row < this.grid.floor) {
                 return true;
             }
@@ -109,8 +105,7 @@ export default class Tetrimino {
 
     get isRightBlocked() {
         const path = this.actives.map((e) => document.getElementById(`${e.idright}`))
-        let j;
-        for (j=0;j<this.actives.length;j++) {
+        for (let j=0;j<this.actives.length;j++) {
             if (path[j].className === 'static' || path[j].column > this.grid.rightedge) {
                 return true;
             }
@@ -122,8 +117,7 @@ export default class Tetrimino {
     get isLeftBlocked() {
         const path = this.actives.map((e) => document.getElementById(`${e.idleft}`))
         // console.log(path);
-        let j;
-        for (j=0;j<this.actives.length;j++) {
+        for (let j=0;j<this.actives.length;j++) {
             if (path[j].className === 'static' || path[j].column < this.grid.leftedge) {
                 return true;
             }
@@ -136,8 +130,7 @@ export default class Tetrimino {
     }
   
     slam() {
-        let i;
-        for (i=0; i<15; i++) {
+        for (let i=0; i<15; i++) {
             if (!this.isDownBlocked) {
                 this.lower();
             } else {
@@ -149,8 +142,7 @@ export default class Tetrimino {
     getStatics() {
         let statics = document.getElementsByClassName('static');
         let array = [];
-        let i;
-        for (i=0;i<statics.length;i++) {
+        for (let i=0;i<statics.length;i++) {
             array.push(statics[i])
         }
         return array;
@@ -186,8 +178,7 @@ export default class Tetrimino {
             return elem.className === 'static';
         }
     
-        let i;
-        for (i=0;i<this.grid.maxRows;i++) {
+        for (let i=0;i<this.grid.maxRows;i++) {
             if (this.grid.ArrayOfVisibleRows[i].every(isFilled)) {
                 this.clearRow(i);
                 this.downShiftStatics();
@@ -319,8 +310,7 @@ export default class Tetrimino {
 
             })
 
-            let i;
-            for (i=0;i<testArray.length;i++) {
+            for (let i=0;i<testArray.length;i++) {
                 if (testArray[i].className === 'static') {
                     return true;
                 }
@@ -339,8 +329,7 @@ export default class Tetrimino {
 
 
         function isRotateBlocked(array) { //takes an array of elements which represent the hypothetical rotated position
-           let j;
-           for (j=0;j<array.length;j++) {
+           for (let j=0;j<array.length;j++) {
                if (array[j].className === 'static' || array[j].column < _this.grid.leftedge || array[j].column > _this.grid.rightedge || array[j].row < _this.grid.floor) {
                    return true;
                }
@@ -484,8 +473,7 @@ export default class Tetrimino {
         function getActives() {
             let array = [];
             const arrayLikeObject = document.getElementsByClassName('active');
-            let i;
-            for (i=0;i<arrayLikeObject.length;i++) {
+            for (let i=0;i<arrayLikeObject.length;i++) {
                 array.push(arrayLikeObject[i]);
             }
             return array;

@@ -19,8 +19,7 @@ export default class Grid {
     }
 
     createRow() {
-        let i;
-        for (i=0; i<this.maxColumns; i++) {
+        for (let i=0; i<this.maxColumns; i++) {
             //lets us keep increasing the array index for each iteration of createRow()
             let indexAdjuster = (this.rowcount - 1) * this.maxColumns; //
             let index = i + indexAdjuster;
@@ -45,8 +44,8 @@ export default class Grid {
     
     //NOTE: we need to add 2 or 3 hidden rows at the top to allow the new shapes to generate 'off-screen'
     createGrid() {
-        let k; //using k, since we used i on inside loop (createRow)
-        for (k=0;k<this.maxRows;k++) {
+        //using k, since we used i on inside loop (createRow)
+        for (let k=0;k<this.maxRows;k++) {
             let array = []
             this.createRow(); //fills in the entire row, adjusting all necessary variables within this inner function.
     
@@ -66,8 +65,7 @@ export default class Grid {
     
     hideBottomRow() {
         this.bottomRow = [];
-        let i;
-        for (i=0;i<this.divArray.length;i++) {
+        for (let i=0;i<this.divArray.length;i++) {
             if (this.divArray[i].row < this.floor) {
               this.  bottomRow.push(this.divArray[i]);
             }
@@ -80,9 +78,7 @@ export default class Grid {
     
     hideTopTwoRows() {
         const topRows = [];
-    
-        let i;
-        for (i=0;i<this.divArray.length;i++) {
+        for (let i=0;i<this.divArray.length;i++) {
             if (this.divArray[i].row > 17) {
                 topRows.push(this.divArray[i]);
             }
@@ -92,8 +88,7 @@ export default class Grid {
     
     hideOuterColumns() {
         const oustideColumns = [];
-        let i;
-        for (i=0;i<this.divArray.length;i++) {
+        for (let i=0;i<this.divArray.length;i++) {
             if (this.divArray[i].column < this.leftedge || this.divArray[i].column > this.rightedge) {
                 oustideColumns.push(this.divArray[i]);
             }

@@ -115,8 +115,7 @@ function checkRowState() {
         return elem.className === 'static';
     }
 
-    let i;
-    for (i=0;i<grid.maxRows;i++) {
+    for (let i=0;i<grid.maxRows;i++) {
         if (grid.ArrayOfVisibleRows[i].every(isFilled)) {
             Mino.clearRow(i);
             Mino.downShiftStatics();
@@ -169,8 +168,7 @@ function checkRowState() {
 }
 
 function isGameOver() {
-    let i;
-    for (i=0;i<grid.ArrayOfVisibleRows[14].length;i++) {
+    for (let i=0;i<grid.ArrayOfVisibleRows[14].length;i++) {
         if (grid.ArrayOfVisibleRows[16][i].className === 'static') {
             console.log('GAME OVER');
             return true;
