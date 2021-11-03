@@ -18,15 +18,36 @@ const bonusScreen = document.getElementById('bonus');
 let points = 0;
 let speedTracker = 0;
 let speed = 500;
-// let timer;
+let timer;
+let paused = false;
 
 //EVENT LISTENERS
 document.addEventListener('keydown', leftEventHandler);
 document.addEventListener('keydown', rightEventHandler);
 document.addEventListener('keydown', downEventHandler);
 document.addEventListener('keydown', rotateEventHandler);
+document.addEventListener('keydown', pauseEventHandler);
+document.addEventListener('keydown', unpauseEventHandler);
 document.addEventListener('keyup', slamEventHandler);
 newGameButton.addEventListener('click', restart);
+
+function addListeners() {
+    document.addEventListener('keydown', leftEventHandler);
+    document.addEventListener('keydown', rightEventHandler);
+    document.addEventListener('keydown', downEventHandler);
+    document.addEventListener('keydown', rotateEventHandler);
+    document.addEventListener('keyup', slamEventHandler);
+    newGameButton.addEventListener('click', restart);
+}
+
+function removeListeners() {
+    document.removeEventListener('keydown', leftEventHandler);
+    document.removeEventListener('keydown', rightEventHandler);
+    document.removeEventListener('keydown', downEventHandler);
+    document.removeEventListener('keydown', rotateEventHandler);
+    document.removeEventListener('keyup', slamEventHandler);
+    newGameButton.removeEventListener('click', restart);
+}
 
 //INITIALIZE BOARD
 grid.createGrid();
@@ -52,14 +73,18 @@ run();
 
 //GLOBAL FUNCTIONS
 function run() { 
-    // timer = setTimeout(fall, speed);
-    // according to eslint setting timer is not necessary
-    setTimeout(fall, speed);
+    timer = setTimeout(fall, speed);
+    // according to eslint setting timer is not necessary, 
+    // but I decided it is necessary to do it this way so we can clear timeouts later.
 }
 
 function fall() {
-    if (!Mino.isDownBlocked) {
+    if (!Mino.isDownBlocked && !paused) {
+        addListeners();
         Mino.lower();
+        run();
+    } else if(!Mino.isDownBlocked && paused) {
+        removeListeners();
         run();
     } else {
         Mino.makeStatic(); //freeze block in place
@@ -182,6 +207,7 @@ function isGameOver() {
 function leftEventHandler(e) {
     if (e.keyCode == 37 && !Mino.isLeftBlocked) {
         Mino.moveLeft();
+        console.log('left')
     }
 }
 
@@ -206,6 +232,23 @@ function rotateEventHandler(e) {
 function slamEventHandler(e) {
     if (e.keyCode == 32) {
         Mino.slam();
+    }
+}
+
+// NOTE: I wanted to assing Pause and Unpause both to the same event key.
+// However, had an error with this double firing for some reason.
+
+function pauseEventHandler(e) {
+    if (e.keyCode === 80 && !paused) {
+        paused = true;
+        console.log('paused:', paused);
+    }
+}
+
+function unpauseEventHandler(e) {
+    if (e.keyCode === 85 && paused) {
+        paused = false;
+        console.log('paused:', paused);
     }
 }
 
