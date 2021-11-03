@@ -1,7 +1,7 @@
 export default class Tetrimino {
     constructor(grid){
         this.grid = grid;
-        this.name = 'terminino object';
+        this.name = 'tetrimino object';
         this.lTetrimino = [this.grid.r16c7, this.grid.r16c8, this.grid.r16c9, this.grid.r17c9]; 
         this.jTetrimino = [this.grid.r16c7, this.grid.r16c8, this.grid.r16c9, this.grid.r17c7];
         this.sqTetrimino = [this.grid.r16c8, this.grid.r16c9, this.grid.r17c8, this.grid.r17c9]; //square shape

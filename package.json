@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Arusli/tetris#readme",
   "devDependencies": {
+    "eslint": "^7.27.0",
     "webpack": "^5.11.1",
     "webpack-cli": "^4.3.1"
   },
